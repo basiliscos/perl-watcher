@@ -1,0 +1,20 @@
+WATCHERS:
+# date-time event [gui] 
+# weather [gui] 
+# rss
+# custom event ($$$)
+
+GUI:
+# clickable events
+# notification level per watcher and default
+# colorize output
+# icons by status
+
+OTHER:
+# save statte
+# tests
+# order status by priority
+# error hanlding
+# insert license
+
+
