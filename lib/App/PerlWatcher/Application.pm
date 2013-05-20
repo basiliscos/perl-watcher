@@ -4,6 +4,7 @@ use 5.12.0;
 use strict;
 use warnings;
 
+use App::PerlWatcher::Status qw/:levels :results/;
 use Data::Dumper;
 use Devel::Comments;
 use Gtk2;
@@ -206,9 +207,9 @@ sub _result_to_symbol {
     my %symbols;
     for my $status (@$statuses) {
         my ( $notice, $alert ) = (
-            ( $status->level eq $App::PerlWatcher::Status::LEVEL_NOTICE )
-              && ( $status->result eq $App::PerlWatcher::Status::RESULT_FAIL ),
-            $status->level eq $App::PerlWatcher::Status::LEVEL_ALERT,
+            ( $status->level == LEVEL_NOTICE )
+              && ( $status->result == RESULT_FAIL ),
+            $status->level == LEVEL_ALERT,
         );
         $symbols{ $status->symbol } = 1 if ( $notice or $alert );
     }

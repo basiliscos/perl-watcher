@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use AnyEvent::Socket;
-use App::PerlWatcher::Status;
+use App::PerlWatcher::Status qw/:levels :results/;
 use App::PerlWatcher::Watcher;
 use Carp;
 use Devel::Comments;
@@ -35,10 +35,8 @@ sub new {
                 ### $success
                 my $status = App::PerlWatcher::Status->new(
                     $self,
-                    $success
-                    ? $App::PerlWatcher::Status::RESULT_OK
-                    : $App::PerlWatcher::Status::RESULT_FAIL,
-                    $App::PerlWatcher::Status::LEVEL_NOTICE,
+                    $success  ? RESULT_OK : RESULT_FAIL,
+                    LEVEL_NOTICE,
                     sub { $self->description },
                 );
                 $callback->($status);

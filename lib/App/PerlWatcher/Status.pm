@@ -5,15 +5,43 @@ use strict;
 use warnings;
 
 use Data::Dumper;
+use Devel::Comments;
+use Exporter;
 
-our $RESULT_OK    = "result.ok";
-our $RESULT_FAIL  = "result.fail";
-our $LEVEL_NOTICE = "level.notice";
-our $LEVEL_ALERT  = "level.alert";
+use constant {
+    LEVEL_NOTICE    => 2,
+    LEVEL_INFO      => 3,
+    LEVEL_WARN      => 4,
+    LEVEL_ALERT     => 5,
+    RESULT_OK       => 200,
+    RESULT_FAIL     => 500,
+};
+
+
+our @ISA = qw(Exporter);
+our @EXPORT_OK = 
+    qw/
+            LEVEL_NOTICE LEVEL_INFO 
+            LEVEL_WARN LEVEL_ALERT
+            RESULT_OK RESULT_FAIL 
+    /;
+    
+our %EXPORT_TAGS = (
+    levels => 
+        [qw(
+            LEVEL_NOTICE LEVEL_INFO 
+            LEVEL_WARN LEVEL_ALERT
+        )], 
+    results => 
+        [qw(
+            RESULT_OK RESULT_FAIL 
+        )],
+);
+
 
 sub new {
     my ( $class, $watcher, $result, $level, $description, $items ) = @_;
-
+    
     my $self = {
         _watcher     => $watcher,
         _result      => $result,
@@ -39,9 +67,9 @@ sub level {
 sub symbol {
     my $self = shift;
     my $r =
-        $self->{_level} eq $App::PerlWatcher::Status::LEVEL_ALERT  ? '!'
-      : $self->{_result} eq $App::PerlWatcher::Status::RESULT_FAIL ? '?'
-      :                                                              'ok';
+        $self->{_level} == LEVEL_ALERT  ? '!'
+      : $self->{_result} == RESULT_FAIL ? '?' : 'ok'
+      ;
     return $r;
 }
 

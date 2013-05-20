@@ -15,7 +15,6 @@ use App::PerlWatcher::Engine;
 use App::PerlWatcher::Watcher::Ping;
 use App::PerlWatcher::Watcher::FileTail;
 
-my $frequency = 15;
 my $timeout   = 1;
 
 my $config_file = $ARGV[0];
