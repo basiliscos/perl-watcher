@@ -17,11 +17,14 @@ my $frequency = 15;
 my $timeout   = 1;
 
 my $config = {
+    loop_engine => 'Gtk2',
     frontend => {
         gtk => {
             window_size => [ 500, 300 ],
         },
     },
+    
+        
 };
 
 my @watchers = (

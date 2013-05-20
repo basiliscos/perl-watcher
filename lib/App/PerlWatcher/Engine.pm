@@ -44,8 +44,9 @@ sub start {
             }
         );
     }
-
-    main Gtk2;
+    my $loop = $self -> config -> {loop_engine};
+    ### $loop
+    main $loop;
 }
 
 sub _gather_results {
