@@ -9,7 +9,8 @@ use Data::Dumper;
 use Devel::Comments;
 
 sub new {
-    my ( $class, $watchers, $config ) = @_;
+    my ( $class, $config ) = @_;
+    my $watchers = _construct_watchers( $config );
     my $watchers_order = {};
     $watchers_order->{ @{$watchers}[$_] } = $_ for 0 .. @$watchers - 1;
     my $self = {
@@ -32,7 +33,6 @@ sub config {
 
 sub start {
     my $self     = shift;
-    my $interval = 3;
     for my $w ( @{ $self->{_watchers} } ) {
         $w->start(
             sub {
@@ -57,6 +57,18 @@ sub _gather_results {
         return $a_index <=> $b_index;
     } values( %{ $self->{_statuses} } );
     return \@statuses;
+}
+
+sub _construct_watchers {
+    my $config = shift;
+    my @r;
+    for my $watcher_definition ( @{ $config -> {watchers} } ) {
+         my ($class, $watcher_config ) 
+            = @{ $watcher_definition }{ qw/class config/ };
+        my $watcher = $class -> new( $config, %$watcher_config );
+        push @r, $watcher;
+    }
+    return \@r;
 }
 
 1;

@@ -7,6 +7,7 @@ use warnings;
 use AnyEvent::Handle;
 use App::PerlWatcher::Status;
 use App::PerlWatcher::Watcher;
+use Carp;
 use File::ReadBackwards;
 use Linux::Inotify2;
 use Devel::Comments;
@@ -14,10 +15,15 @@ use Devel::Comments;
 our @ISA = qw(App::PerlWatcher::Watcher);
 
 sub new {
-    my ( $class, $file, $line_number ) = @_;
+    my ( $class, $engine_config, %config ) = @_;
+    
+    my ( $file, $line_number ) = @config{ qw/ file lines / };
+    
+    $line_number //= 10;
+    croak("file is undefined") unless defined ($file);
 
     my $inotify = Linux::Inotify2->new
-      or die "unable to create new inotify object: $!";
+      or croak("unable to create new inotify object: $!");
 
     my $self = {
         _inotify     => $inotify,

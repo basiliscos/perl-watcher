@@ -4,15 +4,24 @@ use 5.12.0;
 use strict;
 use warnings;
 
+use AnyEvent::Socket;
 use App::PerlWatcher::Status;
 use App::PerlWatcher::Watcher;
+use Carp;
 use Devel::Comments;
-use AnyEvent::Socket;
 
 our @ISA = qw(App::PerlWatcher::Watcher);
 
 sub new {
-    my ( $class, $host, $port, $frequency, $timeout ) = @_;
+    my ( $class, $engine_config, %config ) = @_;
+    my ( $host, $port, $frequency, $timeout ) 
+        = @config{ qw/ host port frequency timeout / };
+        
+    croak("host is not defined") unless defined ($host);
+    croak("port is not defined") unless defined ($port);
+    
+    $frequency  //= 60;
+    $timeout    //= $engine_config -> {timeout} // 5;
 
     my $self;
     $self = {

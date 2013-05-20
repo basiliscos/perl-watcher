@@ -4,6 +4,8 @@ use 5.12.0;
 use strict;
 use warnings;
 
+use Carp;
+use Devel::Comments;
 use FindBin;
 
 BEGIN { unshift @INC, "$FindBin::Bin/../lib" }
@@ -16,35 +18,15 @@ use App::PerlWatcher::Watcher::FileTail;
 my $frequency = 15;
 my $timeout   = 1;
 
-my $config = {
-    loop_engine => 'Gtk2',
-    frontend => {
-        gtk => {
-            window_size => [ 500, 300 ],
-        },
-    },
-    
-        
-};
+my $config_file = $ARGV[0];
 
-my @watchers = (
-    App::PerlWatcher::Watcher::Ping->new(
-        'basiliscos', 443, $frequency, $timeout
-    ),
-    App::PerlWatcher::Watcher::Ping->new(
-        'media.iptel.by', 80, $frequency, $timeout
-    ),
-    App::PerlWatcher::Watcher::Ping->new(
-        'iptel.by', 80, $frequency, $timeout
-    ),
-    App::PerlWatcher::Watcher::Ping->new(
-        'google.com', 80, $frequency, $timeout
-    ),
-    App::PerlWatcher::Watcher::Ping->new( 'helios', 53, $frequency, $timeout ),
-    App::PerlWatcher::Watcher::FileTail->new( '/var/log/messages', 10 ),
-);
+open(my $config_fh, "<", $config_file) 
+    or croak("Can't open config file $config_file");
 
-my $engine = App::PerlWatcher::Engine->new( \@watchers, $config );
+my $content_config = do { local $/ = <$config_fh> };
+my $config = eval $content_config ;
+
+my $engine = App::PerlWatcher::Engine->new($config);
 
 my $app = App::PerlWatcher::Application->new($engine);
 $app->show;
