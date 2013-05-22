@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use AnyEvent::Handle;
-use App::PerlWatcher::Status qw/:levels :results/;
+use App::PerlWatcher::Status qw/:levels/;
 use App::PerlWatcher::Watcher;
 use Carp;
 use File::ReadBackwards;
@@ -103,7 +103,6 @@ sub _trigger_callback {
     my ($self) = @_;
     my $status = App::PerlWatcher::Status->new(
         $self,
-        RESULT_OK,
         LEVEL_NOTICE,
         sub { $self->description },
         sub { $self->{_lines} },

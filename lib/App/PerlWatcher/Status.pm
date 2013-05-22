@@ -4,56 +4,72 @@ use 5.12.0;
 use strict;
 use warnings;
 
+use Carp;
 use Data::Dumper;
 use Devel::Comments;
 use Exporter;
 
 use constant {
+    LEVEL_ANY       => 0,
     LEVEL_NOTICE    => 2,
     LEVEL_INFO      => 3,
     LEVEL_WARN      => 4,
     LEVEL_ALERT     => 5,
-    RESULT_OK       => 200,
-    RESULT_FAIL     => 500,
+    LEVEL_IGNORE    => 10,
 };
 
 
 our @ISA = qw(Exporter);
 our @EXPORT_OK = 
     qw/
+            string_to_level
             LEVEL_NOTICE LEVEL_INFO 
             LEVEL_WARN LEVEL_ALERT
-            RESULT_OK RESULT_FAIL 
     /;
     
 our %EXPORT_TAGS = (
     levels => 
         [qw(
+            
             LEVEL_NOTICE LEVEL_INFO 
             LEVEL_WARN LEVEL_ALERT
         )], 
-    results => 
-        [qw(
-            RESULT_OK RESULT_FAIL 
-        )],
+);
+
+our %_l2s = (
+    LEVEL_NOTICE()    => 'n',
+    LEVEL_INFO()      => 'i',
+    LEVEL_WARN()      => 'w',
+    LEVEL_ALERT()     => 'A',
 );
 
 
+our %_l2string = (
+    LEVEL_NOTICE()    => 'notice',
+    LEVEL_INFO()      => 'info',
+    LEVEL_WARN()      => 'warn',
+    LEVEL_ALERT()     => 'alert',
+);
+
+sub string_to_level {
+    my $s = shift;
+    ## $s
+    my %reversed = reverse %_l2string;
+    my $r = $reversed{ $s };
+    carp "unknown level '$s'" unless defined $r;
+    return $r;
+}
+
 sub new {
-    my ( $class, $watcher, $result, $level, $description, $items ) = @_;
+    my ( $class, $watcher, $level, $description, $items ) = @_;
     
     my $self = {
         _watcher     => $watcher,
-        _result      => $result,
         _level       => $level,
         _description => $description,
         _items       => $items,
     };
     return bless $self, $class;
-}
-
-sub result {
-    return shift->{_result};
 }
 
 sub watcher {
@@ -66,10 +82,7 @@ sub level {
 
 sub symbol {
     my $self = shift;
-    my $r =
-        $self->{_level} == LEVEL_ALERT  ? '!'
-      : $self->{_result} == RESULT_FAIL ? '?' : 'ok'
-      ;
+    my $r = $_l2s{ $self->{_level} };
     return $r;
 }
 

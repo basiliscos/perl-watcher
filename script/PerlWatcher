@@ -23,7 +23,8 @@ open(my $config_fh, "<", $config_file)
     or croak("Can't open config file $config_file");
 
 my $content_config = do { local $/ = <$config_fh> };
-my $config = eval $content_config ;
+my $config = eval "no warnings; $content_config ";
+croak("error in config: $@") if ( $@ );
 
 my $engine = App::PerlWatcher::Engine->new($config);
 
