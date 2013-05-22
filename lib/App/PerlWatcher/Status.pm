@@ -36,7 +36,7 @@ our %EXPORT_TAGS = (
         )], 
 );
 
-our %_l2s = (
+our %_symbols_for = (
     LEVEL_NOTICE()    => 'n',
     LEVEL_INFO()      => 'i',
     LEVEL_WARN()      => 'w',
@@ -44,7 +44,7 @@ our %_l2s = (
 );
 
 
-our %_l2string = (
+our %_labels_for = (
     LEVEL_NOTICE()    => 'notice',
     LEVEL_INFO()      => 'info',
     LEVEL_WARN()      => 'warn',
@@ -54,7 +54,7 @@ our %_l2string = (
 sub string_to_level {
     my $s = shift;
     ## $s
-    my %reversed = reverse %_l2string;
+    my %reversed = reverse %_labels_for;
     my $r = $reversed{ $s };
     carp "unknown level '$s'" unless defined $r;
     return $r;
@@ -82,7 +82,7 @@ sub level {
 
 sub symbol {
     my $self = shift;
-    my $r = $_l2s{ $self->{_level} };
+    my $r = $_symbols_for{ $self->{_level} };
     return $r;
 }
 

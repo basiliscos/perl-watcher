@@ -79,7 +79,7 @@ sub _interpret_result {
     
     my @levels = sort keys (%{ $thresholds -> {$meta_key} });
     my $level_key = first { $_ >= $counter } @levels;
-    ### $level_key
+    # $level_key
     if ( defined $level_key ) {
         $self -> {_last_level} = $thresholds -> {$meta_key} -> {$level_key};
     }
@@ -89,7 +89,7 @@ sub _interpret_result {
             $self->description 
         },
     );
-    ### $status
+    # $status
     $callback->($status);    
 }
 
