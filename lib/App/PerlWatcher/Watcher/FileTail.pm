@@ -124,9 +124,4 @@ sub _initial_read {
     return $file_handle;
 }
 
-sub _get_content {
-    my $self = shift;
-    return join( "\n", @{ $self->{_lines} } );
-}
-
 1;
