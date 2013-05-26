@@ -13,7 +13,7 @@ use Devel::Comments;
 use Hash::Merge qw( merge );
 use List::Util qw( first );
 
-our @ISA = qw(App::PerlWatcher::Watcher);
+use base qw(App::PerlWatcher::Watcher);
 
 sub new {
     my ( $class, $engine_config, %config ) = @_;

@@ -1,6 +1,16 @@
 {
     loop_engine => 'Gtk2',
-    timeout => 1,
+    
+    defaults    => {
+        timeout     => 1,
+        behaviour   => {
+            fail => { 
+                1   =>  'info',
+                3   =>  'alert',
+            },
+            ok  => { 3 => 'notice' },
+        },
+    },
     
     watchers => [
         {
@@ -18,6 +28,7 @@
                 host    =>  'iptel.by',
                 port    =>  80,
                 frequency   =>  15,
+                on => { fail => { 5 => 'alert' } },
             },
         },
         
@@ -27,6 +38,7 @@
                 host    =>  'media.iptel.by',
                 port    =>  80,
                 frequency   =>  25,
+                on => { fail => { 10 => 'info' } },
             },
         },
         
@@ -36,6 +48,7 @@
                 host    =>  'google.com',
                 port    =>  80,
                 frequency   =>  10,
+                on => { fail => { 5 => 'alert' } },
             },
         },
         
@@ -45,6 +58,7 @@
                 host    =>  'helios',
                 port    =>  53,
                 frequency   =>  30,
+                on => { fail => { 10 => 'info' } },
             },
         },
         

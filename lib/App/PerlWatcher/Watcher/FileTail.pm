@@ -12,7 +12,7 @@ use File::ReadBackwards;
 use Linux::Inotify2;
 use Devel::Comments;
 
-our @ISA = qw(App::PerlWatcher::Watcher);
+use base qw(App::PerlWatcher::Watcher);
 
 sub new {
     my ( $class, $engine_config, %config ) = @_;
@@ -58,14 +58,13 @@ sub start {
                     $ea_handle->push_read(
                         line => sub {
                             my ( $ea_handle, $line, $eof ) = @_;
-
                             #print $line, $eof;
                             $self->_add_line($line);
                         }
                     );
                 },
                 on_eof => sub {
-                    ### eof
+                    # eof
                     undef $ae_handle;
                 },
             );

@@ -1,4 +1,5 @@
 WATCHERS:
+# ping: async dns query
 # date-time event [gui] 
 # weather [gui] 
 # rss
