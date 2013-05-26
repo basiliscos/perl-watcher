@@ -65,7 +65,6 @@ sub _install_watcher {
             timeout => $self -> {_timeout},
             sub {
                 my ($body, $headers) = @_;
-                ### got rss content
                 # $headers
                 if ($headers -> {Status} =~ /^2/) {
                     $self->_handle_result($body);

@@ -83,7 +83,7 @@ sub start {
 
 sub description {
     my $self = shift;
-    return "FileWatcher[" . $self->{_file} . "]";
+    return "FileWatcher [" . $self->{_file} . "]";
 }
 
 sub _add_line {

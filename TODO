@@ -19,6 +19,7 @@ WATCHERS:
 # reminder watcher
 
 GUI:
+# hints on summary page on every status
 # collapse watchers (rss/filemanager) if there is no events.
 # notification level per watcher and default ?
 # colorize output
