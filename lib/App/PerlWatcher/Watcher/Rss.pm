@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use App::PerlWatcher::Status qw/:levels/;
-use AnyEvent::Handle;
+use AnyEvent::HTTP;
 use Carp;
 use Devel::Comments;
 use URI;
@@ -60,49 +60,26 @@ sub description {
 sub _install_watcher {
     my $self = shift;
     my $uri = $self -> {_uri};
-    my ($host, $port ) = ( $uri->host, $uri->port );  
     $self -> {_watcher} = sub {
-        my %whole_responce;
-        my $handle; $handle = AnyEvent::Handle->new(
-            connect => [$host => $port],
-            on_error => sub {
-                ### on_error
-                $handle->destroy;
-            },
-            on_eof   => sub {
-                ### on_eof
-                $self -> _handle_result(\%whole_responce);
-                $handle->destroy;
+        $self -> {_w} = http_get (scalar $uri,
+            timeout => $self -> {_timeout},
+            sub {
+                my ($body, $headers) = @_;
+                # $headers
+                if ($headers -> {Status} =~ /^2/) {
+                    $self->_handle_result($body);
+                }
+                else{
+                    ### bad thing has happend
+                }
             },
         );
-        $handle->push_write ("GET $uri HTTP/1.0\015\012\015\012");
-        
-        
-        # now fetch response status line
-        $handle->push_read (line => sub {
-                my ($handle, $line) = @_;
-                $whole_responce{ line } = $line; 
-        });
-        
-        # then the headers
-        $handle->push_read (line => "\015\012\015\012", sub {
-                my ($handle, $line) = @_;
-                $whole_responce{ headers } = $line;
-        });
-        
-        # and finally handle any remaining data as body
-        $handle->on_read (sub {
-                $whole_responce{ body } .= $_[0]->rbuf;
-                $_[0]->rbuf = "";
-        });
     };
 }
 
 sub _handle_result {
-    my ($self, $whole_response) = @_;
-    my $content = $whole_response -> {body};
-    my %result;
-    # $whole_response
+    my ($self, $content) = @_;
+    # $content
     my $xml = XMLin( $content );
     my $items = $xml -> {channel} -> {item};
     # $items

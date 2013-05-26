@@ -7,7 +7,7 @@ CORE:
 WATCHERS:
 # ping: async dns query
 # weather [gui] 
-# rss [gui] 
+# rss: handle errors: dns, non-200 
 # custom event ($$$)
 
 GUI:

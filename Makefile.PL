@@ -9,6 +9,7 @@ WriteMakefile(
   MIN_PERL_VERSION  => '5.012000',
   PREREQ_PM => {
     'AnyEvent'              => '7.04',
+    'AnyEvent::HTTP'        => '2.15',
     'Devel::Comments'       => '1.1.4',
     'File::ReadBackwards'   => '1.05',
     'Gtk2'                  => '1.247',
