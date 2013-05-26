@@ -143,8 +143,8 @@ sub _install_watcher {
         tcp_connect $host, $port, sub {
             my $success = @_;
             # $! contains error
-            ### $host
-            ### $success
+            # $host
+            # $success
             $self -> _interpret_result(scalar @_, $callback );
           }, sub {
 

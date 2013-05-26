@@ -9,6 +9,7 @@ use Data::Dumper;
 use Devel::Comments;
 use Gtk2;
 use Gtk2::TrayIcon;
+use POSIX qw(strftime);
 
 sub new {
     my ( $class, $engine ) = @_;
@@ -162,6 +163,30 @@ sub _consruct_gui {
                 $cell->set( visible => 0 );
             }
 
+        }
+    );
+    
+    # 3rd col
+    my $renderer_timestamp = Gtk2::CellRendererText->new;
+    my $column_timestamp = Gtk2::TreeViewColumn->new;
+    $column_timestamp->pack_start( $renderer_timestamp, 2 );
+    $column_timestamp->set_title('_timestamp');
+    $treeview->append_column($column_timestamp);
+    $column_timestamp->set_cell_data_func(
+        $renderer_timestamp,
+        sub {
+            my ( $column, $cell, $model, $iter, $func_data ) = @_;
+            my $value = $model->get_value( $iter, 0 );
+            my $text;
+            if ( $value->isa('App::PerlWatcher::Status') ) {
+                my $status = $value;
+                $text = strftime('%H:%M:%S',localtime $status->timestamp);
+            }
+            else {
+                $text = q{}; #empty text
+            }
+            ## $text
+            $cell->set( text => $text );
         }
     );
 

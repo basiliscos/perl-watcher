@@ -81,6 +81,7 @@ sub new {
         _level       => $level,
         _description => $description,
         _items       => $items,
+        _timestamp   => time,
     };
     return bless $self, $class;
 }
@@ -105,6 +106,10 @@ sub description {
 
 sub items {
     return shift->{_items};
+}
+
+sub timestamp {
+    return shift->{_timestamp};
 }
 
 1;

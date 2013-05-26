@@ -5,8 +5,8 @@
         timeout     => 1,
         behaviour   => {
             fail => { 
-                1   =>  'info',
-                3   =>  'alert',
+                3   =>  'info',
+                5   =>  'alert',
             },
             ok  => { 3 => 'notice' },
         },
@@ -63,12 +63,42 @@
         },
         
         {
+            class => 'App::PerlWatcher::Watcher::Rss',
+            config => {
+                url         =>  'http://www.opennet.ru/opennews/opennews_all.rss',
+                title       =>  'opennet',
+                frequency   => 5,
+                items       =>  5,
+                on          => { 
+                        ok      => 'info',
+                        fail    => 'warn',
+                },
+            },
+        },
+        
+        
+        {
+            class => 'App::PerlWatcher::Watcher::Rss',
+            config => {
+                url     =>  'http://www.linux.org.ru/section-rss.jsp?section=1',
+                title   =>  'lor',
+                items   =>  5,
+                on => { 
+                    ok      => 'info',
+                    fail    => 'warn',
+                },
+            },
+        },
+        
+        
+        {
             class => 'App::PerlWatcher::Watcher::FileTail',
             config => {
                 file    =>  '/var/log/messages',
                 lines   =>  10,
             },
         },
+        
     ],
     
     frontend => {

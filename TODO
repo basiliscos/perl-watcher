@@ -1,12 +1,14 @@
 CORE:
 # watcher groups?
-# watcher actions: reset, mute, act (click)
-# timestamps of last check
+# watcher actions: reset, mute, act (click), force check?
+# timestamps for sub-events
 
 WATCHERS:
 # ping: async dns query
 # weather 
 # rss: handle errors: non-200
+# rss: record timestamp
+# rss: non-notification states (including warnings)
 # json watcher
 # http watcher
 # reminder watcher
@@ -22,4 +24,8 @@ OTHER:
 # save state
 # tests
 # error hanlding
+
+FUTURE/POSTPONED:
+# rss: atom feeds?
+# other (non-gtk2) backends
 

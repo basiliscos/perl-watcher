@@ -22,7 +22,7 @@ sub new {
     my $uri = URI->new($url);
     
     $items_count //= 5;
-    $frequency   //= 60; # once in minute 
+    $frequency   //= 60; # once in minute
     $timeout     //= $engine_config -> {defaults} -> {timeout} // 5;
     $title       //= $uri->host;
 
@@ -61,10 +61,11 @@ sub _install_watcher {
     my $self = shift;
     my $uri = $self -> {_uri};
     $self -> {_watcher} = sub {
-        $self -> {_w} = http_get (scalar $uri,
+        $self -> {_guard} = http_get (scalar $uri,
             timeout => $self -> {_timeout},
             sub {
                 my ($body, $headers) = @_;
+                ### got rss content
                 # $headers
                 if ($headers -> {Status} =~ /^2/) {
                     $self->_handle_result($body);
