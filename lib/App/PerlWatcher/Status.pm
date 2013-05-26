@@ -11,10 +11,12 @@ use Exporter;
 
 use constant {
     LEVEL_ANY       => 0,
+    
     LEVEL_NOTICE    => 2,
     LEVEL_INFO      => 3,
     LEVEL_WARN      => 4,
     LEVEL_ALERT     => 5,
+    
     LEVEL_IGNORE    => 10,
 };
 
@@ -22,9 +24,12 @@ use constant {
 our @ISA = qw(Exporter);
 our @EXPORT_OK = 
     qw/
-            string_to_level
+            string_to_level level_to_symbol
+            
             LEVEL_NOTICE LEVEL_INFO 
             LEVEL_WARN LEVEL_ALERT
+            
+            LEVEL_ANY LEVEL_IGNORE
     /;
     
 our %EXPORT_TAGS = (
@@ -33,10 +38,13 @@ our %EXPORT_TAGS = (
             
             LEVEL_NOTICE LEVEL_INFO 
             LEVEL_WARN LEVEL_ALERT
+            
+            LEVEL_ANY LEVEL_IGNORE
         )], 
 );
 
 our %_symbols_for = (
+    LEVEL_ANY()       => q{ },
     LEVEL_NOTICE()    => 'n',
     LEVEL_INFO()      => 'i',
     LEVEL_WARN()      => 'w',
@@ -58,6 +66,11 @@ sub string_to_level {
     my $r = $reversed{ $s };
     carp "unknown level '$s'" unless defined $r;
     return $r;
+}
+
+sub level_to_symbol {
+    my $level = shift;
+    return $_symbols_for{$level};
 }
 
 sub new {

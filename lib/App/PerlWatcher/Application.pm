@@ -4,7 +4,7 @@ use 5.12.0;
 use strict;
 use warnings;
 
-use App::PerlWatcher::Status qw/:levels/;
+use App::PerlWatcher::Status qw/level_to_symbol :levels/;
 use Data::Dumper;
 use Devel::Comments;
 use Gtk2;
@@ -204,16 +204,11 @@ sub _result_to_description {
 
 sub _result_to_symbol {
     my ( $self, $statuses ) = @_;
-    my %symbols;
+    my $level = LEVEL_ANY;
     for my $status (@$statuses) {
-        my ( $notice, $alert ) = (
-             $status->level == LEVEL_NOTICE,
-             $status->level == LEVEL_ALERT,
-        );
-        $symbols{ $status->symbol } = 1 if ( $notice or $alert );
+        $level = $status->level if $level < $status->level; 
     }
-    my $symbol = join( '', keys %symbols );
-    $symbol = "*" if ( !$symbol );
+    my $symbol = level_to_symbol($level);
     return $symbol;
 }
 
