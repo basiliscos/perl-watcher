@@ -14,7 +14,7 @@ WriteMakefile(
     'Gtk2'                  => '1.247',
     'Gtk2::TrayIcon'        => '0.06',
     'Linux::Inotify2'       => '1.22',
-    'XML::RSSLite'          => '0.15',
+    'XML::Simple'           => '2.18',
   },
   TEST_REQUIRES => {
   },

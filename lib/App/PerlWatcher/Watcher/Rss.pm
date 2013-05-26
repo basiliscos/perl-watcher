@@ -9,14 +9,14 @@ use AnyEvent::Handle;
 use Carp;
 use Devel::Comments;
 use URI;
-use XML::RSSLite;
+use XML::Simple;
 
 use base qw(App::PerlWatcher::Watcher);
 
 sub new {
     my ( $class, $engine_config, %config ) = @_;
-    my ( $url, $items_count, $frequency, $timeout ) 
-        = @config{ qw/ url items frequency timeout / };
+    my ( $url, $items_count, $frequency, $timeout, $title ) 
+        = @config{ qw/ url items frequency timeout title/ };
         
     croak("url is not defined") unless defined ($url);
     my $uri = URI->new($url);
@@ -24,16 +24,17 @@ sub new {
     $items_count //= 5;
     $frequency   //= 60; # once in minute 
     $timeout     //= $engine_config -> {defaults} -> {timeout} // 5;
+    $title       //= $uri->host;
 
     my $self = {
         _uri            => $uri,
         _items_count    => $items_count,
         _timeout        => $timeout,
         _frequency      => $frequency,
+        _title          => $title,
     };
     bless $self, $class;
     
-    #$self -> _install_thresholds ($engine_config, \%config);
     $self -> _install_watcher;
     
     return $self;
@@ -53,7 +54,7 @@ sub start {
 
 sub description {
     my $self = shift;
-    return "Rss::" . $self->{_uri};
+    return "Rss [" . $self->{_title} . "]";
 }
 
 sub _install_watcher {
@@ -102,17 +103,17 @@ sub _handle_result {
     my $content = $whole_response -> {body};
     my %result;
     # $whole_response
-    parseRSS(\%result, \$content);
-    my @displayed_items = splice @{$result{'item'}}, 0, $self -> {_items_count};
+    my $xml = XMLin( $content );
+    my $items = $xml -> {channel} -> {item};
+    # $items
+    my @displayed_items = splice @{ $items }, 0, $self -> {_items_count};
     my $status = App::PerlWatcher::Status->new( 
         $self, LEVEL_NOTICE, sub { 
-            $self->description,
+            $self->description;
         },
         sub {
             my @titles = map {$_ -> {title}} @displayed_items;
-            ### @titles
-            return ["a","b"];
-            #return \@titles;
+            return \@titles;
         },
     );
     # $status
