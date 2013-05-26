@@ -100,7 +100,7 @@ sub _install_thresholds {
         clone( $config        -> {on} // {} ),
     );
     my $threshold = merge( $r, $l );
-    #merging
+    # merging
     ## $threshold
     ## $l
     ## $r

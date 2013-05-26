@@ -1,20 +1,23 @@
 WATCHERS:
+# watcher groups?
+# watcher actions: reset, mute, act (click)
 # ping: async dns query
+# reset watcher
 # date-time event [gui] 
 # weather [gui] 
-# rss
+# rss [gui] 
 # custom event ($$$)
 
 GUI:
-# clickable events
-# notification level per watcher and default
+# notification level per watcher and default ?
 # colorize output
 # icons by status
+# sorting: by priority, by config
 
 OTHER:
 # save state
 # tests
-# order status by priority
+# startup event on watchers error
 # error hanlding
 # insert license into perl
 

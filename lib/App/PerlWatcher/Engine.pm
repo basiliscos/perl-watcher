@@ -5,6 +5,8 @@ use strict;
 use warnings;
 
 use AnyEvent;
+use Carp;
+use Class::Load ':all';
 use Data::Dumper;
 use Devel::Comments;
 
@@ -63,10 +65,15 @@ sub _construct_watchers {
     my $config = shift;
     my @r;
     for my $watcher_definition ( @{ $config -> {watchers} } ) {
-         my ($class, $watcher_config ) 
+        my ($class, $watcher_config ) 
             = @{ $watcher_definition }{ qw/class config/ };
-        my $watcher = $class -> new( $config, %$watcher_config );
-        push @r, $watcher;
+        my $watcher;
+        eval {
+            load_class($class);
+            $watcher = $class -> new( $config, %$watcher_config );
+            push @r, $watcher;
+        };
+        carp "Error creating watcher $class : $@" if $@;
     }
     return \@r;
 }

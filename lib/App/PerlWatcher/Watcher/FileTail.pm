@@ -90,7 +90,7 @@ sub _add_line {
     my ( $self, $line ) = @_;
     if ( defined $line ) {
         chomp $line;
-        ### $line
+        # $line
         push @{ $self->{_lines} }, $line;
         shift @{ $self->{_lines} }
           if @{ $self->{_lines} } > $self->{_line_number};
@@ -119,7 +119,7 @@ sub _initial_read {
 
     my $file_handle = $frb->get_handle;
 
-    #move file pointer to the end
+    # move file pointer to the end
     seek $file_handle, 0, 2;
     return $file_handle;
 }

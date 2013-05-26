@@ -12,8 +12,6 @@ BEGIN { unshift @INC, "$FindBin::Bin/../lib" }
 
 use App::PerlWatcher::Application;
 use App::PerlWatcher::Engine;
-use App::PerlWatcher::Watcher::Ping;
-use App::PerlWatcher::Watcher::FileTail;
 
 my $timeout   = 1;
 
