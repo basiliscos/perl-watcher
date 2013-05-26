@@ -1,16 +1,18 @@
 CORE:
 # watcher groups?
 # watcher actions: reset, mute, act (click)
-# async dns query
 # timestamps of last check
 
 WATCHERS:
 # ping: async dns query
-# weather [gui] 
-# rss: handle errors: dns, non-200 
-# custom event ($$$)
+# weather 
+# rss: handle errors: non-200
+# json watcher
+# http watcher
+# reminder watcher
 
 GUI:
+# collapse watchers (rss/filemanager) if there is no events.
 # notification level per watcher and default ?
 # colorize output
 # icons by status
