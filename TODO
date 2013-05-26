@@ -3,12 +3,17 @@ CORE:
 # watcher actions: reset, mute, act (click), force check?
 # timestamps for sub-events
 
+REFACTOR:
+# watcher/watcher_function/guard
+# move out gtk2-specific into separate package
+
 WATCHERS:
 # ping: async dns query
-# weather 
 # rss: handle errors: non-200
 # rss: record timestamp
 # rss: non-notification states (including warnings)
+# rss: smart update: use header's info 'if-modified-since'
+# weather watcher 
 # json watcher
 # http watcher
 # reminder watcher
@@ -28,4 +33,5 @@ OTHER:
 FUTURE/POSTPONED:
 # rss: atom feeds?
 # other (non-gtk2) backends
+
 
