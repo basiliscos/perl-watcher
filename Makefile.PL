@@ -11,6 +11,7 @@ WriteMakefile(
     'AnyEvent'              => '7.04',
     'AnyEvent::HTTP'        => '2.15',
     'Devel::Comments'       => '1.1.4',
+    'HTTP::Date'            => '6.02',
     'File::ReadBackwards'   => '1.05',
     'Gtk2'                  => '1.247',
     'Gtk2::TrayIcon'        => '0.06',

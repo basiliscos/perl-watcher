@@ -5,9 +5,11 @@ use strict;
 use warnings;
 
 use App::PerlWatcher::Status qw/:levels/;
+use App::PerlWatcher::EventItem;
 use AnyEvent::HTTP;
 use Carp;
 use Devel::Comments;
+use HTTP::Date;
 use URI;
 use XML::Simple;
 
@@ -83,14 +85,18 @@ sub _handle_result {
     my $xml = XMLin( $content );
     my $items = $xml -> {channel} -> {item};
     # $items
-    my @displayed_items = splice @{ $items }, 0, $self -> {_items_count};
+    my @top_items = splice @$items, 0, $self -> {_items_count};
+    my @news_items = map {
+            my $item = App::PerlWatcher::EventItem->new( $_ -> {title} );
+            $item -> timestamp( str2time( $_ -> {pubDate} ) );
+            $item;
+        } @top_items;
     my $status = App::PerlWatcher::Status->new( 
         $self, LEVEL_NOTICE, sub { 
             $self->description;
         },
         sub {
-            my @titles = map {$_ -> {title}} @displayed_items;
-            return \@titles;
+            return \@news_items;
         },
     );
     # $status

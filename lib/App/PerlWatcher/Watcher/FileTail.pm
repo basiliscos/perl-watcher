@@ -5,6 +5,7 @@ use strict;
 use warnings;
 
 use AnyEvent::Handle;
+use App::PerlWatcher::EventItem;
 use App::PerlWatcher::Status qw/:levels/;
 use App::PerlWatcher::Watcher;
 use Carp;
@@ -29,6 +30,7 @@ sub new {
         _inotify     => $inotify,
         _line_number => $line_number,
         _file        => $file,
+        _events      => [],
     };
 
     return bless $self, $class;
@@ -90,10 +92,12 @@ sub _add_line {
     my ( $self, $line ) = @_;
     if ( defined $line ) {
         chomp $line;
+        my $event_item = App::PerlWatcher::EventItem->new($line);
+        $event_item -> timestamp(0);
         # $line
-        push @{ $self->{_lines} }, $line;
-        shift @{ $self->{_lines} }
-          if @{ $self->{_lines} } > $self->{_line_number};
+        my $evens_queue = $self->{_events};
+        push @$evens_queue, $event_item;
+        shift @$evens_queue if @$evens_queue > $self->{_line_number};
         $self->_trigger_callback;
     }
 }
@@ -104,7 +108,7 @@ sub _trigger_callback {
         $self,
         LEVEL_NOTICE,
         sub { $self->description },
-        sub { $self->{_lines} },
+        sub { $self->{_events} },
     );
     $self->{_callback}->($status);
 }
