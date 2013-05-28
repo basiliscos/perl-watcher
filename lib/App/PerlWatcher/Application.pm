@@ -116,7 +116,7 @@ sub _consruct_gui {
             my ( $column, $cell, $model, $iter, $func_data ) = @_;
             my $value = $model->get_value( $iter, 0 );
             my $text;
-            if ( $value->isa('App::PerlWatcher::Status') ) {
+            if ( ref($value) && $value->isa('App::PerlWatcher::Status') ) {
                 my $status = $value;
                 $text = sprintf( "[%s] %s",
                     $status->symbol, $status->description->() );
@@ -154,7 +154,7 @@ sub _consruct_gui {
         sub {
             my ( $column, $cell, $model, $iter, $func_data ) = @_;
             my $value = $model->get_value( $iter, 0 );
-            if ( $value->isa('App::PerlWatcher::Status') ) {
+            if ( ref($value) && $value->isa('App::PerlWatcher::Status') ) {
                 my $status = $value;
                 $cell->set( active  => $status->watcher->active );
                 $cell->set( visible => 1 );
@@ -178,7 +178,7 @@ sub _consruct_gui {
             my ( $column, $cell, $model, $iter, $func_data ) = @_;
             my $value = $model->get_value( $iter, 0 );
             my $text;
-            if ( $value->isa('App::PerlWatcher::Status') ) {
+            if ( ref($value) && $value->isa('App::PerlWatcher::Status') ) {
                 my $status = $value;
                 $text = strftime('%H:%M:%S',localtime $status->timestamp);
             }

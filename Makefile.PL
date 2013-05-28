@@ -5,7 +5,7 @@ use ExtUtils::MakeMaker;
 
 WriteMakefile(
   NAME  => 'PerlWatcher',
-  VERSION   => '0.01',
+  VERSION   => '0.02',
   MIN_PERL_VERSION  => '5.012000',
   PREREQ_PM => {
     'AnyEvent'              => '7.04',
