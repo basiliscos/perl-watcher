@@ -55,7 +55,7 @@ my $callback_handler = sub {
     return $scenario->[$callback_invocations++]->{res}->(@_);
 };
 
-my $tmpdir = tempdir( CLEANUP => 0 );
+my $tmpdir = tempdir( CLEANUP => 1 );
 $filename = "$tmpdir/sample.log";
 open($file, ">", $filename) 
     or croak("can't open file $filename: $!");
