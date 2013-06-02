@@ -25,12 +25,9 @@ my $config = eval "no warnings; $content_config ";
 croak("error in config: $@") if ( $@ );
 
 my $engine = App::PerlWatcher::Engine->new($config);
-
-my $app = App::PerlWatcher::Application->new($engine);
+my $app = $engine->guess_frontend;
 $app->show;
 $app->update( [] );
-
-$engine->frontend($app);
 
 $engine->start;
 
