@@ -136,7 +136,7 @@ sub _consruct_gui {
                 my $status = $value;
                 $text = sprintf( "[%s] %s",
                     $status->symbol, $status->description->() );
-                $text = "<b>$text</b>;" if ($self->_is_unseen($status));
+                $text = "<b>$text</b>" if ($self->_is_unseen($status));
                 $cell->set( markup => "$text" );
             }
             else {
