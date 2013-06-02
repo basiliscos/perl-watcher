@@ -76,19 +76,24 @@ sub _interpret_result {
     $self -> {$opposite_counter_key} = 0 if ($self -> {_last_result} != $result);
     
     $self -> {_last_level} //= LEVEL_NOTICE;
+    my $updated = 0;
     
     my @levels = sort keys (%{ $thresholds -> {$meta_key} });
     my $level_key = first { $_ >= $counter } @levels;
     # $level_key
     if ( defined $level_key ) {
-        $self -> {_last_level} = $thresholds -> {$meta_key} -> {$level_key};
+        my $new_level = $thresholds -> {$meta_key} -> {$level_key};
+        $updated = $self -> {_last_level} == $new_level;
+        $self -> {_last_level} = $new_level; 
     }
     my $level = $self -> {_last_level};
     my $status = App::PerlWatcher::Status->new(
         watcher     => $self,
         level       => $level,
         description => sub {  $self->description  },
+        updated     => $updated,
     );
+    
     # $status
     $callback->($status);    
 }
