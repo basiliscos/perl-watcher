@@ -5,7 +5,7 @@ use ExtUtils::MakeMaker;
 
 WriteMakefile(
   NAME  => 'PerlWatcher',
-  VERSION   => '0.03',
+  VERSION   => '0.04',
   MIN_PERL_VERSION  => '5.012000',
   PREREQ_PM => {
     'AnyEvent'              => '7.04',
@@ -19,6 +19,7 @@ WriteMakefile(
     'XML::Simple'           => '2.18',
   },
   TEST_REQUIRES => {
+      'Test::TCP'           => '1.26',
       'Test::HTTP::Server'  => '0.03',
   },
   EXE_FILES => [
