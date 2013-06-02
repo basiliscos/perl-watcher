@@ -74,7 +74,7 @@ sub level_to_symbol {
 }
 
 sub new {
-    my ( $class, $watcher, $level, $description, $items ) = @_;
+    my ( $class, $watcher, $level, $description, $items, $updated ) = @_;
     
     my $self = {
         _watcher     => $watcher,
@@ -82,8 +82,13 @@ sub new {
         _description => $description,
         _items       => $items,
         _timestamp   => time,
+        _updated     => $updated,
     };
     return bless $self, $class;
+}
+
+sub updated {
+    return shift->{_updated};
 }
 
 sub watcher {

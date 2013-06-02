@@ -10,6 +10,7 @@ use AnyEvent::HTTP;
 use Carp;
 use Devel::Comments;
 use HTTP::Date;
+use List::MoreUtils qw/any/;
 use URI;
 use XML::Simple;
 
@@ -34,6 +35,7 @@ sub new {
         _timeout        => $timeout,
         _frequency      => $frequency,
         _title          => $title,
+        _recorded_news  => [],
     };
     bless $self, $class;
     
@@ -58,6 +60,8 @@ sub description {
     my $self = shift;
     return "Rss [" . $self->{_title} . "]";
 }
+
+# private API
 
 sub _install_watcher {
     my $self = shift;
@@ -91,16 +95,49 @@ sub _handle_result {
             $item -> timestamp( str2time( $_ -> {pubDate} ) );
             $item;
         } @top_items;
+    $self -> _emit_status(\@news_items);
+}
+
+sub _equals_items {
+    my ($a, $b) = @_;
+    # $a
+    # $b
+    my $result = !( ($a->content cmp $b->content) || ($a->timestamp <=> $b->timestamp) );
+    # $result
+    return $result; 
+}
+
+sub _emit_status {
+    my ($self, $news_items) = @_;
+    my $recorded_items = $self -> {_recorded_news};
+    # $news_items
+    # $recorded_items
+    my $fresh_condition = 
+           !@$recorded_items 
+        || @$recorded_items != @$news_items 
+        || do {
+            my $not_matched = 0;
+            for my $i (0..@$recorded_items-1) {
+               $not_matched ||= ! _equals_items(
+                   @{$recorded_items}[$i],
+                   @{$news_items}    [$i]
+               );
+            }
+        };
+        
+    ### $fresh_condition
+    
+    $self -> {_recorded_news} = $news_items;
     my $status = App::PerlWatcher::Status->new( 
         $self, LEVEL_NOTICE, sub { 
             $self->description;
         },
         sub {
-            return \@news_items;
+            return $self -> {_recorded_news};
         },
+        $fresh_condition,
     );
-    # $status
-    $self -> {_callback}->($status);    
+    $self -> {_callback}->($status);
 }
 
 
