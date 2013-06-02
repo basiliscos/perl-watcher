@@ -5,7 +5,7 @@ CORE:
 
 REFACTOR:
 # watcher/watcher_function/guard
-# move out gtk2-specific into separate package
+# Gtk2: decompose application into smaller number of widgets 
 
 WATCHERS:
 # ping: async dns query
