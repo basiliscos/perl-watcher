@@ -126,16 +126,14 @@ sub _emit_status {
         };
         
     ### $fresh_condition
-    
+
     $self -> {_recorded_news} = $news_items;
-    my $status = App::PerlWatcher::Status->new( 
-        $self, LEVEL_NOTICE, sub { 
-            $self->description;
-        },
-        sub {
-            return $self -> {_recorded_news};
-        },
-        $fresh_condition,
+    my $status = App::PerlWatcher::Status->new(
+        watcher     => $self,
+        level       => LEVEL_NOTICE,
+        description => sub {  $self->description;  },
+        items       => sub { $self -> {_recorded_news}; },
+        updated     => $fresh_condition,
     );
     $self -> {_callback}->($status);
 }

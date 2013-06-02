@@ -9,9 +9,9 @@ use App::PerlWatcher::EventItem;
 use App::PerlWatcher::Status qw/:levels/;
 use App::PerlWatcher::Watcher;
 use Carp;
+use Devel::Comments;
 use File::ReadBackwards;
 use Linux::Inotify2;
-use Devel::Comments;
 
 use base qw(App::PerlWatcher::Watcher);
 
@@ -49,7 +49,6 @@ sub start {
         sub {
             my $e    = shift;
             my $name = $e->fullname;
-
             # cancel this watcher: remove no further events
             #$e->w->cancel;
             my $ae_handle;
@@ -105,10 +104,10 @@ sub _add_line {
 sub _trigger_callback {
     my ($self) = @_;
     my $status = App::PerlWatcher::Status->new(
-        $self,
-        LEVEL_NOTICE,
-        sub { $self->description },
-        sub { $self->{_events} },
+        watcher     => $self,
+        level       => LEVEL_NOTICE,
+        description => sub { $self->description },
+        items       => sub { $self->{_events} },
     );
     $self->{_callback}->($status);
 }

@@ -84,10 +84,10 @@ sub _interpret_result {
         $self -> {_last_level} = $thresholds -> {$meta_key} -> {$level_key};
     }
     my $level = $self -> {_last_level};
-    my $status = App::PerlWatcher::Status->new( 
-        $self, $level, sub { 
-            $self->description 
-        },
+    my $status = App::PerlWatcher::Status->new(
+        watcher     => $self,
+        level       => $level,
+        description => sub {  $self->description  },
     );
     # $status
     $callback->($status);    

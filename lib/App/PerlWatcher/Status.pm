@@ -74,15 +74,15 @@ sub level_to_symbol {
 }
 
 sub new {
-    my ( $class, $watcher, $level, $description, $items, $updated ) = @_;
+    my ( $class, %args ) = @_;
     
     my $self = {
-        _watcher     => $watcher,
-        _level       => $level,
-        _description => $description,
-        _items       => $items,
-        _timestamp   => time,
-        _updated     => $updated,
+        _watcher     => $args{watcher       },
+        _level       => $args{level         },
+        _description => $args{description   },
+        _items       => $args{items         },
+        _updated     => $args{updated       } // 1,
+        _timestamp   => $args{timestamp     } // time,
     };
     return bless $self, $class;
 }
