@@ -32,15 +32,17 @@ sub new {
     bless $self, $class;
 
     $self->_consruct_gui;
-
+    
+    $self -> {_last_seen} = 0;
     my $handler = sub {
         my ( $widget, $event ) = @_;
         $self->{_window}->hide_all;
         my ( $x, $y ) = $event->root_coords;
         $self->{_window}->move( $x, $y );
         $self->{_window}->show_all;
+        $self->{_window}->present;
     };
-
+    
     $icon->signal_connect( "button-press-event" => $handler );
 
     $label->set_has_tooltip(1);
@@ -83,8 +85,22 @@ sub _construct_window {
     $window->set_skip_taskbar_hint(1);
     $window->set_type_hint('tooltip');
     $window->signal_connect( delete_event => \&Gtk2::Widget::hide_on_delete );
+    $window->signal_connect( 'focus-out-event' => sub {
+            ### focus out
+            $self -> {_last_seen} = time;
+    });
 
     return $window;
+}
+
+sub _is_unseen {
+    my ($self, $status) = @_;
+    my $r = 0;
+    if ($status->updated 
+        && ($status->timestamp > $self -> {_last_seen}) ) {
+        $r = 1;
+    }
+    return $r;
 }
 
 sub _consruct_gui {
@@ -120,12 +136,13 @@ sub _consruct_gui {
                 my $status = $value;
                 $text = sprintf( "[%s] %s",
                     $status->symbol, $status->description->() );
+                $text = "<b>$text</b>;" if ($self->_is_unseen($status));
+                $cell->set( markup => "$text" );
             }
             else {
-                $text = $value -> content;
+                $cell->set( text => $value -> content );
             }
-            ## $text
-            $cell->set( text => $text );
+            
         }
     );
 
@@ -145,6 +162,7 @@ sub _consruct_gui {
         $tree_store
     );
 
+    # 3rd col
     my $column_toggle = Gtk2::TreeViewColumn->new;
     $column_toggle->pack_start( $renderer_toggle, 1 );
     $column_toggle->set_title('_active');
