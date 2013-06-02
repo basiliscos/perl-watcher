@@ -1,7 +1,7 @@
 CORE:
 # watcher groups?
 # watcher actions: reset, mute, act (click), force check?
-# timestamps for sub-events
+# timestamps should include dates for sub-events?
 
 REFACTOR:
 # watcher/watcher_function/guard
@@ -13,7 +13,7 @@ WATCHERS:
 # rss: record timestamp
 # rss: non-notification states (including warnings)
 # rss: smart update: use header's info 'if-modified-since'
-# weather watcher 
+# weather watcher
 # json watcher
 # http watcher
 # reminder watcher
@@ -26,9 +26,11 @@ GUI:
 # icons by status
 # sorting: by priority, by config
 
+BUGS:
+# failing test for file tail watcher
+
 OTHER:
-# save state
-# tests
+# watcher save state between invocations 
 # error hanlding
 
 FUTURE/POSTPONED:
