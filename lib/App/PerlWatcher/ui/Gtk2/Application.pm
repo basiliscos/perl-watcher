@@ -87,6 +87,7 @@ sub _construct_window {
     $window->signal_connect( delete_event => \&Gtk2::Widget::hide_on_delete );
     $window->signal_connect( 'focus-out-event' => sub {
             ### focus out
+            $window->hide;
             $self -> {_last_seen} = time;
     });
 
