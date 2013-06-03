@@ -12,10 +12,12 @@ use Devel::Comments;
 
 sub new {
     my ( $class, $config ) = @_;
+    my $backend = _construct_backend( $config );
     my $watchers = _construct_watchers( $config );
     my $watchers_order = {};
     $watchers_order->{ @{$watchers}[$_] } = $_ for 0 .. @$watchers - 1;
     my $self = {
+        _backend        => $backend,
         _watchers       => $watchers,
         _watchers_order => $watchers_order,
         _statuses       => {},
@@ -27,7 +29,7 @@ sub new {
 sub guess_frontend {
     my $self = shift;
     my $fe;
-    my $loop = $self -> config -> {loop_engine};
+    my $loop = $self -> config -> {backend};
     my $class = "App::PerlWatcher::ui::" . $loop . "::Application"; 
     eval {
         load_class($class);
@@ -48,7 +50,7 @@ sub config {
 }
 
 sub start {
-    my $self     = shift;
+    my $self = shift;
     for my $w ( @{ $self->{_watchers} } ) {
         $w->start(
             sub {
@@ -60,9 +62,24 @@ sub start {
             }
         );
     }
-    my $loop = $self -> config -> {loop_engine};
-    ### $loop
-    main $loop;
+    $self -> {_backend} -> start_loop;
+}
+
+sub stop {
+    shift -> {_backend} -> stop_loop;
+}
+
+sub _construct_backend {
+    my ($config) = @_;
+    my $backend_id = $config -> {backend}; 
+    my $backend_class = 'App::PerlWatcher::ui::' . $backend_id . '::EngineBackend';
+    my $backend;
+    eval {
+        load_class($backend_class);
+        $backend = $backend_class -> new;
+    };
+    croak "Unable to construct backend : $@" if($@);
+    return $backend;
 }
 
 sub _gather_results {

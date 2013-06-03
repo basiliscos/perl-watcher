@@ -10,7 +10,6 @@ use FindBin;
 
 BEGIN { unshift @INC, "$FindBin::Bin/../lib" }
 
-use App::PerlWatcher::Application;
 use App::PerlWatcher::Engine;
 
 my $timeout   = 1;
