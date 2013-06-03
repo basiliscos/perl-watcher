@@ -30,7 +30,6 @@ my $scenario = [
             my $status = shift;
             my $items = $status->items->();
             is @{ $items }, 5, "got 5 items (#1)";
-            ok $status->updated, "status has been updated";
         },
     },
     
@@ -41,7 +40,6 @@ my $scenario = [
             my $status = shift;
             my $items = $status->items->();
             is @{ $items }, 5, "got 5 items (#2)";
-            ok !$status->updated, "status has not been updated";
         },
     },
     

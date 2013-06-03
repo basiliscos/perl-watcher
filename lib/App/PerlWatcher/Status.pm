@@ -77,18 +77,19 @@ sub new {
     my ( $class, %args ) = @_;
     
     my $self = {
-        _watcher     => $args{watcher       },
-        _level       => $args{level         },
-        _description => $args{description   },
-        _items       => $args{items         },
-        _updated     => $args{updated       } // 1,
-        _timestamp   => $args{timestamp     } // time,
+        _watcher            => $args{watcher            },
+        _level              => $args{level              },
+        _description        => $args{description        },
+        _items              => $args{items              },
+        _timestamp          => $args{timestamp          } // time,
+        _update_detector    => $args{update_detector    },
     };
     return bless $self, $class;
 }
 
-sub updated {
-    return shift->{_updated};
+sub updated_from {
+    my ($a, $b) = @_;
+    return $a -> {_update_detector}->($a, $b);
 }
 
 sub watcher {

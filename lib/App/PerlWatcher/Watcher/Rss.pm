@@ -133,7 +133,6 @@ sub _emit_status {
         level       => LEVEL_NOTICE,
         description => sub {  $self->description;  },
         items       => sub { $self -> {_recorded_news}; },
-        updated     => $fresh_condition,
     );
     $self -> {_callback}->($status);
 }

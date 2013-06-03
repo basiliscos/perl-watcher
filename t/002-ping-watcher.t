@@ -24,7 +24,6 @@ my $server = Test::TCP->new(
     ) or croak ("ERROR in Socket Creation : $!");
     while(1) {
         my $client_socket = $socket->accept();
-        $client_socket->send("hello");
         $client_socket->close();
     }
   },
@@ -33,12 +32,15 @@ my $server = Test::TCP->new(
 BEGIN { unshift @INC, "$FindBin::Bin/../lib" }
 require App::PerlWatcher::Watcher::Ping;
 
+my ($s1, $s2);
+
 my $scenario = [
     #1 
     {
         res =>  sub {
             my $status = shift;
-            ok $status->updated, "status has been updated";
+            ok $status;
+            $s1 = $status;
         },
     },
     
@@ -46,7 +48,10 @@ my $scenario = [
     {
         res =>  sub {
             my $status = shift;
-            ok $status->updated, "status has been updated";
+            ok $status;
+            $s2 = $status;
+            ok !$s1->updated_from($s2);
+            ok !$s2->updated_from($s1);
         },
     },
     

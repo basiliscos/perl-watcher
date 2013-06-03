@@ -23,7 +23,6 @@ my $scenario = [
     {
         res =>  sub {
             my $status = shift;
-            ok $status->updated, "status has been updated";
             my $items = $status->items->();
             is @{ $items }, 1, "got 1 item (#1)";
             #say $file "line 1";

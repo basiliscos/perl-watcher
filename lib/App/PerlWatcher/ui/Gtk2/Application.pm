@@ -97,8 +97,8 @@ sub _construct_window {
 sub _is_unseen {
     my ($self, $status) = @_;
     my $r = 0;
-    if ($status->updated 
-        && ($status->timestamp > $self -> {_last_seen}) ) {
+    # check if status has been updated
+    if (($status->timestamp > $self -> {_last_seen}) ) {
         $r = 1;
     }
     return $r;

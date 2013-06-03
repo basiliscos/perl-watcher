@@ -21,6 +21,7 @@ sub new {
         _watchers       => $watchers,
         _watchers_order => $watchers_order,
         _statuses       => {},
+        _statuses_stash => {},
         _config         => $config // {},
     };
     return bless $self, $class;
@@ -67,6 +68,20 @@ sub start {
 
 sub stop {
     shift -> {_backend} -> stop_loop;
+}
+
+sub stash {
+    my ($self, $status) = @_;
+    my $watcher = $status -> watcher;
+    $self -> {_statuses_stash} -> {$watcher} = $status; 
+}
+
+sub has_changed {
+    my ($self, $status) = @_;
+    my $watcher = $status -> watcher;
+    my $stashed_status = $self -> {_statuses_stash} -> {$watcher};
+    return 1 if !defined($stashed_status);
+    return $stashed_status->updated_from($status);
 }
 
 sub _construct_backend {
