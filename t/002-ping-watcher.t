@@ -32,6 +32,7 @@ my $server = Test::TCP->new(
 BEGIN { unshift @INC, "$FindBin::Bin/../lib" }
 require App::PerlWatcher::Watcher::Ping;
 
+my $end_var = AnyEvent->condvar;
 my ($s1, $s2);
 
 my $scenario = [
@@ -50,8 +51,7 @@ my $scenario = [
             my $status = shift;
             ok $status;
             $s2 = $status;
-            ok !$s1->updated_from($s2);
-            ok !$s2->updated_from($s1);
+            $end_var->send;
         },
     },
     
@@ -77,22 +77,19 @@ my $engine_config = {
 
 my $watcher = App::PerlWatcher::Watcher::Ping->new(
     $engine_config,
-    (host => "localhost", port => $server->port, frequency => 1, timeout => 1),
+    (host => "localhost", port => $server->port, frequency => 0.1, timeout => 1),
 );
 
 ok defined($watcher), "watcher was created";
 
 $watcher->start($callback_handler);
-
-my $end_var = AnyEvent->condvar;
-my $w = AnyEvent->timer (
-    after => 1.9, 
-    cb => sub {
-        $end_var->send;
-    }
-);
 $end_var->recv;
 
 is $callback_invocations, scalar @$scenario, "correct number of callback invocations";
+ok !$s1->updated_from($s1);
+ok !$s1->updated_from($s2);
+ok !$s2->updated_from($s1);
+ok !$s2->updated_from($s2);
+
 
 done_testing();

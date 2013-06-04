@@ -82,7 +82,7 @@ sub new {
         _description        => $args{description        },
         _items              => $args{items              },
         _timestamp          => $args{timestamp          } // time,
-        _update_detector    => $args{update_detector    },
+        _update_detector    => \&_chage_detector,
     };
     return bless $self, $class;
 }
@@ -117,5 +117,41 @@ sub items {
 sub timestamp {
     return shift->{_timestamp};
 }
+
+sub _chage_detector {
+    my ($a, $b) = @_;
+    carp unless $a -> {_watcher} == $b -> {_watcher};
+    return ($a->level != $b->level)
+        || (defined($a->items) && !defined($b->items))
+        || (!defined($a->items) && defined($b->items))
+        || (defined($a->items) && defined($b->items) 
+                && _items_change_detector($a->items->(), $b->items->()) 
+            );
+}
+
+sub _equals_items {
+    my ($a, $b) = @_;
+    # $a
+    # $b
+    my $result = !( ($a->content cmp $b->content) || ($a->timestamp <=> $b->timestamp) );
+    # $result
+    return $result; 
+}
+
+sub _items_change_detector {
+    my ($a, $b) = @_;
+    # $a
+    # $b
+    return 1 if(@$a != @$b);
+    for my $i (0..@$a-1) {
+        return 1 
+            if ! _equals_items(
+                @{ $a }[$i],
+                @{ $b }[$i],
+            );
+    }
+    return 0;
+}
+
 
 1;

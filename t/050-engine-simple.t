@@ -52,7 +52,7 @@ my $create_status = sub {
     my $level = shift;
     return App::PerlWatcher::Status->new(
         level           => $level,
-        watcher         => $watcher,
+        watcher         => \$watcher,
         update_detector => $update_detector
     );
 };

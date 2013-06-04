@@ -22,6 +22,10 @@ sub getRss {
     return $output;
 }
 
+my ($s1, $s2);
+
+my $end_var = AnyEvent->condvar;
+
 my $scenario = [
     #1 
     {
@@ -30,6 +34,7 @@ my $scenario = [
             my $status = shift;
             my $items = $status->items->();
             is @{ $items }, 5, "got 5 items (#1)";
+            $s1 = $status;
         },
     },
     
@@ -40,6 +45,8 @@ my $scenario = [
             my $status = shift;
             my $items = $status->items->();
             is @{ $items }, 5, "got 5 items (#2)";
+            $s2 = $status;
+            $end_var->send;
         },
     },
     
@@ -57,11 +64,10 @@ my $server = Test::HTTP::Server->new();
 ok defined($server), "served defined";
 
 my $rss_url1 = $server->uri . "rss1";
-# $rss_url1
 
 my $watcher = App::PerlWatcher::Watcher::Rss->new(
     0,
-    (url => $rss_url1, items => 5, frequency => 1, timeout => 1, title => 'la-la-title'),
+    (url => $rss_url1, items => 5, frequency => 0.01, timeout => 1, title => 'la-la-title'),
 );
 
 ok defined($watcher), "watcher was created";
@@ -74,18 +80,15 @@ sub Test::HTTP::Server::Request::rss1 {
 }
 
 $watcher->start($callback_handler);
-
-my $end_var = AnyEvent->condvar;
-my $w = AnyEvent->timer (
-    after => 2, 
-    cb => sub {
-        $end_var->send;
-    }
-);
 $end_var->recv;
 
 # invoked in other forked process. Not testing
 #is $server_invocations  , scalar @$scenario, "correct number of server invocations";
 is $callback_invocations, scalar @$scenario, "correct number of callback invocations";
+
+ok !$s1->updated_from($s1);
+ok !$s1->updated_from($s2);
+ok !$s2->updated_from($s2);
+ok !$s2->updated_from($s1);
 
 done_testing();

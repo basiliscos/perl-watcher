@@ -91,16 +91,10 @@ sub _interpret_result {
         watcher     => $self,
         level       => $level,
         description => sub {  $self->description  },
-        update_detector => \&_chage_detector,
     );
     
     # $status
     $callback->($status);    
-}
-
-sub _chage_detector {
-    my ($a, $b) = @_;
-    return $a->level != $b->level;
 }
 
 sub _install_thresholds {

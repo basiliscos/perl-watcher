@@ -15,8 +15,13 @@ use Test::More;
 BEGIN { unshift @INC, "$FindBin::Bin/../lib" }
 require App::PerlWatcher::Watcher::FileTail;
 
+
+my $end_var = AnyEvent->condvar;
+
 my $filename,
 my $file;
+
+my ($s1);
 
 my $scenario = [
     #1 
@@ -25,7 +30,8 @@ my $scenario = [
             my $status = shift;
             my $items = $status->items->();
             is @{ $items }, 1, "got 1 item (#1)";
-            #say $file "line 1";
+            $s1 = $status;
+            $end_var->send;
         },
     },
 
@@ -69,16 +75,10 @@ my $watcher = App::PerlWatcher::Watcher::FileTail->new(
 ok defined($watcher), "watcher was created";
 
 $watcher->start($callback_handler);
-
-my $end_var = AnyEvent->condvar;
-my $w = AnyEvent->timer (
-    after => 1.9, 
-    cb => sub {
-        $end_var->send;
-    }
-);
 $end_var->recv;
 
 is $callback_invocations, scalar @$scenario, "correct number of callback invocations";
+
+ok !$s1->updated_from($s1);
 
 done_testing();

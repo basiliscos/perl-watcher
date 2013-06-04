@@ -28,6 +28,12 @@ GUI:
 
 BUGS:
 # failing test for file tail watcher
+# handle errors in rss thread (silently ignore)
+*** unhandled exception in callback:
+***   File does not exist: Thread not found.
+***    at /home/dmol/development/perl/lib/lib/perl5/App/PerlWatcher/Watcher/Rss.pm line 89.
+***  ignoring at /home/dmol/development/perl/lib/lib/perl5/App/PerlWatcher/Engine.pm line 65.
+
 
 OTHER:
 # watcher save state between invocations 
