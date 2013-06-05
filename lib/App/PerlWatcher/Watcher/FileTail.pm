@@ -103,11 +103,12 @@ sub _add_line {
 
 sub _trigger_callback {
     my ($self) = @_;
+    my @events = @{ $self->{_events} };
     my $status = App::PerlWatcher::Status->new(
         watcher     => $self,
         level       => LEVEL_NOTICE,
         description => sub { $self->description },
-        items       => sub { $self->{_events} },
+        items       => sub { \@events },
     );
     $self->{_callback}->($status);
 }

@@ -21,7 +21,8 @@ my $end_var = AnyEvent->condvar;
 my $filename,
 my $file;
 
-my ($s1);
+my ($s1, $s2);
+my $timer;
 
 my $scenario = [
     #1 
@@ -31,27 +32,23 @@ my $scenario = [
             my $items = $status->items->();
             is @{ $items }, 1, "got 1 item (#1)";
             $s1 = $status;
-            $end_var->send;
+            $timer = AnyEvent->timer(after => 0, cb => sub {
+                    say $file "1st line";
+            });
         },
     },
 
-## not working yet ??    
-    #2 
-    # {
-        # res =>  sub {
-            # my $status = shift;
-            # ok $status->updated, "status has been updated";
-            # syswrite $file, "line 2";
-        # },
-    # },
-    
-    #3 
-    # {
-        # res =>  sub {
-            # my $status = shift;
-            # ok $status->updated, "status has been updated";
-        # },
-    # },
+    {
+        res =>  sub {
+            my $status = shift;
+            my $items = $status->items->();
+            is @{ $items }, 2, "got 2 items (#2)";
+            $s2 = $status;
+            $timer = AnyEvent->timer(after => 0, cb => sub {
+                    $end_var->send;
+            });
+        },
+    },
     
 ];
 
@@ -80,5 +77,8 @@ $end_var->recv;
 is $callback_invocations, scalar @$scenario, "correct number of callback invocations";
 
 ok !$s1->updated_from($s1);
+ok  $s1->updated_from($s2);
+ok !$s2->updated_from($s2);
+ok  $s2->updated_from($s1);
 
 done_testing();
