@@ -44,7 +44,7 @@ our %EXPORT_TAGS = (
 );
 
 our %_symbols_for = (
-    LEVEL_ANY()       => q{ },
+    LEVEL_ANY()       => '?',
     LEVEL_NOTICE()    => 'n',
     LEVEL_INFO()      => 'i',
     LEVEL_WARN()      => 'w',
@@ -53,6 +53,7 @@ our %_symbols_for = (
 
 
 our %_labels_for = (
+    LEVEL_ANY()       => 'unknown',
     LEVEL_NOTICE()    => 'notice',
     LEVEL_INFO()      => 'info',
     LEVEL_WARN()      => 'warn',

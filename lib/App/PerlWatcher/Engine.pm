@@ -5,6 +5,7 @@ use strict;
 use warnings;
 
 use AnyEvent;
+use App::PerlWatcher::Status qw/:levels/;
 use Carp;
 use Class::Load ':all';
 use Data::Dumper;
@@ -15,7 +16,7 @@ sub new {
     my $backend = _construct_backend( $config );
     my $watchers = _construct_watchers( $config );
     my $watchers_order = {};
-    $watchers_order->{ @{$watchers}[$_] } = $_ for 0 .. @$watchers - 1;
+    $watchers_order->{ $watchers->[$_] } = $_ for 0 .. @$watchers - 1;
     my $self = {
         _backend        => $backend,
         _watchers       => $watchers,
@@ -44,6 +45,18 @@ sub guess_frontend {
 sub frontend {
     my ( $self, $frontend ) = @_;
     $self->{_frontend} = $frontend;
+    # generate fake statuses to make watchers known to frontend
+    my @initial_statuses = map {
+        my $w = $_;
+        App::PerlWatcher::Status->new(
+            watcher     => $w,
+            level       => LEVEL_ANY,
+            description => sub {  $w->description; },
+        );
+    } @{ $self->{_watchers} };
+    
+    # notify as soon as fronend be ready
+    AnyEvent::postpone { $frontend->update(\@initial_statuses) };
 }
 
 sub config {
@@ -63,6 +76,7 @@ sub start {
             }
         );
     }
+    # actually trigger watchers
     $self -> {_backend} -> start_loop;
 }
 
@@ -82,6 +96,10 @@ sub has_changed {
     my $stashed_status = $self -> {_statuses_stash} -> {$watcher};
     return 1 if !defined($stashed_status);
     return $stashed_status->updated_from($status);
+}
+
+sub get_watchers {
+    return shift->{_watchers};
 }
 
 sub _construct_backend {

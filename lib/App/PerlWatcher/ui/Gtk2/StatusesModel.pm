@@ -13,9 +13,10 @@ use POSIX qw(strftime);
 use base 'Gtk2::TreeStore';
 
 sub new {
-    my $class = shift;
+    my ($class, $app) = @_;
     my $self = Gtk2::TreeStore->new(qw/Glib::Scalar/);
     $self -> {_statuses} = [];
+    $self -> {_engine  } = $app->engine;
     bless $self, $class;
     return $self;
 }

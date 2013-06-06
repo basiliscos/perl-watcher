@@ -12,8 +12,12 @@ use Gtk2;
 use Gtk2::TrayIcon;
 use POSIX qw(strftime);
 
+use base qw/App::PerlWatcher::Frontend/;
+
 sub new {
     my ( $class, $engine ) = @_;
+    my $self = $class->SUPER::new($engine);
+    
     Gtk2->init;
     my $icon      = Gtk2::TrayIcon->new("test");
     my $event_box = Gtk2::EventBox->new;
@@ -24,14 +28,9 @@ sub new {
 
     my $tooltips = Gtk2::Tooltips->new;
 
-    my $self = {
-        _icon       => $icon,
-        _label      => $label,
-        _tooltips   => $tooltips,
-        _engine     => $engine,
-        _last_seen  => 0, 
-    };
-    bless $self, $class;
+    $self -> {_icon      } = $icon;
+    $self -> {_label     } = $label;
+    $self -> {_tooltips  } = $label;          
 
     $self->_consruct_gui;
     
@@ -71,11 +70,6 @@ sub show {
     $self->{_icon}->show_all();
 }
 
-sub last_seen {
-    my $self = shift;
-    return $self -> {_last_seen};     
-}
-
 sub _set_label {
     my ( $self, $text ) = @_;
     $self->{_label}->set_text($text);
@@ -86,7 +80,7 @@ sub _construct_window {
     my $window = Gtk2::Window->new;
 
     my $default_size =
-      $self->{_engine}->config->{frontend}->{gtk}->{window_size}
+      $self->engine->config->{frontend}->{gtk}->{window_size}
       // [ 500, 300 ];
 
     $window->set_default_size(@$default_size);
@@ -100,7 +94,7 @@ sub _construct_window {
     $window->signal_connect( 'focus-out-event' => sub {
             ### focus out
             $window->hide;
-            $self -> {_last_seen} = time;
+            $self->last_seen(time);
     });
 
     return $window;
@@ -116,10 +110,11 @@ sub _consruct_gui {
     my $label = Gtk2::Label->new('Hello World!');
     $vbox->pack_start( $label, 1, 1, 0 );
 
-    my $tree_store = App::PerlWatcher::ui::Gtk2::StatusesModel->new;
+    my $tree_store = App::PerlWatcher::ui::Gtk2::StatusesModel
+        ->new($self);
     my $treeview   = App::PerlWatcher::ui::Gtk2::StatusesTreeView
         ->new($tree_store, $self);
-    $vbox->pack_start( $treeview, 1, 1, 0 );
+    $vbox->pack_start( $treeview, 1, 1, 0 );                       
     
     $vbox->show_all;
 

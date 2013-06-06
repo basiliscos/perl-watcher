@@ -37,7 +37,7 @@ sub new {
 }
 
 sub start {
-    ### starting watch file
+    # starting watch file
     my $self = shift;
     $self->{_callback} //= shift;
 

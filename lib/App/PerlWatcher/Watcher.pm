@@ -4,6 +4,8 @@ use 5.12.0;
 use strict;
 use warnings;
 
+use Carp;
+
 sub active {
     my ( $self, $value ) = @_;
     if ( defined($value) ) {
@@ -11,6 +13,10 @@ sub active {
         $self->start if $value;
     }
     return defined( $self->{_w} );
+}
+
+sub description {
+     croak 'Method "description" not implemented by subclass';
 }
 
 1;

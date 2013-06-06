@@ -15,7 +15,8 @@ use Test::TCP;
 
 BEGIN { unshift @INC, "$FindBin::Bin/../lib" }
 use App::PerlWatcher::Status qw/:levels/;
-require App::PerlWatcher::Engine;
+use App::PerlWatcher::Engine;
+use App::PerlWatcher::Frontend;
 
 # watcher event registration
 my $server = Test::TCP->new(
@@ -37,6 +38,16 @@ my $server = Test::TCP->new(
 my $engine;
 
 my $scenario = [
+    #0 initial status 
+    {
+        res =>  sub {
+            my $statuses = shift;
+            ok @$statuses == 1;
+            my $status = pop @{$statuses};
+            is $status->level, LEVEL_ANY;
+        },
+    },
+    
     #1 
     {
         res =>  sub {
@@ -81,12 +92,7 @@ my $callback_handler = sub {
 
 {
     package Test::PerlWatcher::FrontEnd;
-    sub new{
-        my $class = shift;
-        my $self = {};
-        bless $self, $class;
-        return $self;
-    }
+    use base qw/App::PerlWatcher::Frontend/;
     sub update {
         my ( $self, $statuses ) = @_;
         $callback_handler->($statuses);
