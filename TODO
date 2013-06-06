@@ -5,7 +5,6 @@ CORE:
 
 REFACTOR:
 # watcher/watcher_function/guard
-# Gtk2: decompose application into smaller number of widgets 
 
 WATCHERS:
 # ping: async dns query
@@ -42,5 +41,4 @@ OTHER:
 FUTURE/POSTPONED:
 # rss: atom feeds?
 # other (non-gtk2) backends
-
 
