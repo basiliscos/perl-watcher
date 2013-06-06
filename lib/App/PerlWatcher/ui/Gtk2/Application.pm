@@ -55,9 +55,14 @@ sub new {
 
 sub update {
     my ( $self, $statuses ) = @_;
-    my $symbol = $self->_result_to_symbol($statuses);
+    
+    my $model = $self -> {_tree_store };
+    $model->update($statuses);
+    
+    my $max_level = $model->max_actual_level;
+    my $symbol = level_to_symbol($max_level);
     $self->_set_label("[$symbol]");
-    $self->{_tree_store }->update($statuses);
+    
     $self->{_treeview   }->expand_all;
 }
 
@@ -122,16 +127,6 @@ sub _consruct_gui {
     $self->{_window}        = $window;
     $self->{_tree_store}    = $tree_store;
     $self->{_treeview}      = $treeview;
-}
-
-sub _result_to_symbol {
-    my ( $self, $statuses ) = @_;
-    my $level = LEVEL_ANY;
-    for my $status (@$statuses) {
-        $level = $status->level if $level < $status->level; 
-    }
-    my $symbol = level_to_symbol($level);
-    return $symbol;
 }
 
 1;
