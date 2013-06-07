@@ -4,8 +4,9 @@ use warnings;
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
-  NAME  => 'PerlWatcher',
-  VERSION   => '0.04',
+  NAME              => 'PerlWatcher',
+  VERSION           => '0.04',
+  VERSION_FROM      => "lib/App/PerlWatcher/Engine.pm",
   MIN_PERL_VERSION  => '5.012000',
   PREREQ_PM => {
     'AnyEvent'              => '7.04',
