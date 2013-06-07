@@ -38,22 +38,10 @@ my $server = Test::TCP->new(
 my $engine;
 
 my $scenario = [
-    #0 initial status 
-    {
-        res =>  sub {
-            my $statuses = shift;
-            ok @$statuses == 1;
-            my $status = pop @{$statuses};
-            is $status->level, LEVEL_ANY;
-        },
-    },
-    
     #1 
     {
         res =>  sub {
-            my $statuses = shift;
-            ok @$statuses == 1;
-            my $status = pop @{$statuses};
+            my $status = shift;
             is $status->level, LEVEL_NOTICE;
             ok $engine -> has_changed($status); 
             ok $engine -> stash($status);
@@ -64,9 +52,7 @@ my $scenario = [
     #2 
     {
         res =>  sub {
-            my $statuses = shift;
-            ok @$statuses == 1;
-            my $status = pop @{$statuses};
+            my $status = shift;
             is $status->level, LEVEL_NOTICE;
             ok !$engine -> has_changed($status); 
             $server = undef;
@@ -76,9 +62,7 @@ my $scenario = [
     #3 
     {
         res =>  sub {
-            my $statuses = shift;
-            ok @$statuses == 1;
-            my $status = pop @{$statuses};
+            my $status = shift;
             is $status->level, LEVEL_ALERT;
             ok $engine -> has_changed($status); 
         },
@@ -94,8 +78,8 @@ my $callback_handler = sub {
     package Test::PerlWatcher::FrontEnd;
     use base qw/App::PerlWatcher::Frontend/;
     sub update {
-        my ( $self, $statuses ) = @_;
-        $callback_handler->($statuses);
+        my ( $self, $status ) = @_;
+        $callback_handler->($status);
     }
 }
 my $frontend = Test::PerlWatcher::FrontEnd->new($engine);

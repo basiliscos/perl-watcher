@@ -16,7 +16,7 @@ sub new {
 }
 
 sub update {
-    my ( $self, $statuses ) = @_;
+    my ( $self, $status ) = @_;
     croak 'Method "show" not implemented by subclass';
 }
 

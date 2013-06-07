@@ -5,7 +5,6 @@ use strict;
 use warnings;
 
 use AnyEvent;
-use App::PerlWatcher::Status qw/:levels/;
 use Carp;
 use Class::Load ':all';
 use Data::Dumper;
@@ -21,7 +20,6 @@ sub new {
         _backend        => $backend,
         _watchers       => $watchers,
         _watchers_order => $watchers_order,
-        _statuses       => {},
         _statuses_stash => {},
         _config         => $config // {},
     };
@@ -45,18 +43,6 @@ sub guess_frontend {
 sub frontend {
     my ( $self, $frontend ) = @_;
     $self->{_frontend} = $frontend;
-    # generate fake statuses to make watchers known to frontend
-    my @initial_statuses = map {
-        my $w = $_;
-        App::PerlWatcher::Status->new(
-            watcher     => $w,
-            level       => LEVEL_ANY,
-            description => sub {  $w->description; },
-        );
-    } @{ $self->{_watchers} };
-    
-    # notify as soon as fronend be ready
-    AnyEvent::postpone { $frontend->update(\@initial_statuses) };
 }
 
 sub config {
@@ -69,10 +55,9 @@ sub start {
         $w->start(
             sub {
                 my $status = shift;
-                $self->{_statuses}->{ $status->watcher } = $status;
-
-                my $statuses = $self->_gather_results;
-                $self->{_frontend}->update($statuses);
+                AnyEvent::postpone {
+                    $self->{_frontend}->update($status);
+                };
             }
         );
     }
@@ -113,16 +98,6 @@ sub _construct_backend {
     };
     croak "Unable to construct backend : $@" if($@);
     return $backend;
-}
-
-sub _gather_results {
-    my $self     = shift;
-    my @statuses = sort {
-        my $a_index = $self->{_watchers_order}->{ $a->watcher };
-        my $b_index = $self->{_watchers_order}->{ $b->watcher };
-        return $a_index <=> $b_index;
-    } values( %{ $self->{_statuses} } );
-    return \@statuses;
 }
 
 sub _construct_watchers {

@@ -2,16 +2,23 @@ CORE:
 # watcher groups?
 # watcher actions: reset, mute, act (click), force check?
 # timestamps should include dates for sub-events?
+# engine: watcher save state between invocations?
+# update status (tray icon) to notify changes, filtered by some level?
+# about/version information?
 
 REFACTOR:
 # watcher/watcher_function/guard
+# Engine: move out guess frontend into bootstrap? 
 
 WATCHERS:
 # ping: async dns query
+# ping: udp proto
+# ping: icmp proto: external program fork
 # rss: handle errors: non-200
 # rss: record timestamp
 # rss: non-notification states (including warnings)
 # rss: smart update: use header's info 'if-modified-since'
+# rss: gather headers or bodies
 # weather watcher
 # json watcher
 # http watcher
@@ -26,19 +33,18 @@ GUI:
 # sorting: by priority, by config
 
 BUGS:
-# failing test for file tail watcher
-# handle errors in rss thread (silently ignore)
+# handle errors in rss thread (silently ignore?)
 *** unhandled exception in callback:
 ***   File does not exist: Thread not found.
 ***    at /home/dmol/development/perl/lib/lib/perl5/App/PerlWatcher/Watcher/Rss.pm line 89.
 ***  ignoring at /home/dmol/development/perl/lib/lib/perl5/App/PerlWatcher/Engine.pm line 65.
-
+# redraw window on moving 
 
 OTHER:
-# watcher save state between invocations 
 # error hanlding
 
 FUTURE/POSTPONED:
 # rss: atom feeds?
 # other (non-gtk2) backends
+# cookbook of solutions
 

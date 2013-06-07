@@ -26,7 +26,6 @@ croak("error in config: $@") if ( $@ );
 my $engine = App::PerlWatcher::Engine->new($config);
 my $app = $engine->guess_frontend;
 $app->show;
-$app->update( [] );
 
 $engine->start;
 

@@ -53,10 +53,10 @@ sub new {
 }
 
 sub update {
-    my ( $self, $statuses ) = @_;
+    my ( $self, $status ) = @_;
     
     my $model = $self -> {_tree_store };
-    $model->update($statuses);
+    $model->update($status);
     
     my $max_level = $model->max_actual_level;
     my $symbol = level_to_symbol($max_level);

@@ -26,8 +26,10 @@ sub new {
 sub _is_unseen {
     my ($self, $status) = @_;
     my $last_seen = $self -> {_app} -> last_seen;
+    my $engine = $self -> {_app} -> engine;
     # check if status has been updated
-    my $r = $status->timestamp > $last_seen;
+    #my $r = $status->timestamp > $last_seen;
+    my $r = $engine->has_changed($status);
     return $r;
 }
 
