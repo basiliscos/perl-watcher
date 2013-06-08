@@ -40,10 +40,12 @@ sub new {
         my ($widget, $event) = @_;
         my ($x, $y) = $event->root_coords;
         
-        $self->{_window}->hide_all;
-        $self->{_window}->move( $x, $y );
-        $self->{_window}->show_all;
-        $self->{_window}->present;
+        if ( !$self->{_window}->get('visible') ) {
+            $self->{_window}->hide_all;
+            $self->{_window}->move( $x, $y );
+            $self->{_window}->show_all;
+            $self->{_window}->present;
+        }
     };
     
     $icon->signal_connect( "button-press-event" => $handler );
