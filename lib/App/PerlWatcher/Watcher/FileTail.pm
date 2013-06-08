@@ -18,19 +18,22 @@ use base qw(App::PerlWatcher::Watcher);
 sub new {
     my ( $class, $engine_config, %config ) = @_;
     
-    my ( $file, $line_number ) = @config{ qw/ file lines / };
+    my ( $file, $line_number, $filter ) = @config{ qw/ file lines filter / };
     
     $line_number //= 10;
     croak("file is undefined") unless defined ($file);
 
     my $inotify = Linux::Inotify2->new
       or croak("unable to create new inotify object: $!");
+  
+    $filter //= sub { 1 },
 
     my $self = {
         _inotify     => $inotify,
         _line_number => $line_number,
         _file        => $file,
         _events      => [],
+        _filter      => $filter,
     };
 
     return bless $self, $class;
@@ -91,13 +94,15 @@ sub _add_line {
     my ( $self, $line ) = @_;
     if ( defined $line ) {
         chomp $line;
-        my $event_item = App::PerlWatcher::EventItem->new($line);
-        $event_item -> timestamp(0);
-        # $line
-        my $evens_queue = $self->{_events};
-        push @$evens_queue, $event_item;
-        shift @$evens_queue if @$evens_queue > $self->{_line_number};
-        $self->_trigger_callback;
+        if ( $self->{_filter}->(local $_ = $line) ) {
+            my $event_item = App::PerlWatcher::EventItem->new($line);
+            $event_item -> timestamp(0);
+            # $line
+            my $evens_queue = $self->{_events};
+            push @$evens_queue, $event_item;
+            shift @$evens_queue if @$evens_queue > $self->{_line_number};
+            $self->_trigger_callback;
+        }
     }
 }
 
@@ -118,7 +123,13 @@ sub _initial_read {
     my $frb          = File::ReadBackwards->new( $self->{_file} );
     my $end_position = $frb->tell;
     my @last_lines;
-    unshift @last_lines, $frb->readline for 1 .. $self->{_line_number};
+    my $line;
+    do {
+        $line = $frb->readline;
+        unshift @last_lines, $line 
+            if ( $line  && $self->{_filter}->(local $_ = $line) );
+    } while (defined($line) && @last_lines < $self->{_line_number} );
+    
     $self->_add_line($_) for (@last_lines);
 
     my $file_handle = $frb->get_handle;

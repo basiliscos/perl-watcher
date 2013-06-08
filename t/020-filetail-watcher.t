@@ -24,6 +24,13 @@ my $file;
 my ($s1, $s2);
 my $timer;
 
+my $marker = "MarkeR";
+
+my $validate = sub {
+    my $items = shift;
+    like ($_->content, qr/$marker/ ) for ( @$items );
+};
+
 my $scenario = [
     #1 
     {
@@ -31,10 +38,14 @@ my $scenario = [
             my $status = shift;
             my $items = $status->items->();
             is @{ $items }, 1, "got 1 item (#1)";
+            $validate->($items);
             $s1 = $status;
-            $timer = AnyEvent->timer(after => 0, cb => sub {
-                    say $file "1st line";
-            });
+            AnyEvent::postpone {
+                say $file "$marker 1st line";
+                say $file "non-interesting line 1";
+                say $file "non-interesting line 2";
+                say $file "non-interesting line 3";
+            };
         },
     },
 
@@ -43,10 +54,11 @@ my $scenario = [
             my $status = shift;
             my $items = $status->items->();
             is @{ $items }, 2, "got 2 items (#2)";
+            $validate->($items);
             $s2 = $status;
-            $timer = AnyEvent->timer(after => 0, cb => sub {
+            AnyEvent::postpone {
                     $end_var->send;
-            });
+            };
         },
     },
     
@@ -62,11 +74,23 @@ $filename = "$tmpdir/sample.log";
 open($file, ">", $filename) 
     or croak("can't open file $filename: $!");
 $file->autoflush;
-say $file "initial line";
+say $file "$marker initial line";
+
+my $filter = sub {
+    $_ =~ /$marker/;
+};
+# validate the filter itserlf
+ok $filter->(local $_ = "$marker");
+ok !$filter->(local $_ = "empty");
+ok !$filter->(local $_ = "Z");
 
 my $watcher = App::PerlWatcher::Watcher::FileTail->new(
     0,
-    (file => $filename, lines => 5),
+    (
+        file  => $filename, 
+        lines => 5,
+        filter => $filter,
+    ),
 );
 
 ok defined($watcher), "watcher was created";
