@@ -4,7 +4,7 @@ use 5.12.0;
 use strict;
 use warnings;
 
-use App::PerlWatcher::Shelf;
+use AnyEvent;
 use App::PerlWatcher::Status qw/level_to_symbol :levels/;
 use App::PerlWatcher::ui::Gtk2::StatusesModel;
 use App::PerlWatcher::ui::Gtk2::StatusesTreeView;
@@ -32,23 +32,15 @@ sub new {
     $self -> {_icon      } = $icon;
     $self -> {_label     } = $label;
     $self -> {_tooltips  } = $label;          
-    $self -> {_shelf     } = App::PerlWatcher::Shelf->new;          
+    $self -> {_timers    } = [];          
 
     $self->_consruct_gui;
     
-    my $handler = sub {
+    $icon->signal_connect( "button-press-event" => sub {
         my ($widget, $event) = @_;
         my ($x, $y) = $event->root_coords;
-        
-        if ( !$self->{_window}->get('visible') ) {
-            $self->{_window}->hide_all;
-            $self->{_window}->move( $x, $y );
-            $self->{_window}->show_all;
-            $self->{_window}->present;
-        }
-    };
-    
-    $icon->signal_connect( "button-press-event" => $handler );
+        $self -> _present($x, $y);
+    });
 
     $label->set_has_tooltip(1);
     $label->set_tooltip_window( $self->{_window} );
@@ -58,28 +50,21 @@ sub new {
 
 sub update {
     my ( $self, $status ) = @_;
-    
+    my $visible = $self->{_window}->get('visible');
     my $model = $self -> {_tree_store };
-    # stash previous status
-    $self -> {_shelf} -> stash_status(
-        $model->get_status($status->watcher)
-    );
-    $model->update($status);
+    $model->update($status, $visible);
     
     my $max_level = $model->max_actual_level;
     my $symbol = level_to_symbol($max_level);
     $self->_set_label("[$symbol]");
     
-    $self->{_treeview   }->expand_all;
+    $self->{_treeview}->expand_all;
+    $self->_trigger_undertaker if ( $visible );
 }
-
+                                  
 sub show {
     my $self = shift;
     $self->{_icon}->show_all();
-}
-
-sub shelf {
-    return shift->{_shelf};
 }
 
 sub _set_label {
@@ -106,6 +91,7 @@ sub _construct_window {
     $window->signal_connect( 'focus-out-event' => sub {
             ### focus out
             $window->hide;
+            $self->{_timers} = []; # kill all timers
             $self->last_seen(time);
     });
 
@@ -134,6 +120,32 @@ sub _consruct_gui {
     $self->{_window}        = $window;
     $self->{_tree_store}    = $tree_store;
     $self->{_treeview}      = $treeview;
+}
+
+sub _present {
+    my ( $self, $x, $y ) = @_;
+    my $window = $self->{_window}; 
+    if ( !$window->get('visible') ) {
+        $window->hide_all;
+        $window->move( $x, $y );
+        $window->show_all;
+        $window->present;
+        $self->_trigger_undertaker;
+    }
+}
+
+sub _trigger_undertaker {
+    my $self = shift;
+    my $idle = 
+        $self->engine->config->{frontend}->{gtk}->{uninteresting_after} // 5;
+    my $now = time;
+    my $timer = AnyEvent->timer (
+        after => $idle,
+        cb    => sub {
+            $self->{_tree_store}->stash_outdated($now);
+        },
+    );                                       
+    push @{ $self->{_timers} }, $timer;
 }
 
 1;

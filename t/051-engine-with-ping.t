@@ -46,7 +46,7 @@ my $scenario = [
             my $status = shift;
             is $status->level, LEVEL_NOTICE;
             ok $shelf -> status_changed($status); 
-            ok $shelf -> stash_status($status);
+            ok !$shelf -> stash_status($status);
             ok !$shelf -> status_changed($status);
         },
     },

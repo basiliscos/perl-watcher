@@ -28,7 +28,7 @@ sub _is_unseen {
     my $last_seen = $self -> {_app} -> last_seen;
     # check if status has been updated
     #my $r = $status->timestamp > $last_seen;
-    my $r = $self -> {_app}->shelf->status_changed($status);
+    my $r = $self->{_tree_store}->shelf->status_changed($status);
     return $r;
 }
 

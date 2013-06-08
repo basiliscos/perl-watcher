@@ -5,6 +5,7 @@ use strict;
 use warnings;
 
 use AnyEvent;
+use App::PerlWatcher::Shelf;
 use App::PerlWatcher::Status qw/level_to_symbol :levels/;
 use Carp;
 use Devel::Comments;
@@ -18,6 +19,7 @@ sub new {
     my ($class, $app) = @_;
     my $self = Gtk2::TreeStore->new(qw/Glib::Scalar/);
     $self -> {_watchers} = {};
+    $self -> {_shelf   } = App::PerlWatcher::Shelf->new;          
     $self -> {_engine  } = $app->engine;
     bless $self, $class;
     
@@ -35,16 +37,33 @@ sub new {
 }
 
 sub update {
-    my ( $self, $s ) = @_;
+    my ( $self, $s, $stash_previous ) = @_;
     my $watcher_info = $self -> {_watchers}{ $s->watcher };
+    $self -> {_shelf} -> stash_status($watcher_info->{status})
+        if ( $stash_previous );
     my $iter = $watcher_info->{iterator};
     $self -> _update_status( $iter, $s);
     $watcher_info->{status} = $s;
 }
 
-sub get_status {
-    my ( $self, $watcher ) = @_;
-    return $self -> {_watchers}{ $watcher }{status};
+sub shelf {
+    return shift->{_shelf};
+}
+
+sub stash_outdated {
+    my ($self, $time) = @_;
+    my @outdated = 
+        grep { $_->timestamp <= $time } 
+        map { $_->{status} } 
+        values %{ $self -> {_watchers} }; 
+    for( @outdated ) {
+        if ( $self->{_shelf}->stash_status($_) ) {
+            my $iter = $self -> {_watchers}{ $_->watcher }{iterator};
+            my $path = $self->get_path($iter);
+            # emit event
+            $self->row_changed($path, $iter);
+        }
+    }
 }
 
 sub max_actual_level {

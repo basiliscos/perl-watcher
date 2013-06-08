@@ -36,6 +36,7 @@ my $s1 = $create_status->(LEVEL_NOTICE);
 
 ok $shelf -> status_changed($s1);
 ok $shelf -> status_changed($s1);
+ok !$shelf -> stash_status($s1);
 ok $shelf -> stash_status($s1);
 ok !$shelf -> status_changed($s1);
 
