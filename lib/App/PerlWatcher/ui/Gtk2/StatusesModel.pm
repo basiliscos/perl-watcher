@@ -66,13 +66,19 @@ sub stash_outdated {
     }
 }
 
-sub max_actual_level {
+sub summary {
     my $self = shift;
-    my $max = max map { $_->{status}->level } 
-        values %{ $self -> {_watchers} };
-    
-    $max //= LEVEL_ANY;
-    return $max;
+    my $result = {
+        max_level => LEVEL_ANY,
+        has_new   => 0,
+    };
+    my @statuses = map { $_->{status} } values %{ $self -> {_watchers} };
+    for ( @statuses ) {
+        $result->{max_level} = $_->level
+            if ( $result->{max_level} < $_->level );
+        $result->{has_new} ||= $self->{_shelf}->status_changed($_);
+    }
+    return $result;
 }
 
 sub _update_status {

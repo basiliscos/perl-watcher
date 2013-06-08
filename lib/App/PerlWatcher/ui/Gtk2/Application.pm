@@ -51,15 +51,11 @@ sub new {
 sub update {
     my ( $self, $status ) = @_;
     my $visible = $self->{_window}->get('visible');
-    my $model = $self -> {_tree_store };
+    my $model = $self->{_tree_store};
     $model->update($status, $visible);
-    
-    my $max_level = $model->max_actual_level;
-    my $symbol = level_to_symbol($max_level);
-    $self->_set_label("[$symbol]");
-    
     $self->{_treeview}->expand_all;
     $self->_trigger_undertaker if ( $visible );
+    $self->_update_summary;
 }
                                   
 sub show {
@@ -67,9 +63,18 @@ sub show {
     $self->{_icon}->show_all();
 }
 
+sub _update_summary {
+    my $self = shift;
+    my $summary = $self->{_tree_store}->summary;
+    # $summary
+    my $symbol = level_to_symbol($summary->{max_level});
+    $symbol = $summary->{has_new} ? "<b>$symbol</b>" : $symbol;
+    $self->_set_label("[$symbol]");
+}
+
 sub _set_label {
     my ( $self, $text ) = @_;
-    $self->{_label}->set_text($text);
+    $self->{_label}->set_markup($text);
 }
 
 sub _construct_window {
@@ -143,6 +148,7 @@ sub _trigger_undertaker {
         after => $idle,
         cb    => sub {
             $self->{_tree_store}->stash_outdated($now);
+            $self->_update_summary;
         },
     );                                       
     push @{ $self->{_timers} }, $timer;
