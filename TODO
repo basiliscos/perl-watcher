@@ -9,7 +9,6 @@ CORE:
 REFACTOR:
 # watcher/watcher_function/guard
 # engine: move out guess frontend into bootstrap? 
-# engine: move out stash logic into separate class 
 
 WATCHERS:
 # ping: async dns query
@@ -20,6 +19,7 @@ WATCHERS:
 # rss: non-notification states (including warnings)
 # rss: smart update: use header's info 'if-modified-since'
 # rss: gather headers or bodies
+# filetail: filter/grep block
 # weather watcher
 # json watcher
 # http watcher
