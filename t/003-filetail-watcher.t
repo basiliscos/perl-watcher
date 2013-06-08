@@ -13,7 +13,7 @@ use FindBin;
 use Test::More;
 
 BEGIN { unshift @INC, "$FindBin::Bin/../lib" }
-require App::PerlWatcher::Watcher::FileTail;
+use App::PerlWatcher::Watcher::FileTail;
 
 
 my $end_var = AnyEvent->condvar;

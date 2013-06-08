@@ -4,6 +4,7 @@ use 5.12.0;
 use strict;
 use warnings;
 
+use App::PerlWatcher::Shelf;
 use App::PerlWatcher::Status qw/level_to_symbol :levels/;
 use App::PerlWatcher::ui::Gtk2::StatusesModel;
 use App::PerlWatcher::ui::Gtk2::StatusesTreeView;
@@ -31,6 +32,7 @@ sub new {
     $self -> {_icon      } = $icon;
     $self -> {_label     } = $label;
     $self -> {_tooltips  } = $label;          
+    $self -> {_shelf     } = App::PerlWatcher::Shelf->new;          
 
     $self->_consruct_gui;
     
@@ -56,6 +58,10 @@ sub update {
     my ( $self, $status ) = @_;
     
     my $model = $self -> {_tree_store };
+    # stash previous status
+    $self -> {_shelf} -> stash_status(
+        $model->get_status($status->watcher)
+    );
     $model->update($status);
     
     my $max_level = $model->max_actual_level;
@@ -68,6 +74,10 @@ sub update {
 sub show {
     my $self = shift;
     $self->{_icon}->show_all();
+}
+
+sub shelf {
+    return shift->{_shelf};
 }
 
 sub _set_label {

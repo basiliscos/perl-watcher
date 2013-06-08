@@ -15,6 +15,7 @@ use Test::TCP;
 
 BEGIN { unshift @INC, "$FindBin::Bin/../lib" }
 use App::PerlWatcher::Status qw/:levels/;
+use App::PerlWatcher::Shelf;
 use App::PerlWatcher::Engine;
 use App::PerlWatcher::Frontend;
 
@@ -36,6 +37,7 @@ my $server = Test::TCP->new(
 );
 
 my $engine;
+my $shelf = App::PerlWatcher::Shelf->new;
 
 my $scenario = [
     #1 
@@ -43,9 +45,9 @@ my $scenario = [
         res =>  sub {
             my $status = shift;
             is $status->level, LEVEL_NOTICE;
-            ok $engine -> has_changed($status); 
-            ok $engine -> stash($status);
-            ok !$engine -> has_changed($status);
+            ok $shelf -> status_changed($status); 
+            ok $shelf -> stash_status($status);
+            ok !$shelf -> status_changed($status);
         },
     },
     
@@ -54,7 +56,7 @@ my $scenario = [
         res =>  sub {
             my $status = shift;
             is $status->level, LEVEL_NOTICE;
-            ok !$engine -> has_changed($status); 
+            ok !$shelf -> status_changed($status); 
             $server = undef;
         },
     },
@@ -64,7 +66,7 @@ my $scenario = [
         res =>  sub {
             my $status = shift;
             is $status->level, LEVEL_ALERT;
-            ok $engine -> has_changed($status); 
+            ok $shelf -> status_changed($status); 
         },
     },
 ];

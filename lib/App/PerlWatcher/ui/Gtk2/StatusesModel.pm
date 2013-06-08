@@ -38,9 +38,13 @@ sub update {
     my ( $self, $s ) = @_;
     my $watcher_info = $self -> {_watchers}{ $s->watcher };
     my $iter = $watcher_info->{iterator};
-    $self -> {_engine  } -> stash( $watcher_info->{status} );
     $self -> _update_status( $iter, $s);
     $watcher_info->{status} = $s;
+}
+
+sub get_status {
+    my ( $self, $watcher ) = @_;
+    return $self -> {_watchers}{ $watcher }{status};
 }
 
 sub max_actual_level {

@@ -12,7 +12,7 @@ use Test::More;
 use Test::HTTP::Server;
 
 BEGIN { unshift @INC, "$FindBin::Bin/../lib" }
-require App::PerlWatcher::Watcher::Rss;
+use App::PerlWatcher::Watcher::Rss;
 
 sub getRss {
     my $file = dirname(__FILE__) . "/data/rss1.rss";

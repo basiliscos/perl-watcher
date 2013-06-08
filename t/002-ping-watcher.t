@@ -30,7 +30,7 @@ my $server = Test::TCP->new(
 );
 
 BEGIN { unshift @INC, "$FindBin::Bin/../lib" }
-require App::PerlWatcher::Watcher::Ping;
+use App::PerlWatcher::Watcher::Ping;
 
 my $end_var = AnyEvent->condvar;
 my ($s1, $s2);
