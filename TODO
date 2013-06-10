@@ -5,6 +5,7 @@ CORE:
 # engine: watcher save state between invocations?
 # update status (tray icon) to notify changes, filtered by some level?
 # about/version information?
+# research the possible usage of Module::Pluggable
 
 REFACTOR:
 # watcher/watcher_function/guard
@@ -22,7 +23,6 @@ WATCHERS:
 # filetail: add beautifyer?
 # weather watcher
 # json watcher
-# http watcher
 # reminder watcher
 
 GUI:
