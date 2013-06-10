@@ -16,9 +16,9 @@ WATCHERS:
 # ping: icmp proto: external program fork
 # rss: handle errors: non-200
 # rss: record timestamp
-# rss: non-notification states (including warnings)
 # rss: smart update: use header's info 'if-modified-since'
 # rss: gather headers or bodies
+# rss: display bodies as hints?
 # filetail: add beautifyer?
 # weather watcher
 # json watcher
