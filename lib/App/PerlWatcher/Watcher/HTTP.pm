@@ -72,7 +72,15 @@ sub _install_watcher {
             timeout => $self -> {_timeout},
             sub {
                 my ($body, $headers) = @_;
-                $self->{_processor}->($self, $body, $headers); 
+                if ($headers -> {Status} =~ /^2/) {
+                    $self->{_processor}->($self, $body, $headers);
+                }
+                else{
+                    my $reason = $headers -> {Status};
+                    # bad thing has happend
+                    # $reason
+                    $self->_interpret_result(0, $self -> {_callback});
+                }
             }
         );
     };

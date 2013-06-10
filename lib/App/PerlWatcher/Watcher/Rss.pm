@@ -26,23 +26,8 @@ sub description {
     return "RSS [" . $self->{_title} . "]";
 }
 
-
 sub _process_rss {
-    my ($self, $body, $headers) = @_;
-    # $headers
-    if ($headers -> {Status} =~ /^2/) {
-        $self->_handle_result($body);
-    }
-    else{
-        my $reason = $headers -> {Status};
-        # bad thing has happend
-        # $reason
-        $self->_interpret_result(0, $self -> {_callback});
-    }
-}
-                                 
-sub _handle_result {
-    my ($self, $content) = @_;
+    my ($self, $content, $headers) = @_;
     # $content
     my $xml = XMLin( $content );
     my $items = $xml -> {channel} -> {item};
