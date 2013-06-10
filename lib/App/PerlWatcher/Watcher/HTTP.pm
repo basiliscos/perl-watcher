@@ -73,12 +73,14 @@ sub _install_watcher {
             sub {
                 my ($body, $headers) = @_;
                 if ($headers -> {Status} =~ /^2/) {
+                    # $body
                     $self->{_processor}->($self, $body, $headers);
                 }
                 else{
                     my $reason = $headers -> {Status};
                     # bad thing has happend
                     # $reason
+                    # $self
                     $self->_interpret_result(0, $self -> {_callback});
                 }
             }
