@@ -13,6 +13,7 @@ use Test::HTTP::Server;
 
 BEGIN { unshift @INC, "$FindBin::Bin/../lib" }
 use App::PerlWatcher::Watcher::Rss;
+use App::PerlWatcher::Status qw/:levels/;
 
 sub getRss {
     my $file = dirname(__FILE__) . "/data/rss1.rss";
@@ -21,6 +22,8 @@ sub getRss {
     my $output = do { local $/; <$fh> };
     return $output;
 }
+
+my $server;
 
 my ($s1, $s2);
 
@@ -46,6 +49,15 @@ my $scenario = [
             my $items = $status->items->();
             is @{ $items }, 5, "got 5 items (#2)";
             $s2 = $status;
+            $server = undef;
+        },
+    },
+    
+    #3 
+    {
+        res =>  sub {
+            my $status = shift;
+            is $status->level, LEVEL_INFO;
             $end_var->send;
         },
     },
@@ -60,14 +72,28 @@ my $callback_handler = sub {
     return $scenario->[$callback_invocations++]->{res}->(@_);
 };
 
-my $server = Test::HTTP::Server->new();
+$server = Test::HTTP::Server->new();
 ok defined($server), "served defined";
 
 my $rss_url1 = $server->uri . "rss1";
 
+my $engine_config = {
+    defaults    => {
+        behaviour   => {
+            fail => { 
+                3   =>  'info',
+                5   =>  'alert',
+            },
+            ok  => { 3 => 'notice' },
+        },
+    },
+};
+
 my $watcher = App::PerlWatcher::Watcher::Rss->new(
-    0,
-    (url => $rss_url1, items => 5, frequency => 0.01, timeout => 1, title => 'la-la-title'),
+    $engine_config,
+    (   url => $rss_url1, items => 5, frequency => 1, timeout => 1, title => 'la-la-title',
+        on => { fail => { 1 => 'info' } },
+    ),
 );
 
 ok defined($watcher), "watcher was created";

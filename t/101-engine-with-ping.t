@@ -55,8 +55,8 @@ my $scenario = [
     {
         res =>  sub {
             my $status = shift;
-            is $status->level, LEVEL_NOTICE;
-            ok !$shelf -> status_changed($status); 
+            is $status->level, LEVEL_INFO;
+            ok $shelf -> status_changed($status); 
             $server = undef;
         },
     },

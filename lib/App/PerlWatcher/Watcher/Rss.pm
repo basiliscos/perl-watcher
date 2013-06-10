@@ -35,10 +35,10 @@ sub new {
         _timeout        => $timeout,
         _frequency      => $frequency,
         _title          => $title,
-        _recorded_news  => [],
     };
     bless $self, $class;
     
+    $self -> _install_thresholds ($engine_config, \%config);
     $self -> _install_watcher;
     
     return $self;
@@ -76,13 +76,16 @@ sub _install_watcher {
                     $self->_handle_result($body);
                 }
                 else{
-                    ### bad thing has happend
+                    my $reason = $headers -> {Status};
+                    # bad thing has happend
+                    # $reason
+                    $self->_interpret_result(0, $self -> {_callback});
                 }
             },
         );
     };
 }
-
+                                 
 sub _handle_result {
     my ($self, $content) = @_;
     # $content
@@ -95,23 +98,7 @@ sub _handle_result {
             $item -> timestamp( str2time( $_ -> {pubDate} ) );
             $item;
         } @top_items;
-    $self -> _emit_status(\@news_items);
-}
-
-sub _emit_status {
-    my ($self, $news_items) = @_;
-    my $recorded_items = $self -> {_recorded_news};
-    # $news_items
-    # $recorded_items
-
-    $self -> {_recorded_news} = $news_items;
-    my $status = App::PerlWatcher::Status->new(
-        watcher     => $self,
-        level       => LEVEL_NOTICE,
-        description => sub {  $self->description;  },
-        items       => sub { $self -> {_recorded_news}; },
-    );
-    $self -> {_callback}->($status);
+    $self->_interpret_result(1, $self -> {_callback}, sub { \@news_items; } );
 }
 
 1;
