@@ -21,7 +21,7 @@ WriteMakefile(
   },
   TEST_REQUIRES => {
       'Test::TCP'           => '1.26',
-      'Test::HTTP::Server'  => '0.03',
+      'AnyEvent::HTTPD'     => '0.93',
   },
   EXE_FILES => [
     'script/PerlWatcher', 

@@ -125,3 +125,4 @@ $engine->start;
 is $callback_invocations, scalar @$scenario, "correct number of callback invocations";
 
 done_testing();
+

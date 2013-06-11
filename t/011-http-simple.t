@@ -7,11 +7,11 @@ use warnings;
 use feature 'state';
 
 use AnyEvent;
+use AnyEvent::HTTPD;
 use Devel::Comments;
 use File::Basename;
 use FindBin;
 use Test::More;
-use AnyEvent::HTTPD;
 
 BEGIN { unshift @INC, "$FindBin::Bin/../lib" }
 use App::PerlWatcher::Watcher::HTTPSimple;
@@ -144,3 +144,4 @@ $end_var->recv;
 is $callback_invocations, scalar @$scenario, "correct number of callback invocations";
 
 done_testing();
+

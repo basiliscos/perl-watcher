@@ -5,11 +5,11 @@ use strict;
 use warnings;
 
 use AnyEvent;
+use AnyEvent::HTTPD;
 use Devel::Comments;
 use File::Basename;
 use FindBin;
 use Test::More;
-use Test::HTTP::Server;
 
 BEGIN { unshift @INC, "$FindBin::Bin/../lib" }
 use App::PerlWatcher::Watcher::Rss;
@@ -72,10 +72,23 @@ my $callback_handler = sub {
     return $scenario->[$callback_invocations++]->{res}->(@_);
 };
 
-$server = Test::HTTP::Server->new();
-ok defined($server), "served defined";
+$server = AnyEvent::HTTPD->new;
+$server->reg_cb (
+    '/rss1' => sub {
+        my ($httpd, $req) = @_;
+        $req->respond (
+            { content => 
+                [
+                    'text/html',
+                    $server_handler->()
+                ]
+            },
+        );
+    },
+);
 
-my $rss_url1 = $server->uri . "rss1";
+ok defined($server), "served defined";
+my $rss_url1 = "http://" . $server->host . ":" . $server->port . "/rss1";
 
 my $engine_config = {
     defaults    => {
@@ -91,19 +104,13 @@ my $engine_config = {
 
 my $watcher = App::PerlWatcher::Watcher::Rss->new(
     $engine_config,
-    (   url => $rss_url1, items => 5, frequency => 1, timeout => 1, title => 'la-la-title',
+    (   url => $rss_url1, items => 5, frequency => 0.1, timeout => 1, title => 'la-la-title',
         on => { fail => { 1 => 'info' } },
     ),
 );
 
 ok defined($watcher), "watcher was created";
 like $watcher->description, qr/la-la-title/, "check watcher title";
-
-
-sub Test::HTTP::Server::Request::rss1 {
-    my $self = shift;
-    return $server_handler->();
-}
 
 $watcher->start($callback_handler);
 $end_var->recv;
