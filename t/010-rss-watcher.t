@@ -35,6 +35,7 @@ my $scenario = [
         req =>  sub { return getRss(); },
         res =>  sub {
             my $status = shift;
+            is $status->level, LEVEL_NOTICE;
             my $items = $status->items->();
             is @{ $items }, 5, "got 5 items (#1)";
             $s1 = $status;
@@ -46,6 +47,7 @@ my $scenario = [
         req =>  sub { return getRss(); },
         res =>  sub {
             my $status = shift;
+            is $status->level, LEVEL_NOTICE;
             my $items = $status->items->();
             is @{ $items }, 5, "got 5 items (#2)";
             $s2 = $status;
@@ -54,6 +56,16 @@ my $scenario = [
     },
     
     #3 
+    {
+        res =>  sub {
+            my $status = shift;
+            is $status->level, LEVEL_NOTICE;
+            my $items = $status->items->();
+            is @{ $items }, 5, "got 5 items (#2)";
+        },
+    },
+    
+    #4 
     {
         res =>  sub {
             my $status = shift;
@@ -105,7 +117,7 @@ my $engine_config = {
 my $watcher = App::PerlWatcher::Watcher::Rss->new(
     $engine_config,
     (   url => $rss_url1, items => 5, frequency => 0.1, timeout => 1, title => 'la-la-title',
-        on => { fail => { 1 => 'info' } },
+        on => { fail => { 2 => 'info' } },
     ),
 );
 

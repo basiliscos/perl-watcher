@@ -81,11 +81,23 @@ sub _install_watcher {
                     # bad thing has happend
                     # $reason
                     # $self
-                    $self->_interpret_result(0, $self -> {_callback});
+                    $self->_interpret_result(0, sub {
+                            my $status = shift;
+                            $self->_invoke_callback(
+                                $self -> {_callback},
+                                $status
+                            );
+                    });
                 }
             }
         );
     };
+}
+
+# intendent to be overriden in descendants
+sub _invoke_callback {
+    my ($self, $callback, $status) = @_;
+    $callback->($status);
 }
 
 sub _process_http_response {

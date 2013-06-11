@@ -38,7 +38,15 @@ sub _process_rss {
             $item -> timestamp( str2time( $_ -> {pubDate} ) );
             $item;
         } @top_items;
-    $self->_interpret_result(1, $self -> {_callback}, sub { \@news_items; } );
+    $self->{_last_items} = sub { \@news_items; };
+    $self->_interpret_result(1, $self -> {_callback}, $self->{_last_items} );
 }
+
+sub _invoke_callback {
+    my ($self, $callback, $status) = @_;
+    $status->items($self->{_last_items});
+    $callback->($status);
+}
+
 
 1;

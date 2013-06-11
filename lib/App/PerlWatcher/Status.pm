@@ -112,7 +112,9 @@ sub description {
 }
 
 sub items {
-    return shift->{_items};
+    my ($self, $value) = @_;
+    $self -> {_items} = $value if defined($value);
+    return $self -> {_items};
 }
 
 sub timestamp {
