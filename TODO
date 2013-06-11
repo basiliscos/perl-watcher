@@ -18,7 +18,7 @@ WATCHERS:
 # rss: handle errors: non-200
 # rss: record timestamp
 # rss: smart update: use header's info 'if-modified-since'
-# rss: gather headers or bodies
+# rss: gather item titles or bodies
 # rss: display bodies as hints?
 # filetail: add beautifyer?
 # weather watcher
@@ -26,7 +26,7 @@ WATCHERS:
 # reminder watcher
 
 GUI:
-# hints on summary page on every status
+# mark as uninteresting action for all statuses?
 # collapse watchers (rss/filemanager) if there is no events.
 # notification level per watcher and default ?
 # colorize output

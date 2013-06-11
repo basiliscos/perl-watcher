@@ -27,11 +27,8 @@ sub new {
     $event_box->add($label);
     $icon->add($event_box);
 
-    my $tooltips = Gtk2::Tooltips->new;
-
     $self -> {_icon      } = $icon;
     $self -> {_label     } = $label;
-    $self -> {_tooltips  } = $label;          
     $self -> {_timers    } = [];          
 
     $self->_consruct_gui;
@@ -42,8 +39,8 @@ sub new {
         $self -> _present($x, $y);
     });
 
-    $label->set_has_tooltip(1);
-    $label->set_tooltip_window( $self->{_window} );
+    #$label->set_has_tooltip(1);
+    #$label->set_tooltip_window( $self->{_window} );
 
     return $self;
 }
@@ -68,13 +65,18 @@ sub _update_summary {
     my $summary = $self->{_tree_store}->summary;
     # $summary
     my $symbol = level_to_symbol($summary->{max_level});
-    $symbol = $summary->{has_new} ? "<b>$symbol</b>" : $symbol;
-    $self->_set_label("[$symbol]");
+    $symbol = @{ $summary->{updated} } ? "<b>$symbol</b>" : $symbol;
+    $symbol = "[$symbol]";
+    my $tip = join "\n", map {
+            sprintf("[%s] %s", level_to_symbol($_->level), $_->description->())
+        } @{ $summary->{updated} };
+    $self->_set_label($symbol, $tip);
 }
 
 sub _set_label {
-    my ( $self, $text ) = @_;
+    my ( $self, $text, $tip ) = @_;
     $self->{_label}->set_markup($text);
+    $self->{_label}->set_tooltip_markup($tip);
 }
 
 sub _construct_window {

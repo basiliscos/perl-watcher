@@ -70,13 +70,14 @@ sub summary {
     my $self = shift;
     my $result = {
         max_level => LEVEL_ANY,
-        has_new   => 0,
+        updated   => [],
     };
     my @statuses = map { $_->{status} } values %{ $self -> {_watchers} };
     for ( @statuses ) {
         $result->{max_level} = $_->level
             if ( $result->{max_level} < $_->level );
-        $result->{has_new} ||= $self->{_shelf}->status_changed($_);
+        push @{ $result->{updated} }, $_  
+            if $self->{_shelf}->status_changed($_);
     }
     return $result;
 }
