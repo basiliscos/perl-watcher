@@ -66,10 +66,11 @@ sub _update_summary {
     # $summary
     my $symbol = level_to_symbol($summary->{max_level});
     $symbol = @{ $summary->{updated} } ? "<b>$symbol</b>" : $symbol;
+    my $sorted_statuses = $self->engine->sort_statuses($summary->{updated});
     $symbol = "[$symbol]";
     my $tip = join "\n", map {
             sprintf("[%s] %s", level_to_symbol($_->level), $_->description->())
-        } @{ $summary->{updated} };
+        } @$sorted_statuses;
     $self->_set_label($symbol, $tip);
 }
 

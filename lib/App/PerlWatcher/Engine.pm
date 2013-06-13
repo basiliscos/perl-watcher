@@ -74,6 +74,16 @@ sub get_watchers {
     return shift->{_watchers};
 }
 
+sub sort_statuses {
+    my ($self, $statuses) = @_;
+    my $order_of = $self->{_watchers_order};
+    return [
+        sort {
+            $order_of->{ $a->watcher } <=> $order_of->{ $b->watcher };
+        } @$statuses
+    ];
+}
+
 sub _construct_backend {
     my ($config) = @_;
     my $backend_id = $config -> {backend}; 
