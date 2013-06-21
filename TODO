@@ -1,4 +1,5 @@
 CORE:
+# Migrate to Dist::Zilla?
 # watcher groups?
 # watcher actions: reset, mute, act (click), force check?
 # timestamps should include dates for sub-events?
@@ -26,12 +27,13 @@ WATCHERS:
 # reminder watcher
 
 GUI:
+# use home directory to store configs : File::Spec->catfile($ENV{'HOME'}, '.ackrc')
 # mark as uninteresting action for all statuses?
 # collapse watchers (rss/filemanager) if there is no events.
 # notification level per watcher and default ?
 # colorize output
 # icons by status
-# sorting: by priority, by config
+# sorting: by priority, by config?
 
 BUGS:
 # handle errors in rss thread (silently ignore?)

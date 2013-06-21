@@ -34,9 +34,15 @@ sub new {
     $self->_consruct_gui;
     
     $icon->signal_connect( "button-press-event" => sub {
-        my ($widget, $event) = @_;
-        my ($x, $y) = $event->root_coords;
-        $self -> _present($x, $y);
+            ### button-press-event
+            my ($widget, $event) = @_;
+            if ( $event->button == 1 ) { # left
+                my ($x, $y) = $event->root_coords;
+                $self -> _present($x, $y);
+            }
+            elsif ( $event->button == 3 ) { # right
+                $self->_mark_as_read;
+            }
     });
 
     #$label->set_has_tooltip(1);
@@ -110,11 +116,19 @@ sub _consruct_gui {
     my $self = shift;
     my $window = $self->_construct_window;
 
-    my $vbox = Gtk2::VBox->new( 0, 6 );
+    my $vbox = Gtk2::VBox->new( 0, 3 );
     $window->add($vbox);
 
-    my $label = Gtk2::Label->new('Hello World!');
-    $vbox->pack_start( $label, 1, 1, 0 );
+    my $hbox = Gtk2::HBox->new( 0, 5 );
+    $vbox->pack_start( $hbox, 0, 0, 0 );
+    
+    my $label = Gtk2::Label->new('Action');
+    $hbox->pack_start( $label, 0, 0, 5 );
+    my $reset_button = Gtk2::Button->new_with_label('Mark as read');
+    $reset_button->signal_connect( 'clicked' => sub {
+            $self->_mark_as_read;
+    });    
+    $hbox->pack_end( $reset_button, 1, 1, 0 );
 
     my $tree_store = App::PerlWatcher::ui::Gtk2::StatusesModel
         ->new($self);
@@ -146,15 +160,20 @@ sub _trigger_undertaker {
     my $self = shift;
     my $idle = 
         $self->engine->config->{frontend}->{gtk}->{uninteresting_after} // 5;
-    my $now = time;
     my $timer = AnyEvent->timer (
         after => $idle,
         cb    => sub {
-            $self->{_tree_store}->stash_outdated($now);
-            $self->_update_summary;
+            $self->_mark_as_read;
         },
     );                                       
     push @{ $self->{_timers} }, $timer;
+}
+
+sub _mark_as_read {
+    my $self = shift;
+    $self->{_timers} = [];
+    $self->{_tree_store}->stash_outdated(time);
+    $self->_update_summary;
 }
 
 1;

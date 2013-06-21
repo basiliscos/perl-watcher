@@ -60,7 +60,7 @@ sub stash_outdated {
         if ( $self->{_shelf}->stash_status($_) ) {
             my $iter = $self -> {_watchers}{ $_->watcher }{iterator};
             my $path = $self->get_path($iter);
-            # emit event
+            ### emit event
             $self->row_changed($path, $iter);
         }
     }
