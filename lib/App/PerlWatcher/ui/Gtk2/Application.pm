@@ -62,8 +62,11 @@ sub update {
     my ( $self, $status ) = @_;
     my $visible = $self->{_window}->get('visible');
     my $model = $self->{_tree_store};
-    $model->update($status, $visible);
-    $self->{_treeview}->expand_all;
+    $model->update($status, $visible, sub {
+            my $path = shift;
+            $self->{_treeview}->expand_row($path, 1);
+    });
+    #$self->{_treeview}->expand_all;
     $self->_trigger_undertaker if ( $visible );
     $self->_update_summary;
 }

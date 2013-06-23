@@ -37,13 +37,15 @@ sub new {
 }
 
 sub update {
-    my ( $self, $s, $stash_previous ) = @_;
+    my ( $self, $s, $stash_previous, $new_callback ) = @_;
     my $watcher_info = $self -> {_watchers}{ $s->watcher };
     $self -> {_shelf} -> stash_status($watcher_info->{status})
         if ( $stash_previous );
     my $iter = $watcher_info->{iterator};
     $self -> _update_status( $iter, $s);
     $watcher_info->{status} = $s;
+    $new_callback->($self->get_path($iter))
+        if $self->{_shelf}->status_changed($s);
 }
 
 sub shelf {
@@ -86,7 +88,7 @@ sub _update_status {
     my ($self, $iterator, $status ) = @_;
     my $label  = sprintf( "[%s] %s", $status->symbol, $status->description->() );
     $self->set( $iterator, 0 => $status );
-    $self -> _update_event_items($iterator, $status);
+    $self->_update_event_items($iterator, $status);
 }
 
 sub _update_event_items {
