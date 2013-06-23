@@ -5,7 +5,7 @@ CORE:
 # timestamps should include dates for sub-events?
 # engine: watcher save state between invocations?
 # update status (tray icon) to notify changes, filtered by some level?
-# about/version information?
+# about information?
 # research the possible usage of Module::Pluggable
 
 REFACTOR:

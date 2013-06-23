@@ -5,6 +5,7 @@ use strict;
 use warnings;
 
 use AnyEvent;
+use App::PerlWatcher::Engine;
 use App::PerlWatcher::Status qw/level_to_symbol :levels/;
 use App::PerlWatcher::ui::Gtk2::StatusesModel;
 use App::PerlWatcher::ui::Gtk2::StatusesTreeView;
@@ -87,6 +88,7 @@ sub _update_summary {
     my $tip = join "\n", map {
             sprintf("[%s] %s", level_to_symbol($_->level), $_->description->())
         } @$sorted_statuses;
+    $tip = sprintf("<b>%s %s</b>","PerlWatcher",$App::PerlWatcher::Engine::VERSION) ."\n\n" . $tip;
     $self->_set_label($symbol, $tip);
 }
 
