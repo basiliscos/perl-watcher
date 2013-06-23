@@ -27,20 +27,6 @@ sub new {
     return bless $self, $class;
 }
 
-sub guess_frontend {
-    my $self = shift;
-    my $fe;
-    my $loop = $self -> config -> {backend};
-    my $class = "App::PerlWatcher::ui::" . $loop . "::Application"; 
-    eval {
-        load_class($class);
-        $fe = $class -> new( $self );
-        $self -> frontend( $fe );
-    };
-    carp "Error creating application $class : $@" if $@;
-    return $fe;
-}
-
 sub frontend {
     my ( $self, $frontend ) = @_;
     $self->{_frontend} = $frontend;

@@ -5,6 +5,7 @@ use strict;
 use warnings;
 
 use Carp;
+use Class::Load ':all';
 use Devel::Comments;
 use FindBin;
 
@@ -23,8 +24,19 @@ my $content_config = do { local $/ = <$config_fh> };
 my $config = eval "no warnings; $content_config ";
 croak("error in config: $@") if ( $@ );
 
+    
 my $engine = App::PerlWatcher::Engine->new($config);
-my $app = $engine->guess_frontend;
+
+# guess frontend
+my $loop = $config->{backend};
+my $fe_class = "App::PerlWatcher::ui::" . $loop . "::Application"; 
+my $app = eval {
+    load_class($fe_class);
+    return $fe_class -> new( $engine );
+};
+croak "Error creating application $fe_class : $@" if $@;
+$engine->frontend( $app );
+
 $app->show;
 
 $engine->start;
