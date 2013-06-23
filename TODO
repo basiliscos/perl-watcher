@@ -26,7 +26,7 @@ WATCHERS:
 # reminder watcher
 
 GUI:
-# implement quit
+# appear window on hot key press as in stardict
 # use home directory to store configs : File::Spec->catfile($ENV{'HOME'}, '.ackrc')
 # collapse watchers (rss/filemanager) if there is no events.
 # notification level per watcher and default ?
@@ -44,7 +44,6 @@ BUGS:
 *** unhandled exception in callback:
 ***   AnyEvent::Handle uncaught error: Broken pipe at /home/dmol/development/perl/lib/lib/perl5/x86_64-linux-thread-multi/AnyEvent/Impl/Glib.pm line 57.
 ***  ignoring at /home/dmol/development/perl/lib/lib/perl5/App/PerlWatcher/ui/Gtk2/EngineBackend.pm line 16.
-
 # redraw window on moving 
 
 OTHER:

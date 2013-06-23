@@ -12,6 +12,7 @@ use Devel::Comments;
 use Gtk2;
 use Gtk2::TrayIcon;
 use POSIX qw(strftime);
+use Scalar::Util qw/weaken/;
 
 use base qw/App::PerlWatcher::Frontend/;
 
@@ -32,6 +33,7 @@ sub new {
     $self -> {_timers    } = [];          
 
     $self->_consruct_gui;
+    $self->_construct_menu;
     
     $icon->signal_connect( "button-press-event" => sub {
             ### button-press-event
@@ -39,10 +41,15 @@ sub new {
             if ( $event->button == 1 ) { # left
                 my ($x, $y) = $event->root_coords;
                 $self -> _present($x, $y);
+                return 1;
             }
             elsif ( $event->button == 3 ) { # right
-                $self->_mark_as_read;
+                #$self->_mark_as_read;
+               $self->{_tray_menu}->popup(undef,undef,undef,undef,0,0);
+               $self->{_tray_menu}->show_all;
+               return 1;
             }
+            return 0;
     });
 
     #$label->set_has_tooltip(1);
@@ -144,6 +151,29 @@ sub _consruct_gui {
     $self->{_treeview}      = $treeview;
 }
 
+sub _construct_menu {
+    my $self = shift;
+    weaken $self;
+    
+    my $tray_menu = Gtk2::Menu->new();
+    
+    my $menu_read = Gtk2::MenuItem->new('mark all as read');
+    $menu_read->signal_connect('activate' => sub {
+            $self->_mark_as_read;
+    });
+    $tray_menu->append($menu_read);
+    
+    $tray_menu->append(Gtk2::SeparatorMenuItem->new());
+    
+    my $menu_item_quit = Gtk2::MenuItem->new('quit');
+    $menu_item_quit->signal_connect('activate' => sub {
+            $self->_quit;
+    });
+    $tray_menu->append($menu_item_quit);
+    
+    $self->{_tray_menu} = $tray_menu;
+}
+
 sub _present {
     my ( $self, $x, $y ) = @_;
     my $window = $self->{_window}; 
@@ -174,6 +204,11 @@ sub _mark_as_read {
     $self->{_timers} = [];
     $self->{_tree_store}->stash_outdated(time);
     $self->_update_summary;
+}
+
+sub _quit {
+    my $self = shift;
+    $self->engine->stop;
 }
 
 1;
