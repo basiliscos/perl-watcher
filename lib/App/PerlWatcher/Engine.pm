@@ -10,8 +10,6 @@ use Class::Load ':all';
 use Data::Dumper;
 use Devel::Comments;
 
-our $VERSION = '0.07';
-
 sub new {
     my ( $class, $config ) = @_;
     my $backend = _construct_backend( $config );

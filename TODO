@@ -1,12 +1,15 @@
 CORE:
-# Migrate to Dist::Zilla?
 # watcher groups?
 # watcher actions: reset, mute, act (click), force check?
 # timestamps should include dates for sub-events?
-# engine: watcher save state between invocations?
+# engine: watcher save state between invocations
 # update status (tray icon) to notify changes, filtered by some level?
 # about information?
 # research the possible usage of Module::Pluggable
+
+BUILD/ECOSYSTEM:
+# Document modules (with Pod::Weaver?)
+# 
 
 REFACTOR:
 # watcher/watcher_function/guard
@@ -22,7 +25,7 @@ WATCHERS:
 # rss: display bodies as hints?
 # filetail: add beautifyer?
 # weather watcher
-# json watcher
+# json watcher: curl -b 'PHPSESSID=470c412bd1b60bd9d463771490b9e132' -H 'X-Requested-With: XMLHttpRequest' -g 'http://media.iptel.by/video/cs/csadmin.php?DATA[SubCategoryID]=0&DATA[GenreID]=0&DATA[CountryID]=0&DATA[SortID]=1&DATA[SortCheckBox]=1&DATA[StartPageNum]=1&DATA[SearchMode]=0&DATA[SearchStr]=&DATA[SearchRBSel]=0&DATA[action]=getMainPage'
 # reminder watcher
 
 GUI:
@@ -47,7 +50,7 @@ BUGS:
 # redraw window on moving 
 
 OTHER:
-# error hanlding
+# error hanlding, e.g. user typos in config?
 
 FUTURE/POSTPONED:
 # rss: atom feeds?
