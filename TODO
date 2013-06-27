@@ -1,4 +1,5 @@
 CORE:
+# add max notification level limit (e.g. no warns/alerts for particular events)
 # watcher groups?
 # watcher actions: reset, mute, act (click), force check?
 # timestamps should include dates for sub-events?
@@ -8,8 +9,8 @@ CORE:
 # research the possible usage of Module::Pluggable
 
 BUILD/ECOSYSTEM:
+# Build via travis-ci.org
 # Document modules (with Pod::Weaver?)
-# 
 
 REFACTOR:
 # watcher/watcher_function/guard

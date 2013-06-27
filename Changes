@@ -1,0 +1,6 @@
+{{$NEXT}}
+
+0.08      2013-06-27 23:44:24 Europe/Minsk
+  [Improvements]
+      - Moved to using Dist::Zilla instead of old-school ExtUtils::MakeMaker
+
