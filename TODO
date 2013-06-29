@@ -9,7 +9,10 @@ CORE:
 # research the possible usage of Module::Pluggable
 
 BUILD/ECOSYSTEM:
+# use File::ShareDir and Dist::Zilla::Plugin::ShareDir to have shared resources
+# Decouple Gtk2 GUI from Engine
 # Build via travis-ci.org
+# Integate git plugin to release
 # Document modules (with Pod::Weaver?)
 
 REFACTOR:

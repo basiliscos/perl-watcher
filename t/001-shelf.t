@@ -7,7 +7,6 @@ use warnings;
 use FindBin;
 use Test::More;
 
-BEGIN { unshift @INC, "$FindBin::Bin/../lib" }
 use App::PerlWatcher::Shelf;
 use App::PerlWatcher::Status qw/:levels/;
 

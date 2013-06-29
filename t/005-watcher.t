@@ -7,7 +7,6 @@ use warnings;
 use FindBin;
 use Test::More;
 
-BEGIN { unshift @INC, "$FindBin::Bin/../lib" }
 use App::PerlWatcher::Status qw/:levels/;
 use App::PerlWatcher::Watcher;
 
@@ -63,6 +62,8 @@ $watcher->_interpret_result(1, expect(LEVEL_NOTICE));
 $watcher->_interpret_result(0, expect(LEVEL_NOTICE));
 $watcher->_interpret_result(0, expect(LEVEL_NOTICE));
 $watcher->_interpret_result(0, expect(LEVEL_INFO));
+
+
 
 done_testing();
 

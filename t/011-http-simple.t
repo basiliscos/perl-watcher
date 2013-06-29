@@ -4,8 +4,6 @@ use 5.12.0;
 use strict;
 use warnings;
 
-use feature 'state';
-
 use AnyEvent;
 use AnyEvent::HTTPD;
 use Devel::Comments;
@@ -13,7 +11,6 @@ use File::Basename;
 use FindBin;
 use Test::More;
 
-BEGIN { unshift @INC, "$FindBin::Bin/../lib" }
 use App::PerlWatcher::Watcher::HTTPSimple;
 use App::PerlWatcher::Status qw/:levels/;
 

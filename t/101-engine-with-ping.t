@@ -13,7 +13,6 @@ use FindBin;
 use Test::More;
 use Test::TCP;
 
-BEGIN { unshift @INC, "$FindBin::Bin/../lib" }
 use App::PerlWatcher::Status qw/:levels/;
 use App::PerlWatcher::Shelf;
 use App::PerlWatcher::Engine;

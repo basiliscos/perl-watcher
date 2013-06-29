@@ -12,7 +12,6 @@ use File::Temp qw/ tempdir /;
 use FindBin;
 use Test::More;
 
-BEGIN { unshift @INC, "$FindBin::Bin/../lib" }
 use App::PerlWatcher::Watcher::FileTail;
 
 

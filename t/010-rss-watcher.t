@@ -11,7 +11,6 @@ use File::Basename;
 use FindBin;
 use Test::More;
 
-BEGIN { unshift @INC, "$FindBin::Bin/../lib" }
 use App::PerlWatcher::Watcher::Rss;
 use App::PerlWatcher::Status qw/:levels/;
 
