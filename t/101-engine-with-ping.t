@@ -5,7 +5,6 @@ use strict;
 use warnings;
 
 use AnyEvent;
-use Gtk2;
 use Devel::Comments;
 use IO::Socket::INET;
 use File::Basename;
@@ -107,7 +106,7 @@ my $config = {
         },
     ],
 };
-$engine = App::PerlWatcher::Engine->new($config, 'Gtk2');
+$engine = App::PerlWatcher::Engine->new($config, 'AnyEvent');
 ok $engine;
 $engine->frontend($frontend);
 

@@ -18,7 +18,7 @@ use App::PerlWatcher::Status qw/:levels/;
 use App::PerlWatcher::Engine;
 
 my $config = {};
-my $engine = App::PerlWatcher::Engine->new($config, 'Gtk2');
+my $engine = App::PerlWatcher::Engine->new($config, 'AnyEvent');
 ok $engine;
 
 # start/stop test
