@@ -52,7 +52,7 @@ our %_symbols_for = (
 );
 
 
-our %_labels_for = (
+our %_labels_for = reverse (
     LEVEL_ANY()       => 'unknown',
     LEVEL_NOTICE()    => 'notice',
     LEVEL_INFO()      => 'info',
@@ -60,12 +60,11 @@ our %_labels_for = (
     LEVEL_ALERT()     => 'alert',
 );
 
+
 sub string_to_level {
-    my $s = shift;
-    ## $s
-    my %reversed = reverse %_labels_for;
-    my $r = $reversed{ $s };
-    carp "unknown level '$s'" unless defined $r;
+    my $status = shift;
+    my $r = $_labels_for{ $status };
+    carp "unknown level '$status'" unless defined $r;
     return $r;
 }
 

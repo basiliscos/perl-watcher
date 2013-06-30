@@ -1,5 +1,4 @@
 CORE:
-# add max notification level limit (e.g. no warns/alerts for particular events)
 # watcher groups?
 # watcher actions: reset, mute, act (click), force check?
 # timestamps should include dates for sub-events?
@@ -34,6 +33,7 @@ WATCHERS:
 
 GUI:
 # appear window on hot key press as in stardict
+# don't show 'mark all as read" when there is nothing to mark
 # use home directory to store configs : File::Spec->catfile($ENV{'HOME'}, '.ackrc')
 # collapse watchers (rss/filemanager) if there is no events.
 # notification level per watcher and default ?

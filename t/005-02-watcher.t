@@ -4,6 +4,7 @@ use 5.12.0;
 use strict;
 use warnings;
 
+use Devel::Comments;
 use FindBin;
 use Test::More;
 
@@ -17,7 +18,7 @@ use App::PerlWatcher::Watcher;
         my ( $class, $engine_config, %config ) = @_;
         my $self = {};
         bless $self, $class;
-        $self -> _install_thresholds ($engine_config, \%config);
+        $self -> _install_thresholds($engine_config, \%config);
         return $self;
     }
 }
@@ -63,7 +64,25 @@ $watcher->_interpret_result(0, expect(LEVEL_NOTICE));
 $watcher->_interpret_result(0, expect(LEVEL_NOTICE));
 $watcher->_interpret_result(0, expect(LEVEL_INFO));
 
+my %specific_config = (
+    fail => { 
+        2   =>  'info/max',
+    },
+    ok  => { 1 => 'notice' },
+);
 
+$watcher = Test::PerlWatcher::TestWatcher->new($engine_config, %specific_config);
+$watcher->_interpret_result(1, expect(LEVEL_NOTICE));
+$watcher->_interpret_result(1, expect(LEVEL_NOTICE));
+$watcher->_interpret_result(1, expect(LEVEL_NOTICE));
+
+$watcher->_interpret_result(0, expect(LEVEL_NOTICE));
+#$watcher->_interpret_result(0, expect(LEVEL_INFO));
+#$watcher->_interpret_result(0, expect(LEVEL_INFO));
+#$watcher->_interpret_result(0, expect(LEVEL_INFO));
+#$watcher->_interpret_result(0, expect(LEVEL_INFO));
+#$watcher->_interpret_result(0, expect(LEVEL_INFO));
+#$watcher->_interpret_result(0, expect(LEVEL_INFO));
 
 done_testing();
 

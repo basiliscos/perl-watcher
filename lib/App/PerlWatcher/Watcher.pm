@@ -6,7 +6,7 @@ use warnings;
 
 use App::PerlWatcher::Status qw/string_to_level :levels/;
 use Carp;
-use Devel::Comments;
+#use Devel::Comments;
 use Clone qw(clone);
 use Hash::Merge qw( merge );
 use List::Util qw( max );
@@ -37,46 +37,73 @@ sub initial_status {
 # protected methods
 #
 
-sub _key_for_value {
-    my ($target, %h) = @_;
-    my %reversed = reverse %h;
-    return $reversed{ $target } ;
-}
-
 sub _install_thresholds {
     my ( $self, $engine_config, $config ) = @_;
     my ( $r, $l ) = (
-        clone( $engine_config -> {defaults} -> {behaviour} ),
-        clone( $config        -> {on} // {} ),
+        $engine_config -> {defaults} -> {behaviour},
+        $config        -> {on} // {},
     );
-    my $threshold = merge( $r, $l );
-    # merging
-    ## $threshold
-    ## $l
-    ## $r
+    my $threshold;
     for my $k ('ok', 'fail') {
-        while (my ($key, $value) = each %{ $threshold -> {$k} } ) {
-            ## $k
-            ## $key
-            ## $value
-            my $right = _key_for_value( $value, %{ $r->{$k} } );
-            my $left  = _key_for_value( $value, %{ $l->{$k} } );
-            ## $right
-            ## $left
-            delete $threshold -> {$k} -> {$right} 
-                if ( defined($right) && defined($left) );
+        my $merged = _merge($l->{$k}, $r->{$k});
+        # from human strings to numbers
+        while (my ($key, $value) = each %$merged ){
+            $merged->{$key} = string_to_level($value);
         }
+        $threshold->{$k} = $merged;
     }
-    ## $threshold
-    #changing from human-readable to numeric values
-    for my $k ('ok', 'fail') {
-        while (my ($key, $value) = each %{ $threshold -> {$k} } ) {
-            $threshold -> {$k} -> {$key} 
-                = string_to_level( $value );
-        }
-    }
-    ## $threshold
-    $self -> {_threshold} = $threshold; 
+    $self -> {_threshold} = $threshold;
+}
+
+sub _merge {
+    my ($l, $r) = @_;
+    
+    my $max_re = qr/(.*)\/max/;
+    my $level = sub { 
+        my $a = shift;
+        return ($a =~ /$max_re/) ? $1 : $a;
+    };
+    my $wrap = sub {
+        my $hash_ref = shift;
+        my %cleaned = map { $_ => ( $level->($hash_ref->{$_}) ) }
+            keys %$hash_ref;
+        ### %cleaned
+        my %level_for = reverse %cleaned;
+        my @levels = keys %level_for;
+        ### @levels;
+        my @prepared_result =  
+            sort { $a->{weight} <=> $b->{weight} }
+            map { 
+                    my $value = $level_for{$_};
+                    my $max = $hash_ref->{ $value } =~ /$max_re/;
+                    {
+                        level   => $_, 
+                        value   => $value, 
+                        weight  => string_to_level($_),
+                        max     => $max,   
+                    };
+            } @levels;
+        return @prepared_result;
+    };
+    
+    # prepare/wrap left part
+    my @l_result = $wrap->($l);
+    ### @l_result
+    my $max_weight = max 
+        map { $_->{weight} } 
+        grep { $_->{max} } @l_result;
+    my %l_value_of = map { $_->{level} => $_ } @l_result;
+    
+    # join with right part (if there was no key in left) 
+    my @r_result =
+        grep { $max_weight ? ($_->{weight} <= $max_weight) : 1 }
+        grep { !exists $l_value_of{ $_->{level} }  }
+        $wrap->($r);
+    push @l_result, $_ for ( @r_result );
+    ### @l_result
+    
+    # unwrap
+    return { map { $_->{value} => $_->{level} } @l_result };
 }
 
 sub _interpret_result {

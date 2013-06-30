@@ -1,18 +1,40 @@
+use utf8;
+
 {
-    loop_engine => 'Gtk2',
+    backend => 'Gtk2',
     
     defaults    => {
         timeout     => 1,
         behaviour   => {
             fail => { 
                 3   =>  'info',
-                5   =>  'alert',
+                5   =>  'warn',
+                8   =>  'alert',
             },
             ok  => { 3 => 'notice' },
         },
     },
     
     watchers => [
+        {
+            class => 'App::PerlWatcher::Watcher::HTTPSimple',
+            config => {
+                url                 =>  'http://download.finance.yahoo.com/d/quotes.csv?s=EURUSD=X&f=sl1d1t1c1ohgv&e=.csv',
+                title               =>  '€/$',
+                #title               =>  'eur/usd',
+                frequency           => 600,
+                timeout             => 10,
+                response_handler    => sub {
+                    (split(',', $_))[1];
+                },
+                on                  => { 
+                    ok      => { 1  => 'notice' },
+                    fail    => { 10 => 'info'   },
+                },
+            },
+        },
+        
+        
         {
             class => 'App::PerlWatcher::Watcher::Ping',
             config => {
@@ -38,7 +60,7 @@
                 host    =>  'media.iptel.by',
                 port    =>  80,
                 frequency   =>  25,
-                on => { fail => { 10 => 'info' } },
+                on => { fail => { 10 => 'info/max' } },
             },
         },
         
@@ -55,10 +77,20 @@
         {
             class => 'App::PerlWatcher::Watcher::Ping',
             config => {
+                host    =>  'anna-wan',
+                port    =>  22,
+                frequency   =>  30,
+                on => { fail => { 5 => 'info' } },
+            },
+        },
+        
+        {
+            class => 'App::PerlWatcher::Watcher::Ping',
+            config => {
                 host    =>  'helios',
                 port    =>  53,
                 frequency   =>  30,
-                on => { fail => { 10 => 'info' } },
+                on => { fail => { 10 => 'info/max' } },
             },
         },
         
@@ -67,11 +99,12 @@
             config => {
                 url         =>  'http://www.opennet.ru/opennews/opennews_all.rss',
                 title       =>  'opennet',
-                frequency   => 5,
+                frequency   => 60,
+                timeout     => 10,
                 items       =>  5,
                 on          => { 
-                        ok      => 'info',
-                        fail    => 'warn',
+                        ok      => { 1  => 'notice' },
+                        fail    => { 10 => 'info/max'   },
                 },
             },
         },
@@ -80,12 +113,14 @@
         {
             class => 'App::PerlWatcher::Watcher::Rss',
             config => {
-                url     =>  'http://www.linux.org.ru/section-rss.jsp?section=1',
-                title   =>  'lor',
-                items   =>  5,
-                on => { 
-                    ok      => 'info',
-                    fail    => 'warn',
+                url         =>  'http://www.linux.org.ru/section-rss.jsp?section=1',
+                title       =>  'lor',
+                frequency   => 120,
+                timeout     => 10,
+                items       =>  5,
+                on          => { 
+                        ok      => { 1  => 'notice' },
+                        fail    => { 10 => 'info/max'   },
                 },
             },
         },
@@ -96,6 +131,7 @@
             config => {
                 file    =>  '/var/log/messages',
                 lines   =>  10,
+                filter  => sub { $_ !~ /\scron/ },
             },
         },
         
@@ -103,7 +139,11 @@
     
     frontend => {
         gtk => {
-            window_size => [ 500, 300 ],
+            window_size         => [ 500, 300 ],
+            
+            # make the event uninteresting after
+            # seen at the UI during 5 seconds
+            uninteresting_after => 3,
         },
     },
     
