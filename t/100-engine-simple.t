@@ -17,10 +17,8 @@ use Test::TCP;
 use App::PerlWatcher::Status qw/:levels/;
 use App::PerlWatcher::Engine;
 
-my $config = {
-    backend => 'Gtk2',
-};
-my $engine = App::PerlWatcher::Engine->new($config);
+my $config = {};
+my $engine = App::PerlWatcher::Engine->new($config, 'Gtk2');
 ok $engine;
 
 # start/stop test
@@ -66,7 +64,7 @@ $config = {
         },
     ],
 };
-$engine = App::PerlWatcher::Engine->new($config);
+$engine = App::PerlWatcher::Engine->new($config, 'Gtk2');
 my $watchers = $engine->get_watchers;
 my $statuses = [];
 my $callback = sub { push @$statuses, shift };

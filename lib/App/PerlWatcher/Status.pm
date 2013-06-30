@@ -7,7 +7,7 @@ use warnings;
 use Carp;
 use Data::Dumper;
 use Devel::Comments;
-use Exporter;
+use parent qw/Exporter/;
 
 use constant {
     LEVEL_ANY       => 0,
@@ -21,7 +21,6 @@ use constant {
 };
 
 
-our @ISA = qw(Exporter);
 our @EXPORT_OK = 
     qw/
             string_to_level level_to_symbol

@@ -88,7 +88,7 @@ sub _update_summary {
     my $tip = join "\n", map {
             sprintf("[%s] %s", level_to_symbol($_->level), $_->description->())
         } @$sorted_statuses;
-    $tip = sprintf("<b>%s %s</b>","PerlWatcher",$App::PerlWatcher::Engine::VERSION)
+    $tip = sprintf("<b>%s %s</b>","PerlWatcher",$App::PerlWatcher::Engine::VERSION // "dev")
         . ($tip ? "\n\n" . $tip : "");
     $self->_set_label($symbol, $tip);
 }

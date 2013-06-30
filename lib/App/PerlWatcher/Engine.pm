@@ -11,8 +11,8 @@ use Data::Dumper;
 use Devel::Comments;
 
 sub new {
-    my ( $class, $config ) = @_;
-    my $backend = _construct_backend( $config );
+    my ( $class, $config, $backend_id ) = @_;
+    my $backend = _construct_backend( $backend_id );
     my $watchers = _construct_watchers( $config );
     my $watchers_order = {};
     $watchers_order->{ $watchers->[$_] } = $_ for 0 .. @$watchers - 1;
@@ -69,10 +69,9 @@ sub sort_statuses {
 }
 
 sub _construct_backend {
-    my ($config) = @_;
-    my $backend_id = $config -> {backend}; 
+    my $backend_id = shift; 
     my $backend_class = 'App::PerlWatcher::ui::' . $backend_id . '::EngineBackend';
-    my $backend;
+    my $backend;                 
     eval {
         load_class($backend_class);
         $backend = $backend_class -> new;

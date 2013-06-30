@@ -77,7 +77,7 @@ my $callback_handler = sub {
 
 {
     package Test::PerlWatcher::FrontEnd;
-    use base qw/App::PerlWatcher::Frontend/;
+    use base qw/App::PerlWatcher::Frontend/;              
     sub update {
         my ( $self, $status ) = @_;
         $callback_handler->($status);
@@ -86,7 +86,6 @@ my $callback_handler = sub {
 my $frontend = Test::PerlWatcher::FrontEnd->new($engine);
 
 my $config = {
-    backend => 'Gtk2',
     defaults    => {
         timeout     => 1,
         behaviour   => {
@@ -108,7 +107,7 @@ my $config = {
         },
     ],
 };
-$engine = App::PerlWatcher::Engine->new($config);
+$engine = App::PerlWatcher::Engine->new($config, 'Gtk2');
 ok $engine;
 $engine->frontend($frontend);
 

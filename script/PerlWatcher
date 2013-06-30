@@ -5,41 +5,21 @@ use strict;
 use warnings;
 
 use Carp;
-use Class::Load ':all';
 use Devel::Comments;
 use FindBin;
 
 BEGIN { unshift @INC, "$FindBin::Bin/../lib" }
 
-use App::PerlWatcher::Bootstrap;
+use App::PerlWatcher::Bootstrap qw/startup frontend/;
 use App::PerlWatcher::Engine;
 
-my $timeout   = 1;
-
-my $config_file = $ARGV[0];
-
-open(my $config_fh, "<", $config_file) 
-    or croak("Can't open config file $config_file");
-
-my $content_config = do { local $/ = <$config_fh> };
-my $config = eval "no warnings; $content_config ";
-croak("error in config: $@") if ( $@ );
-
-    
-my $engine = App::PerlWatcher::Engine->new($config);
-
-# guess frontend
-my $loop = $config->{backend};
-my $fe_class = "App::PerlWatcher::ui::" . $loop . "::Application"; 
-my $app = eval {
-    load_class($fe_class);
-    return $fe_class -> new( $engine );
-};
-croak "Error creating application $fe_class : $@" if $@;
+my $config = startup;
+my $backend = 'Gtk2';
+my $engine = App::PerlWatcher::Engine->new($config, $backend);
+my $app = frontend($backend, $engine);
 $engine->frontend( $app );
 
 $app->show;
-
 $engine->start;
 
 1;
