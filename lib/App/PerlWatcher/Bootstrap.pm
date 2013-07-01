@@ -6,35 +6,47 @@ use warnings;
 
 use Carp;
 use Class::Load ':all';
-use File::ShareDir ':ALL';
+use File::Copy;
+use File::ShareDir::ProjectDistDir ':all';
+use File::Spec;
+use Path::Class qw(file dir);
 
 use parent qw/Exporter/;
 
-our @EXPORT_OK = qw/startup frontend/;
+our @EXPORT_OK = qw/engine_config get_home_file config/;
 
-sub startup {
-    #my $file = dist_file('samples',  'config/PerlWatcher.conf.sample');
-    
-    my $config_file = $ARGV[0];
-
-    open(my $config_fh, "<", $config_file) 
-        or croak("Can't open config file $config_file");
-    
-    my $content_config = do { local $/ = <$config_fh> };
-    my $config = eval "no warnings; $content_config ";
-    croak("error in config: $@") if $@ ;
-    return $config;
+sub engine_config {
+    my $config_file = $ARGV[0] 
+        // get_home_file('engine.conf', 
+                __PACKAGE__, 'examples/PerlWatcher.conf.example');
+    return config($config_file);
 }
 
-sub frontend {
-    my ($hint, $engine) = @_;
-    my $fe_class = "App::PerlWatcher::ui::" . $hint . "::Application"; 
-    my $app = eval {
-        load_class($fe_class);
-        return $fe_class->new($engine);
-    };
-    croak "Error creating application $fe_class : $@" if $@;
-    return $app;
+sub config {
+    my ($file) = @_;
+    my $content_config = file($file)->slurp(iomode => '<:encoding(UTF-8)'); 
+    my $config = eval "no warnings; $content_config ";
+    croak("error in config: $@") if $@ ;
+    return $config;    
+}
+
+# with fallback to packages's default file
+sub get_home_file {
+    my ($file, $package, $package_example) = @_;
+    my $config_file = File::Spec->catfile(_home(), $file);
+    if (not -e $config_file) {
+        my $example = dist_file($package, $package_example);
+        copy($example, $config_file);
+    }
+    return $config_file;
+}
+
+sub _home {
+    my $home = dir(File::Spec->catfile($ENV{'HOME'}, '.perl-watcher'));
+    if ( not-X $home ) {
+        mkdir $home or croak("can't create $home : $!");
+    }
+    return $home;
 }
 
 1;

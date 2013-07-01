@@ -1,8 +1,6 @@
 use utf8;
 
 {
-    backend => 'Gtk2',
-    
     defaults    => {
         timeout     => 1,
         behaviour   => {
@@ -136,15 +134,5 @@ use utf8;
         },
         
     ],
-    
-    frontend => {
-        gtk => {
-            window_size         => [ 500, 300 ],
-            
-            # make the event uninteresting after
-            # seen at the UI during 5 seconds
-            uninteresting_after => 3,
-        },
-    },
-    
+
 };
