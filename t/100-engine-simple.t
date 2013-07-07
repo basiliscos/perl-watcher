@@ -5,7 +5,6 @@ use strict;
 use warnings;
 
 use AnyEvent;
-use Gtk2;
 use Devel::Comments;
 use IO::Socket::INET;
 use File::Basename;
@@ -64,7 +63,7 @@ $config = {
         },
     ],
 };
-$engine = App::PerlWatcher::Engine->new($config, 'Gtk2');
+$engine = App::PerlWatcher::Engine->new($config, 'AnyEvent');
 my $watchers = $engine->get_watchers;
 my $statuses = [];
 my $callback = sub { push @$statuses, shift };

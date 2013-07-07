@@ -18,7 +18,7 @@ our @EXPORT_OK = qw/engine_config get_home_file config/;
 sub engine_config {
     my $config_file = $ARGV[0] 
         // get_home_file('engine.conf', 
-                __PACKAGE__, 'examples/PerlWatcher.conf.example');
+                __PACKAGE__, 'examples/engine.conf.example');
     return config($config_file);
 }
 
