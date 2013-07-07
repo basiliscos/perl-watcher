@@ -1,4 +1,8 @@
 {{$NEXT}}
+    Use Dist::Zilla's @git plugins bundle
+
+0.09      2013-07-08 00:49:44 Europe/Minsk
+    Separation Gtk frontend from main engine
 
 0.08      2013-06-27 23:44:24 Europe/Minsk
   [Improvements]
