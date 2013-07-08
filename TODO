@@ -1,17 +1,14 @@
-CORE:
+ENGINE
 # watcher groups?
 # watcher actions: reset, mute, act (click), force check?
 # timestamps should include dates for sub-events?
-# engine: watcher save state between invocations
+# watcher save state between invocations
 # update status (tray icon) to notify changes, filtered by some level?
 # about information?
 # research the possible usage of Module::Pluggable
 
 BUILD/ECOSYSTEM:
-# use File::ShareDir and Dist::Zilla::Plugin::ShareDir to have shared resources
-# Decouple Gtk2 GUI from Engine
 # Build via travis-ci.org
-# Integate git plugin to release
 # Document modules (with Pod::Weaver?)
 
 REFACTOR:
@@ -30,16 +27,6 @@ WATCHERS:
 # weather watcher
 # json watcher: curl -b 'PHPSESSID=470c412bd1b60bd9d463771490b9e132' -H 'X-Requested-With: XMLHttpRequest' -g 'http://media.iptel.by/video/cs/csadmin.php?DATA[SubCategoryID]=0&DATA[GenreID]=0&DATA[CountryID]=0&DATA[SortID]=1&DATA[SortCheckBox]=1&DATA[StartPageNum]=1&DATA[SearchMode]=0&DATA[SearchStr]=&DATA[SearchRBSel]=0&DATA[action]=getMainPage'
 # reminder watcher
-
-GUI:
-# appear window on hot key press as in stardict
-# don't show 'mark all as read" when there is nothing to mark
-# use home directory to store configs : File::Spec->catfile($ENV{'HOME'}, '.ackrc')
-# collapse watchers (rss/filemanager) if there is no events.
-# notification level per watcher and default ?
-# colorize output
-# icons by status
-# sorting: by priority, by config?
 
 BUGS:
 # handle errors in rss thread (silently ignore?)
