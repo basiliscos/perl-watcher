@@ -9,7 +9,6 @@ use App::PerlWatcher::EventItem;
 use Carp;
 use Devel::Comments;
 use HTTP::Date;
-use URI;
 use XML::Simple;
 
 use base qw(App::PerlWatcher::Watcher::HTTP);

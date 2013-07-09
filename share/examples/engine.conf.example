@@ -15,6 +15,14 @@ use utf8;
     
     watchers => [
         {
+            class => 'App::PerlWatcher::Watcher::Weather',
+            config => {
+                url         =>  'http://api.yr.no/weatherapi/locationforecast/1.8/?lat=53.54;lon=27.34;msl=220',
+                frequency   =>  1800,
+            },
+        },
+        
+        {
             class => 'App::PerlWatcher::Watcher::HTTPSimple',
             config => {
                 url                 =>  'http://download.finance.yahoo.com/d/quotes.csv?s=EURUSD=X&f=sl1d1t1c1ohgv&e=.csv',
