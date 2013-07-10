@@ -5,7 +5,6 @@ use strict;
 use warnings;
 
 use AnyEvent::Socket;
-use App::PerlWatcher::Status qw/string_to_level :levels/;
 use App::PerlWatcher::Watcher;
 use Carp;
 use Devel::Comments;

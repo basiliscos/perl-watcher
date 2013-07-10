@@ -11,8 +11,9 @@ use File::Basename;
 use FindBin;
 use Test::More;
 
+use App::PerlWatcher::Level qw/:levels/;
+use App::PerlWatcher::Status;
 use App::PerlWatcher::Watcher::HTTPSimple;
-use App::PerlWatcher::Status qw/:levels/;
 
 sub getConversion {
     my $file = dirname(__FILE__) . "/data/eur-usd.csv";

@@ -12,8 +12,9 @@ use FindBin;
 use Path::Class qw(file); 
 use Test::More;
 
+use App::PerlWatcher::Level qw/:levels/;
+use App::PerlWatcher::Status;
 use App::PerlWatcher::Watcher::Weather;
-use App::PerlWatcher::Status qw/:levels/;
 
 my $b = 0;
 my $server;

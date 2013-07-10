@@ -4,11 +4,11 @@ use 5.12.0;
 use strict;
 use warnings;
 
-use FindBin;
 use Test::More;
 
+use App::PerlWatcher::Level qw/:levels/;
+use App::PerlWatcher::Status;
 use App::PerlWatcher::Shelf;
-use App::PerlWatcher::Status qw/:levels/;
 
 my $watcher = "watcher";
 my $update_detector = sub {
@@ -28,7 +28,7 @@ my $create_status = sub {
         update_detector => $update_detector
     );                               
 };
-
+                                                   
 my $shelf = App::PerlWatcher::Shelf->new;
 
 my $s1 = $create_status->(LEVEL_NOTICE);

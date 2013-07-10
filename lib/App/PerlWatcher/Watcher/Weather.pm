@@ -5,10 +5,9 @@ use strict;
 use warnings;
 use utf8;
 
-use App::PerlWatcher::Status qw/:levels/;
 use App::PerlWatcher::EventItem;
 use Carp;
-use Devel::Comments;
+use Devel::Comments;               
 use HTTP::Date;
 use XML::XPath;
 

@@ -12,10 +12,11 @@ use FindBin;
 use Test::More;
 use Test::TCP;
 
-use App::PerlWatcher::Status qw/:levels/;
-use App::PerlWatcher::Shelf;
 use App::PerlWatcher::Engine;
 use App::PerlWatcher::Frontend;
+use App::PerlWatcher::Level qw/:levels/;
+use App::PerlWatcher::Status;
+use App::PerlWatcher::Shelf;
 
 # watcher event registration
 my $server = Test::TCP->new(

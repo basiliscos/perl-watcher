@@ -13,8 +13,9 @@ use Test::More;
 use Test::TCP;
 
 
-use App::PerlWatcher::Status qw/:levels/;
 use App::PerlWatcher::Engine;
+use App::PerlWatcher::Level qw/:levels/;
+use App::PerlWatcher::Status;
 
 my $config = {};
 my $engine = App::PerlWatcher::Engine->new($config, 'AnyEvent');

@@ -8,7 +8,8 @@ use Devel::Comments;
 use FindBin;
 use Test::More;
 
-use App::PerlWatcher::Status qw/:levels/;
+use App::PerlWatcher::Level qw/:levels/;
+use App::PerlWatcher::Status;
 use App::PerlWatcher::Watcher;
 
 {

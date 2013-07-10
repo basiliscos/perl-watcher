@@ -11,8 +11,9 @@ use File::Basename;
 use FindBin;
 use Test::More;
 
+use App::PerlWatcher::Level qw/:levels/;
+use App::PerlWatcher::Status;
 use App::PerlWatcher::Watcher::Rss;
-use App::PerlWatcher::Status qw/:levels/;
 
 sub getRss {
     my $file = dirname(__FILE__) . "/data/rss1.rss";

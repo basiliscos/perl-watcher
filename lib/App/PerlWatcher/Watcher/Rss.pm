@@ -4,7 +4,6 @@ use 5.12.0;
 use strict;
 use warnings;
 
-use App::PerlWatcher::Status qw/:levels/;
 use App::PerlWatcher::EventItem;
 use Carp;
 use Devel::Comments;

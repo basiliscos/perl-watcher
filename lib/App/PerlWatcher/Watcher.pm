@@ -4,7 +4,8 @@ use 5.12.0;
 use strict;
 use warnings;
 
-use App::PerlWatcher::Status qw/string_to_level :levels/;
+use App::PerlWatcher::Level qw/get_by_description :levels/;
+use App::PerlWatcher::Status;
 use Carp;
 #use Devel::Comments;
 use Clone qw(clone);
@@ -51,7 +52,7 @@ sub _install_thresholds {
         my $merged = _merge($l->{$k}, $r->{$k});
         # from human strings to numbers
         while (my ($key, $value) = each %$merged ){
-            $merged->{$key} = string_to_level($value);
+            $merged->{$key} = get_by_description($value);
         }
         $threshold->{$k} = $merged;
     }
@@ -82,7 +83,7 @@ sub _merge {
                     {
                         level   => $_, 
                         value   => $value, 
-                        weight  => string_to_level($_),
+                        weight  => get_by_description($_)->value,
                         max     => $max,   
                     };
             } @levels;

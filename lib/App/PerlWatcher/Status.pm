@@ -7,70 +7,8 @@ use warnings;
 use Carp;
 use Data::Dumper;
 use Devel::Comments;
-use parent qw/Exporter/;
 
-use constant {
-    LEVEL_ANY       => 0,
-    
-    LEVEL_NOTICE    => 2,
-    LEVEL_INFO      => 3,
-    LEVEL_WARN      => 4,
-    LEVEL_ALERT     => 5,
-    
-    LEVEL_IGNORE    => 10,
-};
-
-
-our @EXPORT_OK = 
-    qw/
-            string_to_level level_to_symbol
-            
-            LEVEL_NOTICE LEVEL_INFO 
-            LEVEL_WARN LEVEL_ALERT
-            
-            LEVEL_ANY LEVEL_IGNORE
-    /;
-    
-our %EXPORT_TAGS = (
-    levels => 
-        [qw(
-            
-            LEVEL_NOTICE LEVEL_INFO 
-            LEVEL_WARN LEVEL_ALERT
-            
-            LEVEL_ANY LEVEL_IGNORE
-        )], 
-);
-
-our %_symbols_for = (
-    LEVEL_ANY()       => '?',
-    LEVEL_NOTICE()    => 'n',
-    LEVEL_INFO()      => 'i',
-    LEVEL_WARN()      => 'w',
-    LEVEL_ALERT()     => 'A',
-);
-
-
-our %_labels_for = reverse (
-    LEVEL_ANY()       => 'unknown',
-    LEVEL_NOTICE()    => 'notice',
-    LEVEL_INFO()      => 'info',
-    LEVEL_WARN()      => 'warn',
-    LEVEL_ALERT()     => 'alert',
-);
-
-
-sub string_to_level {
-    my $status = shift;
-    my $r = $_labels_for{ $status };
-    carp "unknown level '$status'" unless defined $r;
-    return $r;
-}
-
-sub level_to_symbol {
-    my $level = shift;
-    return $_symbols_for{$level};
-}
+use App::PerlWatcher::Level;
 
 sub new {
     my ( $class, %args ) = @_;
@@ -97,12 +35,6 @@ sub watcher {
 
 sub level {
     return shift->{_level};
-}
-
-sub symbol {
-    my $self = shift;
-    my $r = $_symbols_for{ $self->{_level} };
-    return $r;
 }
 
 sub description {
