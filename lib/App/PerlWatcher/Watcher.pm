@@ -11,6 +11,9 @@ use Clone qw(clone);
 use Hash::Merge qw( merge );
 use List::Util qw( max );
 
+use overload fallback => 1,
+     '""' => 'description'; 
+
 sub active {
     my ( $self, $value ) = @_;
     if ( defined($value) ) {

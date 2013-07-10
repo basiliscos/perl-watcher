@@ -121,7 +121,7 @@ sub timestamp {
 
 sub _chage_detector {
     my ($a, $b) = @_;
-    carp unless $a -> {_watcher} == $b -> {_watcher};
+    carp unless $a -> {_watcher} eq $b -> {_watcher};
     return ($a->level != $b->level)
         || (defined($a->items) && !defined($b->items))
         || (!defined($a->items) && defined($b->items))

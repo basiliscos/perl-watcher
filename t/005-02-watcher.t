@@ -21,6 +21,7 @@ use App::PerlWatcher::Watcher;
         $self -> _install_thresholds($engine_config, \%config);
         return $self;
     }
+    sub description { shift;  }
 }
 
 my $engine_config = {

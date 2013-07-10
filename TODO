@@ -1,9 +1,8 @@
 ENGINE
+# watcher save state between invocations. The shelf should be persisted
 # watcher groups?
 # watcher actions: reset, mute, act (click), force check?
 # timestamps should include dates for sub-events?
-# watcher save state between invocations
-# update status (tray icon) to notify changes, filtered by some level?
 # about information?
 # research the possible usage of Module::Pluggable
 
@@ -44,6 +43,7 @@ BUGS:
 
 OTHER:
 # error hanlding, e.g. user typos in config?
+# handle watcher's errors at startup
 
 FUTURE/POSTPONED:
 # rss: atom feeds?
