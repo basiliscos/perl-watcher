@@ -17,8 +17,10 @@ use utf8;
         {
             class => 'App::PerlWatcher::Watcher::Weather',
             config => {
-                url         =>  'http://api.yr.no/weatherapi/locationforecast/1.8/?lat=53.54;lon=27.34;msl=220',
-                frequency   =>  1800,
+                latitude    => 53.54,
+                longitude   => 27.34,
+                frequency   => 1800,
+                timeout     => 15,
             },
         },
         

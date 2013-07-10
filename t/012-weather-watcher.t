@@ -32,7 +32,7 @@ my $scenario = [
         req =>  \&getWeather,
         res =>  sub {
             my $status = shift;
-            ### $status
+            # $status
             
             is $status->level, LEVEL_NOTICE;
             like $status->description->(), qr/15.7/;
@@ -88,7 +88,9 @@ my $engine_config = {
 };
 
 my %config = (
-    url                 =>  $url,
+    latitude            => 53.54,
+    longitude           => 27.34,
+    url_generator       => sub { return $url},
     frequency           => 10,
     on                  => { 
         ok      => { 1  => 'notice' },

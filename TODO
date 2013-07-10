@@ -25,7 +25,8 @@ WATCHERS:
 # rss: display bodies as hints?
 # rss: get rid of XML::Simple
 # filetail: add beautifyer?
-# weather: use more friendly config
+# weather: add other tracking parameters
+# weather: add dsl for warnings
 # json watcher: curl -b 'PHPSESSID=470c412bd1b60bd9d463771490b9e132' -H 'X-Requested-With: XMLHttpRequest' -g 'http://media.iptel.by/video/cs/csadmin.php?DATA[SubCategoryID]=0&DATA[GenreID]=0&DATA[CountryID]=0&DATA[SortID]=1&DATA[SortCheckBox]=1&DATA[StartPageNum]=1&DATA[SearchMode]=0&DATA[SearchStr]=&DATA[SearchRBSel]=0&DATA[action]=getMainPage'
 # reminder watcher
 

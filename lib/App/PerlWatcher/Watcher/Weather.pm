@@ -21,7 +21,18 @@ our $T_UNITS = {
 
 sub new {
     my ( $class, $engine_config, %config ) = @_;
+    
+    my $url_generator = $config{url_generator} // sub {
+        my ($lat, $lon) = @_;
+        return "http://api.yr.no/weatherapi/locationforecast/1.8/?lat=$lat;lon=$lon";
+    };
+    
+    croak "latitude is not defined" unless $config{latitude};
+    croak "longitude is not defined" unless $config{longitude};
+    
+    $config{url      } = $url_generator->($config{latitude}, $config{longitude});
     $config{processor} = \&_process_reply;
+    
     my $self = $class->SUPER::new($engine_config, %config);
     return $self;
 }

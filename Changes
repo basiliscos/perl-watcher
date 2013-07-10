@@ -1,4 +1,5 @@
 {{$NEXT}}
+    Added Weather watcher
 
 0.10      2013-07-08 01:05:47 Europe/Minsk
     Use Dist::Zilla's @git plugins bundle
