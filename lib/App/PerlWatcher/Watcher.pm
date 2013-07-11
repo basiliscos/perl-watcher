@@ -7,13 +7,30 @@ use warnings;
 use App::PerlWatcher::Level qw/get_by_description :levels/;
 use App::PerlWatcher::Status;
 use Carp;
-#use Devel::Comments;
+use Devel::Comments;
+use Digest::MD5 qw(md5_base64);
 use Clone qw(clone);
 use Hash::Merge qw( merge );
 use List::Util qw( max );
+use Storable qw/freeze/;
+use Scalar::Util qw/reftype/;
 
 use overload fallback => 1,
-     '""' => 'description'; 
+     '""' => 'unique_id'; 
+
+sub new {
+    my ($class, $engine_config, %config) = @_;
+    my @clean_keys = grep { (ref($config{$_}) // '?') ne 'CODE' } 
+        keys %config;
+    my @values = sort @config{ @clean_keys };
+    my $hash = md5_base64(freeze(\@values));
+    my $id = "$class/$hash";
+    ## @values
+    ## $id
+    my $self = {_unique_id => $id};
+    bless $self => $class;
+    return $self;
+}
 
 sub active {
     my ( $self, $value ) = @_;
@@ -35,6 +52,10 @@ sub initial_status {
         level       => LEVEL_ANY,
         description => sub {  $self->description; },
     );
+}
+
+sub unique_id {
+    return shift->{_unique_id};
 }
 
 #
@@ -71,10 +92,10 @@ sub _merge {
         my $hash_ref = shift;
         my %cleaned = map { $_ => ( $level->($hash_ref->{$_}) ) }
             keys %$hash_ref;
-        ### %cleaned
+        ## %cleaned
         my %level_for = reverse %cleaned;
         my @levels = keys %level_for;
-        ### @levels;
+        ## @levels;
         my @prepared_result =  
             sort { $a->{weight} <=> $b->{weight} }
             map { 
@@ -92,7 +113,7 @@ sub _merge {
     
     # prepare/wrap left part
     my @l_result = $wrap->($l);
-    ### @l_result
+    ## @l_result
     my $max_weight = max 
         map { $_->{weight} } 
         grep { $_->{max} } @l_result;
@@ -104,7 +125,7 @@ sub _merge {
         grep { !exists $l_value_of{ $_->{level} }  }
         $wrap->($r);
     push @l_result, $_ for ( @r_result );
-    ### @l_result
+    ## @l_result
     
     # unwrap
     return { map { $_->{value} => $_->{level} } @l_result };

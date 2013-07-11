@@ -19,14 +19,8 @@ sub new {
         _description        => $args{description        },
         _items              => $args{items              },
         _timestamp          => $args{timestamp          } // time,
-        _update_detector    => \&_chage_detector,
     };
     return bless $self, $class;
-}
-
-sub updated_from {
-    my ($a, $b) = @_;
-    return $a -> {_update_detector}->($a, $b);
 }
 
 sub watcher {
@@ -51,7 +45,7 @@ sub timestamp {
     return shift->{_timestamp};
 }
 
-sub _chage_detector {
+sub updated_from {
     my ($a, $b) = @_;
     carp unless $a -> {_watcher} eq $b -> {_watcher};
     return ($a->level != $b->level)
@@ -86,5 +80,20 @@ sub _items_change_detector {
     return 0;
 }
 
+sub STORABLE_freeze {
+    my ($self, $cloning) = @_;
+    my $values_hash_ref = {};
+    my @copy_props = qw/_watcher _level _items _timestamp/;
+    @$values_hash_ref{ @copy_props } = @$self{ @copy_props };
+    $values_hash_ref->{_description_value} = $self->description->();
+    return ("", $values_hash_ref); 
+}
+
+sub STORABLE_thaw {
+    my ($self, $cloning, $serialized, $values_hash_ref) = @_;
+    my @copy_props = qw/_watcher _level _items _timestamp/;
+    @$self{ @copy_props } = @$values_hash_ref{ @copy_props };
+    $self->{_description} = sub { $values_hash_ref->{_description_value} };
+}
 
 1;

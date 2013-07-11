@@ -22,12 +22,13 @@ sub new {
     $frequency  //= 60;
     $timeout    //= $engine_config -> {defaults} -> {timeout} // 5;
 
-    my $self = {
+    my $self = $class->SUPER::new($engine_config, %config);
+    my $extendent_self = {
         _frequency => $frequency,
         _host      => $host,
         _port      => $port,
     };
-    bless $self, $class;
+    @$self{ keys %$extendent_self } = values %$extendent_self;
     
     $self -> _install_thresholds ($engine_config, \%config);
     $self -> _install_watcher;

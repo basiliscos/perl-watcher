@@ -27,8 +27,9 @@ sub new {
     $timeout     //= $engine_config -> {defaults} -> {timeout} // 5;
     $title       //= $uri->host;
     $processor   //= \&_process_http_response;
-
-    my $self = {
+    
+    my $self = $class->SUPER::new($engine_config, %config);
+    my $extendent_self = {
         _uri            => $uri,
         _items_count    => $items_count,
         _timeout        => $timeout,
@@ -36,7 +37,7 @@ sub new {
         _title          => $title,
         _processor      => $processor,
     };
-    bless $self, $class;
+    @$self{ keys %$extendent_self } = values %$extendent_self;
     
     $self -> _install_thresholds ($engine_config, \%config);
     $self -> _install_watcher;

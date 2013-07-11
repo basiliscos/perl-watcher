@@ -11,21 +11,12 @@ use App::PerlWatcher::Status;
 use App::PerlWatcher::Shelf;
 
 my $watcher = "watcher";
-my $update_detector = sub {
-    my ($a, $b) = @_;
-    my $result = !($a->level == $b->level); 
-    # $a
-    # $b
-    # $result
-    return $result;
-};
 
 my $create_status = sub {
     my $level = shift;
     return App::PerlWatcher::Status->new(
         level           => $level,
         watcher         => \$watcher,
-        update_detector => $update_detector
     );                               
 };
                                                    

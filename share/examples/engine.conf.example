@@ -134,14 +134,14 @@ use utf8;
         },
         
         
-#        {
-#            class => 'App::PerlWatcher::Watcher::FileTail',
-#            config => {
-#                file    =>  '/var/log/messages',
-#                lines   =>  10,
-#                filter  => sub { $_ !~ /\scron/ },
-#            },
-#        },
+        {
+            class => 'App::PerlWatcher::Watcher::FileTail',
+            config => {
+                file    =>  '/var/log/messages',
+                lines   =>  10,
+                filter  => sub { $_ !~ /\scron/ },
+            },
+        },
         
     ],
 

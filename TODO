@@ -1,5 +1,7 @@
 ENGINE
 # watcher save state between invocations. The shelf should be persisted
+# leaks at Storable ? https://rt.perl.org/rt3/Public/Bug/Display.html?id=118829
+# 005-watcher-02-result-interpretation.t ?
 # watcher groups?
 # watcher actions: reset, mute, act (click), force check?
 # timestamps should include dates for sub-events?

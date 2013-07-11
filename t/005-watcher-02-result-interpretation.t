@@ -17,8 +17,7 @@ use App::PerlWatcher::Watcher;
     use base qw/App::PerlWatcher::Watcher/;
     sub new {
         my ( $class, $engine_config, %config ) = @_;
-        my $self = {};
-        bless $self, $class;
+        my $self = $class->SUPER::new($engine_config, %config);
         $self -> _install_thresholds($engine_config, \%config);
         return $self;
     }

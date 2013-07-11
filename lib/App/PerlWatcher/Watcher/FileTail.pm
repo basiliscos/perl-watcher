@@ -29,15 +29,17 @@ sub new {
   
     $filter //= sub { 1 },
 
-    my $self = {
+    my $self = $class->SUPER::new($engine_config, %config);
+    my $extendent_self = {
         _inotify     => $inotify,
         _line_number => $line_number,
         _file        => $file,
         _events      => [],
         _filter      => $filter,
     };
+    @$self{ keys %$extendent_self } = values %$extendent_self;
 
-    return bless $self, $class;
+    return $self;
 }
 
 sub start {
