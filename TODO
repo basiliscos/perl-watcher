@@ -1,11 +1,10 @@
 ROADMAP v.0.20
 # persists shelf(s) and load them on bootstrap
-# icons
-# readme
-# summary level filter
 # travis-ci
-# 005-watcher-02-result-interpretation.t ?
-# about information?
+# readme
+# documentation (pod)
+# icons
+# summary level filter
 
 ENGINE
 # watcher save state between invocations. The shelf should be persisted

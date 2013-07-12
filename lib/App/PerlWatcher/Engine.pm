@@ -9,6 +9,11 @@ use Carp;
 use Class::Load ':all';
 use Data::Dumper;
 use Devel::Comments;
+use File::Spec;
+use Path::Class qw(file);
+
+use App::PerlWatcher::Bootstrap qw/get_home_dir/;
+use App::PerlWatcher::Shelf qw/thaw/;
 
 sub new {
     my ( $class, $config, $backend_id ) = @_;
@@ -22,7 +27,10 @@ sub new {
         _watchers_order => $watchers_order,
         _config         => $config // {},
     };
-    return bless $self, $class;
+    bless $self => $class;
+    $self->{_shelf} = $self->_construct_shelf;
+    
+    return $self;
 }
 
 sub frontend {
@@ -51,11 +59,21 @@ sub start {
 }
 
 sub stop {
-    shift -> {_backend} -> stop_loop;
+    my $self = shift;
+    $self->{_backend}->stop_loop;
+    
+    # persist statuses shelf
+    my $data = $self->{_shelf}->freeze;
+    my $statuses_file = $self->_statuses_file;
+    $statuses_file->spew($data);
 }
 
 sub get_watchers {
     return shift->{_watchers};
+}
+
+sub get_statuses_shelf {
+    return shift->{_shelf};
 }
 
 sub sort_statuses {
@@ -67,6 +85,8 @@ sub sort_statuses {
         } @$statuses
     ];
 }
+
+# private API
 
 sub _construct_backend {
     my $backend_id = shift; 
@@ -95,6 +115,24 @@ sub _construct_watchers {
         carp "Error creating watcher $class : $@" if $@;
     }
     return \@r;
+}
+
+sub _statuses_file {
+    my $path = File::Spec->catfile(get_home_dir(), "statuses-shelf.data");
+    return file($path);
+}
+
+sub _construct_shelf {
+    my $self = shift;
+    my $shelf = App::PerlWatcher::Shelf->new;
+    my $statuses_file = _statuses_file;
+    if ( -r $statuses_file ) {
+        my $data = $statuses_file->slurp;
+        $shelf = thaw($data, $self);
+    } 
+    else {
+        $shelf = App::PerlWatcher::Shelf->new;
+    }
 }
 
 1;
