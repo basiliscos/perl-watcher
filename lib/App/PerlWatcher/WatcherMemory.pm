@@ -56,4 +56,8 @@ sub interpret_result {
     return $self -> {_last_level};
 }
 
+sub last_level {
+    return shift->{_last_level};
+}
+
 1;

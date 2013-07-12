@@ -94,6 +94,11 @@ sub thaw {
     my $actual_statuses = {};
     @$actual_statuses{ @actual_statuses_keys } = values %$statuses;
     $self->{_statuses} = $actual_statuses;
+    
+    my %watchers_memories = %{ $stored_items->{watchers_memories} }; 
+    $watchers_pool{$_}->memory($watchers_memories{$_}) 
+        for(@actual_statuses_keys);
+    
     return $self;
 }
 

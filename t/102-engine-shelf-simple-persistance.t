@@ -90,6 +90,21 @@ ok !$thawed_shelf -> status_changed($s1);
 ok !$thawed_shelf -> status_changed($s2);
 is_deeply $thawed_shelf->{_statuses}{$s1->watcher}->items()->(), $items;
 
+
+# check that watcher's memory is restored
+$engine = App::PerlWatcher::Engine->new($config, 'AnyEvent');
+$watcher = @{ $engine->get_watchers }[0];
+my $memory = $watcher->memory;
+is $memory->interpret_result(1), LEVEL_NOTICE;
+is $memory->interpret_result(1), LEVEL_INFO;
+is $memory->last_level, LEVEL_INFO;
+$serialized = $shelf->freeze($engine);
+$engine = App::PerlWatcher::Engine->new($config, 'AnyEvent');
+$thawed_shelf = thaw($serialized, $engine);
+$watcher = @{ $engine->get_watchers }[0];
+ok $watcher;
+is $watcher->memory->last_level, LEVEL_INFO;
+
 # change the config -> no wather and event should be restored 
 $config->{watchers}[0]{config}{frequency} = 2;
 $engine = App::PerlWatcher::Engine->new($config, 'AnyEvent');
