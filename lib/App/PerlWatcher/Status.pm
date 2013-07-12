@@ -83,17 +83,21 @@ sub _items_change_detector {
 sub STORABLE_freeze {
     my ($self, $cloning) = @_;
     my $values_hash_ref = {};
-    my @copy_props = qw/_watcher _level _items _timestamp/;
+    my @copy_props = qw/_watcher _level _timestamp/;
     @$values_hash_ref{ @copy_props } = @$self{ @copy_props };
     $values_hash_ref->{_description_value} = $self->description->();
+    my $items = $self->items;
+    $values_hash_ref->{_items_value} = $items ? $items->() : undef;
     return ("", $values_hash_ref); 
 }
 
 sub STORABLE_thaw {
     my ($self, $cloning, $serialized, $values_hash_ref) = @_;
-    my @copy_props = qw/_watcher _level _items _timestamp/;
+    my @copy_props = qw/_watcher _level _timestamp/;
     @$self{ @copy_props } = @$values_hash_ref{ @copy_props };
     $self->{_description} = sub { $values_hash_ref->{_description_value} };
+    $self->{_items} = sub { $values_hash_ref->{_items_value} }
+        if $values_hash_ref->{_items_value};
 }
 
 1;
