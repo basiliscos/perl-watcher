@@ -1,11 +1,17 @@
+ROADMAP v.0.20
+# persists shelf(s) and load them on bootstrap
+# icons
+# readme
+# summary level filter
+# travis-ci
+# 005-watcher-02-result-interpretation.t ?
+# about information?
+
 ENGINE
 # watcher save state between invocations. The shelf should be persisted
-# leaks at Storable ? https://rt.perl.org/rt3/Public/Bug/Display.html?id=118829
-# 005-watcher-02-result-interpretation.t ?
 # watcher groups?
 # watcher actions: reset, mute, act (click), force check?
 # timestamps should include dates for sub-events?
-# about information?
 # research the possible usage of Module::Pluggable
 
 BUILD/ECOSYSTEM:

@@ -40,50 +40,54 @@ my $engine_config = {
 my $watcher = Test::PerlWatcher::TestWatcher->new($engine_config);
 ok $watcher, "watcher has been defined";
 
-sub expect {
-    my $level = shift;
-    return sub { 
-        my $status = shift; 
-        is $status->level, $level;
-    };
+sub got_interpretation {
+    my ($watcher, $value) = @_;
+    my $level;
+    $watcher->_interpret_result($value, sub {
+            $level = shift->level;
+    });
 }
 
-$watcher->_interpret_result(1, expect(LEVEL_NOTICE));
-$watcher->_interpret_result(1, expect(LEVEL_NOTICE));
-$watcher->_interpret_result(1, expect(LEVEL_NOTICE));
+is got_interpretation($watcher, 1),  LEVEL_NOTICE;
+is got_interpretation($watcher, 1),  LEVEL_NOTICE;
+is got_interpretation($watcher, 1),  LEVEL_NOTICE;
 
-$watcher->_interpret_result(0, expect(LEVEL_NOTICE));
-$watcher->_interpret_result(0, expect(LEVEL_NOTICE));
-$watcher->_interpret_result(0, expect(LEVEL_INFO));
-$watcher->_interpret_result(0, expect(LEVEL_INFO));
-$watcher->_interpret_result(0, expect(LEVEL_ALERT));
-$watcher->_interpret_result(0, expect(LEVEL_ALERT));
-$watcher->_interpret_result(1, expect(LEVEL_ALERT));
-$watcher->_interpret_result(1, expect(LEVEL_ALERT));
-$watcher->_interpret_result(1, expect(LEVEL_NOTICE));
-$watcher->_interpret_result(0, expect(LEVEL_NOTICE));
-$watcher->_interpret_result(0, expect(LEVEL_NOTICE));
-$watcher->_interpret_result(0, expect(LEVEL_INFO));
+is got_interpretation($watcher, 0),  LEVEL_NOTICE;
+is got_interpretation($watcher, 0),  LEVEL_NOTICE;
+is got_interpretation($watcher, 0),  LEVEL_INFO;
+is got_interpretation($watcher, 0),  LEVEL_INFO;
+is got_interpretation($watcher, 0),  LEVEL_ALERT;
+is got_interpretation($watcher, 0),  LEVEL_ALERT;
+is got_interpretation($watcher, 1),  LEVEL_ALERT;
+is got_interpretation($watcher, 1),  LEVEL_ALERT;
+is got_interpretation($watcher, 1),  LEVEL_NOTICE;
+is got_interpretation($watcher, 0),  LEVEL_NOTICE;
+is got_interpretation($watcher, 0),  LEVEL_NOTICE;
+is got_interpretation($watcher, 0),  LEVEL_INFO;
 
 my %specific_config = (
-    fail => { 
-        2   =>  'info/max',
-    },
-    ok  => { 1 => 'notice' },
+    on => {
+        fail => { 
+            2   =>  'info/max',
+        },
+        ok  => { 1 => 'notice' },
+    }
 );
 
 $watcher = Test::PerlWatcher::TestWatcher->new($engine_config, %specific_config);
-$watcher->_interpret_result(1, expect(LEVEL_NOTICE));
-$watcher->_interpret_result(1, expect(LEVEL_NOTICE));
-$watcher->_interpret_result(1, expect(LEVEL_NOTICE));
+is got_interpretation($watcher, 1),  LEVEL_NOTICE;
+is got_interpretation($watcher, 1),  LEVEL_NOTICE;
+is got_interpretation($watcher, 1),  LEVEL_NOTICE;
 
-$watcher->_interpret_result(0, expect(LEVEL_NOTICE));
-#$watcher->_interpret_result(0, expect(LEVEL_INFO));
-#$watcher->_interpret_result(0, expect(LEVEL_INFO));
-#$watcher->_interpret_result(0, expect(LEVEL_INFO));
-#$watcher->_interpret_result(0, expect(LEVEL_INFO));
-#$watcher->_interpret_result(0, expect(LEVEL_INFO));
-#$watcher->_interpret_result(0, expect(LEVEL_INFO));
+is got_interpretation($watcher, 0),  LEVEL_NOTICE;
+is got_interpretation($watcher, 0),  LEVEL_INFO;
+is got_interpretation($watcher, 0),  LEVEL_INFO;
+is got_interpretation($watcher, 0),  LEVEL_INFO;
+is got_interpretation($watcher, 0),  LEVEL_INFO;
+is got_interpretation($watcher, 0),  LEVEL_INFO;
+is got_interpretation($watcher, 0),  LEVEL_INFO;
+
+is got_interpretation($watcher, 0),  LEVEL_INFO;
 
 done_testing();
 
