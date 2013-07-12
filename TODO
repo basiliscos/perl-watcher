@@ -1,5 +1,4 @@
 ROADMAP v.0.20
-# persists shelf(s) and load them on bootstrap
 # travis-ci
 # readme
 # documentation (pod)
@@ -7,7 +6,6 @@ ROADMAP v.0.20
 # summary level filter
 
 ENGINE
-# watcher save state between invocations. The shelf should be persisted
 # watcher groups?
 # watcher actions: reset, mute, act (click), force check?
 # timestamps should include dates for sub-events?
