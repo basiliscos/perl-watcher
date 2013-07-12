@@ -6,14 +6,12 @@ use warnings;
 
 use App::PerlWatcher::Level qw/get_by_description :levels/;
 use App::PerlWatcher::Status;
+use App::PerlWatcher::WatcherMemory;
 use Carp;
 use Devel::Comments;
 use Digest::MD5 qw(md5_base64);
-use Clone qw(clone);
-use Hash::Merge qw( merge );
 use List::Util qw( max );
 use Storable qw/freeze/;
-use Scalar::Util qw/reftype/;
 
 use overload fallback => 1,
      '""' => 'unique_id'; 
@@ -58,6 +56,20 @@ sub unique_id {
     return shift->{_unique_id};
 }
 
+sub calculate_threshods {
+    my ($l, $r) = @_;
+    my $thresholds_map;
+    for my $k ('ok', 'fail') {
+        my $merged = _merge($l->{$k}, $r->{$k});
+        # from human strings to numbers
+        while (my ($key, $value) = each %$merged ){
+            $merged->{$key} = get_by_description($value);
+        }
+        $thresholds_map->{$k} = $merged;
+    }
+    return $thresholds_map;
+}
+
 #
 # protected methods
 #
@@ -67,17 +79,9 @@ sub _install_thresholds {
     my ( $r, $l ) = (
         $engine_config -> {defaults} -> {behaviour},
         $config        -> {on} // {},
-    );
-    my $threshold;
-    for my $k ('ok', 'fail') {
-        my $merged = _merge($l->{$k}, $r->{$k});
-        # from human strings to numbers
-        while (my ($key, $value) = each %$merged ){
-            $merged->{$key} = get_by_description($value);
-        }
-        $threshold->{$k} = $merged;
-    }
-    $self -> {_threshold} = $threshold;
+    );    
+    my $map = calculate_threshods($l, $r);
+    $self->{_memory} = App::PerlWatcher::WatcherMemory->new($map);
 }
 
 sub _merge {
@@ -133,38 +137,9 @@ sub _merge {
 
 sub _interpret_result {
     my ($self, $result, $callback, $items) = @_;
-    my $thresholds = $self -> {_threshold};
-    # $thresholds
     
-    croak "Thresholds hasn't been installed" unless $thresholds;
-    $self -> {_last_result} //= $result;
-    my ($meta_key, $opposite_key) 
-        = $result ? ('ok',   'fail')
-                  : ('fail',  'ok' );
-                  
-    my $counter_key          =  "_$meta_key" . "_counter";
-    my $opposite_counter_key =  "_$opposite_key" . "_counter";
+    my $level = $self->{_memory}->interpret_result($result);
     
-    my $result_changed = $self -> {_last_result} != $result; 
-    # reset values
-    @$self{ ($counter_key, $opposite_counter_key) } = (0,0)
-        if ($result_changed);
-    my $counter = ++$self -> {$counter_key};
-    
-    $self -> {_last_level} //= LEVEL_NOTICE;
-    
-    my @levels = sort keys (%{ $thresholds -> {$meta_key} });
-    # @levels
-    # $counter
-    my $level_key = max grep { $_ <= $counter } @levels;
-    # $level_key
-    if ( defined $level_key ) {
-        my $new_level = $thresholds -> {$meta_key} -> {$level_key};
-        $self -> {_last_level} = $new_level; 
-    }
-    my $level = $self -> {_last_level};
-    # $level
-    $self -> {_last_result} = $result;
     $self->_emit_event($level, $callback, $items);
 }
 
