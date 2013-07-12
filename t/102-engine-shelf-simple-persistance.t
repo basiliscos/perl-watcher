@@ -78,7 +78,7 @@ $shelf -> stash_status($s1);
 ok !$shelf -> status_changed($s2);
 is_deeply $shelf->{_statuses}{$s1->watcher}->items()->(), $items;
 
-my $serialized = $shelf->freeze;
+my $serialized = $shelf->freeze($engine);
 
 # new engine forces new watcher instances to be created
 $engine = App::PerlWatcher::Engine->new($config, 'AnyEvent');

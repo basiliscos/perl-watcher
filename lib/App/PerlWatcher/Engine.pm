@@ -63,7 +63,7 @@ sub stop {
     $self->{_backend}->stop_loop;
     
     # persist statuses shelf
-    my $data = $self->{_shelf}->freeze;
+    my $data = $self->{_shelf}->freeze($self);
     my $statuses_file = $self->_statuses_file;
     $statuses_file->spew($data);
 }

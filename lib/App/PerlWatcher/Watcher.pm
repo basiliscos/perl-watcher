@@ -56,6 +56,12 @@ sub unique_id {
     return shift->{_unique_id};
 }
 
+sub memory {
+    my ($self, $value) = @_;
+    $self -> {_memory} = $value if defined($value);
+    return $self -> {_memory};
+}
+
 sub calculate_threshods {
     my ($l, $r) = @_;
     my $thresholds_map;
@@ -81,7 +87,8 @@ sub _install_thresholds {
         $config        -> {on} // {},
     );    
     my $map = calculate_threshods($l, $r);
-    $self->{_memory} = App::PerlWatcher::WatcherMemory->new($map);
+    my $memory = App::PerlWatcher::WatcherMemory->new($map);
+    $self->memory($memory);
 }
 
 sub _merge {

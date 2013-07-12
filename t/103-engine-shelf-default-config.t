@@ -36,11 +36,11 @@ for my $w ( @{ $engine->get_watchers } ) {
     $shelf->stash_status($status);
 }
 
-my $serialized = $shelf->freeze;
+my $serialized = $shelf->freeze($engine);
 my $thawed_shelf = thaw($serialized, $engine);
-#for ( @$statuses ) {
-#    ok !$thawed_shelf -> status_changed($_);
-#}
+for ( @$statuses ) {
+    ok !$thawed_shelf -> status_changed($_);
+}
 
 
 done_testing();

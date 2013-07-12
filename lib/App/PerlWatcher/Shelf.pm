@@ -8,6 +8,8 @@ use Devel::Comments;
 use Scalar::Util qw/refaddr/;
 use Storable;
 
+use App::PerlWatcher::Engine;
+
 use parent qw/Exporter/;
 our @EXPORT_OK = qw/thaw/;
 
@@ -41,12 +43,21 @@ sub status_changed {
 }
 
 sub freeze {
-    my $self = shift;
+    my ($self, $engine) = @_;
     local *App::PerlWatcher::Watcher::STORABLE_freeze = sub {
         my ($self, $cloning) = @_;
         return $self->unique_id;
     };
-    return Storable::freeze($self);
+    my %watchers_memories = 
+        map { $_ => $_->memory }
+        @{ $engine->get_watchers };
+        
+    my $stored_items = {
+        version           => $App::PerlWatcher::Engine::VERSION // 'dev',
+        shelf             => $self,
+        watchers_memories => \%watchers_memories,
+    };
+    return Storable::freeze($stored_items);
 }
 
 sub thaw {
@@ -69,7 +80,12 @@ sub thaw {
         return $w;
     };
     
-    my $self = Storable::thaw($serialized);
+    my $stored_items = Storable::thaw($serialized);
+    my $version = $stored_items->{version} // 'dev';
+    return App::PerlWatcher::Shelf->new
+        unless $version eq ($App::PerlWatcher::Engine::VERSION // 'dev');
+    
+    my $self = $stored_items->{shelf};
     my $statuses = $self->{_statuses};
     my @actual_statuses_keys
         = grep { $watchers_pool{$_} }  keys %$statuses;
