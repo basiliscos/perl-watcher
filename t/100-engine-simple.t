@@ -8,14 +8,16 @@ use AnyEvent;
 use Devel::Comments;
 use IO::Socket::INET;
 use File::Basename;
+use File::Temp qw/ tempdir /;
 use FindBin;
 use Test::More;
 use Test::TCP;
 
-
 use App::PerlWatcher::Engine;
 use App::PerlWatcher::Level qw/:levels/;
 use App::PerlWatcher::Status;
+
+$ENV{'HOME'} = tempdir( CLEANUP => 1 );
 
 my $config = {};
 my $engine = App::PerlWatcher::Engine->new($config, 'AnyEvent');

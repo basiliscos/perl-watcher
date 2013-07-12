@@ -4,6 +4,7 @@ use 5.12.0;
 use strict;
 use warnings;
 
+use File::Temp qw/ tempdir /;
 use Test::More;
 
 use App::PerlWatcher::Engine;
@@ -12,6 +13,7 @@ use App::PerlWatcher::Level qw/:levels/;
 use App::PerlWatcher::Status;
 use App::PerlWatcher::Shelf qw/thaw/;
 
+$ENV{'HOME'} = tempdir( CLEANUP => 1 );
 
 {
     package Test::PerlWatcher::TestWatcher;
@@ -94,6 +96,11 @@ $engine = App::PerlWatcher::Engine->new($config, 'AnyEvent');
 $thawed_shelf = thaw($serialized, $engine);
 ok $thawed_shelf -> status_changed($s1);
 ok $thawed_shelf -> status_changed($s2);
+
+# corrupt the data file
+App::PerlWatcher::Engine::_statuses_file->spew(q/corrupted data/);
+$engine = App::PerlWatcher::Engine->new($config, 'AnyEvent');
+ok $engine;
 
 done_testing();
 

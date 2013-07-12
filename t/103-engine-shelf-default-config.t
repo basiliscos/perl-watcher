@@ -8,6 +8,7 @@ use AnyEvent;
 use Devel::Comments;
 use IO::Socket::INET;
 use File::Basename;
+use File::Temp qw/ tempdir /;
 use FindBin;
 use Test::More;
 use Test::TCP;
@@ -17,6 +18,9 @@ use App::PerlWatcher::Engine;
 use App::PerlWatcher::Level qw/:levels/;
 use App::PerlWatcher::Status;
 use App::PerlWatcher::Shelf qw/thaw/;
+
+
+$ENV{'HOME'} = tempdir( CLEANUP => 1 );
 
 my $config_path = dirname(__FILE__) . "/../share/examples/engine.conf.example";
 my $config = config($config_path);

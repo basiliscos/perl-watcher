@@ -80,7 +80,9 @@ sub thaw {
         return $w;
     };
     
-    my $stored_items = Storable::thaw($serialized);
+    my $stored_items = eval { Storable::thaw($serialized) };
+    return App::PerlWatcher::Shelf->new if $@;
+    
     my $version = $stored_items->{version} // 'dev';
     return App::PerlWatcher::Shelf->new
         unless $version eq ($App::PerlWatcher::Engine::VERSION // 'dev');

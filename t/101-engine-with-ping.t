@@ -9,6 +9,7 @@ use Devel::Comments;
 use IO::Socket::INET;
 use File::Basename;
 use FindBin;
+use File::Temp qw/ tempdir /;
 use Test::More;
 use Test::TCP;
 
@@ -17,6 +18,8 @@ use App::PerlWatcher::Frontend;
 use App::PerlWatcher::Level qw/:levels/;
 use App::PerlWatcher::Status;
 use App::PerlWatcher::Shelf;
+
+$ENV{'HOME'} = tempdir( CLEANUP => 1 );
 
 # watcher event registration
 my $server = Test::TCP->new(
