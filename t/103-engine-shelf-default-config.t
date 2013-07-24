@@ -13,13 +13,11 @@ use FindBin;
 use Test::More;
 use Test::TCP;
 
-use App::PerlWatcher::Bootstrap qw/config/;
 use App::PerlWatcher::Engine;
 use App::PerlWatcher::Level qw/:levels/;
 use App::PerlWatcher::Status;
+use App::PerlWatcher::Util::Bootstrap qw/config/;
 use App::PerlWatcher::Util::Storable qw/freeze thaw/;
-
-
 
 $ENV{'HOME'} = tempdir( CLEANUP => 1 );
 
