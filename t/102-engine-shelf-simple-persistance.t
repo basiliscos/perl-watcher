@@ -11,7 +11,7 @@ use App::PerlWatcher::Engine;
 use App::PerlWatcher::EventItem;
 use App::PerlWatcher::Level qw/:levels/;
 use App::PerlWatcher::Status;
-use App::PerlWatcher::Shelf qw/thaw/;
+use App::PerlWatcher::Util::Storable qw/freeze thaw/;
 
 $ENV{'HOME'} = tempdir( CLEANUP => 1 );
 
@@ -72,19 +72,19 @@ my $create_status = sub {
         items           => sub { $items },
     );                               
 };
-                                                   
-my $shelf = App::PerlWatcher::Shelf->new;
+
+my $shelf = $engine->statuses_shelf;
 my $s1 = $create_status->(LEVEL_NOTICE);
 my $s2 = $create_status->(LEVEL_NOTICE);
 $shelf -> stash_status($s1);
 ok !$shelf -> status_changed($s2);
 is_deeply $shelf->{_statuses}{$s1->watcher}->items()->(), $items;
 
-my $serialized = $shelf->freeze($engine);
-
+my $serialized = freeze($engine);
 # new engine forces new watcher instances to be created
-$engine = App::PerlWatcher::Engine->new($config, 'AnyEvent');
-my $thawed_shelf = thaw($serialized, $engine);
+
+ok thaw($engine, $serialized);
+my $thawed_shelf = $engine->statuses_shelf;
 
 ok !$thawed_shelf -> status_changed($s1);
 ok !$thawed_shelf -> status_changed($s2);
@@ -98,9 +98,12 @@ my $memory = $watcher->memory;
 is $memory->interpret_result(1), LEVEL_NOTICE;
 is $memory->interpret_result(1), LEVEL_INFO;
 is $memory->last_level, LEVEL_INFO;
-$serialized = $shelf->freeze($engine);
+$serialized = freeze($engine);
 $engine = App::PerlWatcher::Engine->new($config, 'AnyEvent');
-$thawed_shelf = thaw($serialized, $engine);
+
+ok thaw($engine, $serialized);
+
+$thawed_shelf = $engine->statuses_shelf;
 $watcher = @{ $engine->get_watchers }[0];
 ok $watcher;
 is $watcher->memory->last_level, LEVEL_INFO;
@@ -108,7 +111,10 @@ is $watcher->memory->last_level, LEVEL_INFO;
 # change the config -> no wather and event should be restored 
 $config->{watchers}[0]{config}{frequency} = 2;
 $engine = App::PerlWatcher::Engine->new($config, 'AnyEvent');
-$thawed_shelf = thaw($serialized, $engine);
+
+ok thaw($engine, $serialized);
+
+$thawed_shelf = $engine->statuses_shelf;
 ok $thawed_shelf -> status_changed($s1);
 ok $thawed_shelf -> status_changed($s2);
 

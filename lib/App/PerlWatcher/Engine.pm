@@ -12,8 +12,9 @@ use Devel::Comments;
 use File::Spec;
 use Path::Class qw(file);
 
-use App::PerlWatcher::Bootstrap qw/get_home_dir/;
-use App::PerlWatcher::Shelf qw/thaw/;
+use App::PerlWatcher::Shelf;
+use App::PerlWatcher::Util::Bootstrap qw/get_home_dir/;
+use App::PerlWatcher::Util::Storable qw/freeze thaw/;
 
 sub new {
     my ( $class, $config, $backend_id ) = @_;
@@ -62,8 +63,7 @@ sub stop {
     my $self = shift;
     $self->{_backend}->stop_loop;
     
-    # persist statuses shelf
-    my $data = $self->{_shelf}->freeze($self);
+    my $data = freeze($self);
     my $statuses_file = $self->_statuses_file;
     $statuses_file->spew($data);
 }
@@ -72,8 +72,10 @@ sub get_watchers {
     return shift->{_watchers};
 }
 
-sub get_statuses_shelf {
-    return shift->{_shelf};
+sub statuses_shelf {
+    my ($self, $value) = @_;
+    $self -> {_shelf} = $value if defined($value);
+    return $self -> {_shelf};
 }
 
 sub sort_statuses {
@@ -124,15 +126,13 @@ sub _statuses_file {
 
 sub _construct_shelf {
     my $self = shift;
-    my $shelf = App::PerlWatcher::Shelf->new;
     my $statuses_file = _statuses_file;
     if ( -r $statuses_file ) {
         my $data = $statuses_file->slurp;
-        $shelf = thaw($data, $self);
+        thaw($self, $data) 
+            and return $self->statuses_shelf; 
     } 
-    else {
-        $shelf = App::PerlWatcher::Shelf->new;
-    }
+    return App::PerlWatcher::Shelf->new;
 }
 
 1;

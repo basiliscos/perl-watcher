@@ -17,7 +17,8 @@ use App::PerlWatcher::Bootstrap qw/config/;
 use App::PerlWatcher::Engine;
 use App::PerlWatcher::Level qw/:levels/;
 use App::PerlWatcher::Status;
-use App::PerlWatcher::Shelf qw/thaw/;
+use App::PerlWatcher::Util::Storable qw/freeze thaw/;
+
 
 
 $ENV{'HOME'} = tempdir( CLEANUP => 1 );
@@ -27,7 +28,7 @@ my $config = config($config_path);
 my $engine = App::PerlWatcher::Engine->new($config, 'AnyEvent');
 ok $engine;
 
-my $shelf = App::PerlWatcher::Shelf->new;
+my $shelf = $engine->statuses_shelf;
 my $statuses = [];
 
 for my $w ( @{ $engine->get_watchers } ) {
@@ -40,8 +41,12 @@ for my $w ( @{ $engine->get_watchers } ) {
     $shelf->stash_status($status);
 }
 
-my $serialized = $shelf->freeze($engine);
-my $thawed_shelf = thaw($serialized, $engine);
+my $serialized = freeze($engine);
+
+$engine = App::PerlWatcher::Engine->new($config, 'AnyEvent');
+ok thaw($engine, $serialized);
+my $thawed_shelf = $engine->statuses_shelf;
+
 for ( @$statuses ) {
     ok !$thawed_shelf -> status_changed($_);
 }

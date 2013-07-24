@@ -48,12 +48,14 @@ sub timestamp {
 sub updated_from {
     my ($a, $b) = @_;
     carp unless $a -> {_watcher} eq $b -> {_watcher};
-    return ($a->level != $b->level)
+    my $updated = ($a->level != $b->level)
         || (defined($a->items) && !defined($b->items))
         || (!defined($a->items) && defined($b->items))
         || (defined($a->items) && defined($b->items) 
                 && _items_change_detector($a->items->(), $b->items->()) 
             );
+    # $updated
+    return $updated;
 }
 
 sub _equals_items {

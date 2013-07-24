@@ -1,4 +1,4 @@
-package App::PerlWatcher::Bootstrap;
+package App::PerlWatcher::Util::Bootstrap;
 
 use 5.12.0;
 use strict;
