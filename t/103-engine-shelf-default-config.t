@@ -35,7 +35,7 @@ for my $w ( @{ $engine->get_watchers } ) {
         level       => LEVEL_INFO,
         description => sub { return $w->description; },
     );
-    push $statuses, $status;
+    push @$statuses, $status;
     $shelf->stash_status($status);
 }
 
