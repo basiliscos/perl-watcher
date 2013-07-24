@@ -1,4 +1,7 @@
 package App::PerlWatcher::Util::Storable;
+{
+  $App::PerlWatcher::Util::Storable::VERSION = '0.10';
+}
 
 use 5.12.0;
 use strict;

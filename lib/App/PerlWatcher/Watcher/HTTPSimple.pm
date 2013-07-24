@@ -1,4 +1,7 @@
 package App::PerlWatcher::Watcher::HTTPSimple;
+{
+  $App::PerlWatcher::Watcher::HTTPSimple::VERSION = '0.10';
+}
 
 use 5.12.0;
 use strict;

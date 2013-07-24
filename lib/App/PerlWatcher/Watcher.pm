@@ -1,4 +1,7 @@
 package App::PerlWatcher::Watcher;
+{
+  $App::PerlWatcher::Watcher::VERSION = '0.10';
+}
 
 use 5.12.0;
 use strict;

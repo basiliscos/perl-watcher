@@ -1,4 +1,7 @@
 package App::PerlWatcher::EventItem;
+{
+  $App::PerlWatcher::EventItem::VERSION = '0.10';
+}
 
 use 5.12.0;
 use strict;

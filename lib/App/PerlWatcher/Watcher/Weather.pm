@@ -1,4 +1,7 @@
 package App::PerlWatcher::Watcher::Weather;
+{
+  $App::PerlWatcher::Watcher::Weather::VERSION = '0.10';
+}
 
 use 5.12.0;
 use strict;
