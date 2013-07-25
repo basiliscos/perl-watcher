@@ -1,6 +1,6 @@
 package App::PerlWatcher::Util::Bootstrap;
 {
-  $App::PerlWatcher::Util::Bootstrap::VERSION = '0.10';
+  $App::PerlWatcher::Util::Bootstrap::VERSION = '0.11';
 }
 
 use 5.12.0;

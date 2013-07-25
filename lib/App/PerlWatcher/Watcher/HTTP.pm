@@ -1,6 +1,6 @@
 package App::PerlWatcher::Watcher::HTTP;
 {
-  $App::PerlWatcher::Watcher::HTTP::VERSION = '0.10';
+  $App::PerlWatcher::Watcher::HTTP::VERSION = '0.11';
 }
 
 use 5.12.0;

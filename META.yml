@@ -27,4 +27,4 @@ requires:
   Storable: 2.39
   XML::Simple: 2.18
   XML::XPath: 1.13
-version: 0.10
+version: 0.11

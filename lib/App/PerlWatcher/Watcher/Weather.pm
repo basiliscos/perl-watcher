@@ -1,6 +1,6 @@
 package App::PerlWatcher::Watcher::Weather;
 {
-  $App::PerlWatcher::Watcher::Weather::VERSION = '0.10';
+  $App::PerlWatcher::Watcher::Weather::VERSION = '0.11';
 }
 
 use 5.12.0;

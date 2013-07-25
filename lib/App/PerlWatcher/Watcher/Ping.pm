@@ -1,6 +1,6 @@
 package App::PerlWatcher::Watcher::Ping;
 {
-  $App::PerlWatcher::Watcher::Ping::VERSION = '0.10';
+  $App::PerlWatcher::Watcher::Ping::VERSION = '0.11';
 }
 
 use 5.12.0;
