@@ -1,5 +1,8 @@
 {{$NEXT}}
+    The build was adopted to travis-ci
+    Persists application state (statuses with levels) between invocations
     Added Weather watcher
+    [fix] Build correctly on perl v5.12
 
 0.10      2013-07-08 01:05:47 Europe/Minsk
     Use Dist::Zilla's @git plugins bundle
