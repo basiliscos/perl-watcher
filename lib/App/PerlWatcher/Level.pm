@@ -54,21 +54,33 @@ use constant {
     LEVEL_IGNORE    => __PACKAGE__->_new(10, 'ignore'),
 };
 
-our @ALL_LEVELS = sort qw/
-    LEVEL_IGNORE
+our @ALL_LEVELS = (
+    LEVEL_ANY, 
     
-    LEVEL_NOTICE 
-    LEVEL_INFO 
-    LEVEL_WARN 
-    LEVEL_ALERT
+    LEVEL_NOTICE,
+    LEVEL_INFO, 
+    LEVEL_WARN, 
+    LEVEL_ALERT,
     
-    LEVEL_ANY 
-/;
+    LEVEL_IGNORE,
+);
 
-our @EXPORT_OK = (qw/get_by_description/, @ALL_LEVELS); 
+my @all_levels_strings = qw
+    /
+        LEVEL_ANY 
+        
+        LEVEL_NOTICE
+        LEVEL_INFO 
+        LEVEL_WARN 
+        LEVEL_ALERT
+        
+        LEVEL_IGNORE
+    /;
+
+our @EXPORT_OK = (qw/get_by_description/, @all_levels_strings); 
     
 our %EXPORT_TAGS = (
-    levels => \@ALL_LEVELS, 
+    levels => [ @all_levels_strings ], 
 );
 
 1;
