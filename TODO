@@ -1,8 +1,10 @@
 ROADMAP v.0.20
 # readme
 # documentation (pod)
-# icons
-# summary level filter
+# watcher action [gtk]
+# persists summary level, collapse/expand states [gtk]
+# scrollable results [gtk]
+# icons [gtk]
 # travis-ci [gtk]
 
 ENGINE
