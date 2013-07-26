@@ -37,7 +37,7 @@ sub interpret_result {
     my $counter_key          =  "_$meta_key" . "_counter";
     my $opposite_counter_key =  "_$opposite_key" . "_counter";
     
-    my $result_changed = $self -> {_last_result} != $result; 
+    my $result_changed = $self -> {_last_result} ne $result; 
     # reset values
     @$self{ ($counter_key, $opposite_counter_key) } = (0,0)
         if ($result_changed);
