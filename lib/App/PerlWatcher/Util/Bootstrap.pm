@@ -38,7 +38,7 @@ sub get_home_file {
     my ($file, $package, $package_example) = @_;
     my $config_file = File::Spec->catfile(get_home_dir(), $file);
     if (not -e $config_file) {
-        my $example = dist_file($package, $package_example);
+        my $example = module_file($package, $package_example);
         copy($example, $config_file);
     }
     return $config_file;
