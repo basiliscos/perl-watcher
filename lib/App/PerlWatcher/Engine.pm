@@ -92,7 +92,7 @@ sub sort_statuses {
 
 sub _construct_backend {
     my $backend_id = shift; 
-    my $backend_class = 'App::PerlWatcher::ui::' . $backend_id . '::EngineBackend';
+    my $backend_class = 'App::PerlWatcher::UI::' . $backend_id . '::EngineBackend';
     my $backend;                 
     eval {
         load_class($backend_class);

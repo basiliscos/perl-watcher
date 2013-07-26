@@ -1,4 +1,4 @@
-package App::PerlWatcher::ui::AnyEvent::EngineBackend;
+package App::PerlWatcher::UI::AnyEvent::EngineBackend;
 
 use 5.12.0;
 use strict;
