@@ -1,6 +1,6 @@
-package App::PerlWatcher::ui::AnyEvent::EngineBackend;
+package App::PerlWatcher::UI::AnyEvent::EngineBackend;
 {
-  $App::PerlWatcher::ui::AnyEvent::EngineBackend::VERSION = '0.11';
+  $App::PerlWatcher::UI::AnyEvent::EngineBackend::VERSION = '0.11';
 }
 
 use 5.12.0;

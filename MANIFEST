@@ -1,5 +1,6 @@
 .travis.yml
 App-PerlWatcher-Engine-0.11/.travis.yml
+App-PerlWatcher-Engine-0.11/App-PerlWatcher-Engine-0.11/.travis.yml
 Changes
 LICENSE
 MANIFEST
@@ -15,6 +16,7 @@ lib/App/PerlWatcher/Frontend.pm
 lib/App/PerlWatcher/Level.pm
 lib/App/PerlWatcher/Shelf.pm
 lib/App/PerlWatcher/Status.pm
+lib/App/PerlWatcher/UI/AnyEvent/EngineBackend.pm
 lib/App/PerlWatcher/Util/Bootstrap.pm
 lib/App/PerlWatcher/Util/Storable.pm
 lib/App/PerlWatcher/Watcher.pm
@@ -25,7 +27,6 @@ lib/App/PerlWatcher/Watcher/Ping.pm
 lib/App/PerlWatcher/Watcher/Rss.pm
 lib/App/PerlWatcher/Watcher/Weather.pm
 lib/App/PerlWatcher/WatcherMemory.pm
-lib/App/PerlWatcher/ui/AnyEvent/EngineBackend.pm
 share/examples/engine.conf.example
 t/001-01-levels.t
 t/001-02-shelf.t
