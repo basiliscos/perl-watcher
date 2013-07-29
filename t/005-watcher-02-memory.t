@@ -24,7 +24,7 @@ my $engine_config = {
 my $map = App::PerlWatcher::Watcher::calculate_threshods($engine_config, {});
 ok $map, "thresholds map has been defined";
 
-my $wm = App::PerlWatcher::WatcherMemory->new($map);
+my $wm = App::PerlWatcher::WatcherMemory->new(thresholds_map=>$map);
 
 is $wm->interpret_result(1), LEVEL_NOTICE;
 is $wm->interpret_result(1), LEVEL_NOTICE;
@@ -51,7 +51,7 @@ my %specific_config = (
 );
 
 $map = App::PerlWatcher::Watcher::calculate_threshods(\%specific_config, $engine_config);
-$wm = App::PerlWatcher::WatcherMemory->new($map);
+$wm = App::PerlWatcher::WatcherMemory->new(thresholds_map=>$map);
 
 is $wm->interpret_result(1), LEVEL_NOTICE;
 is $wm->interpret_result(1), LEVEL_NOTICE;

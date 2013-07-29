@@ -6,25 +6,16 @@ use warnings;
 
 use Carp;
 use List::Util qw( max );
+use Moo;
 
 use App::PerlWatcher::Level qw/:levels/;
 
-sub new {
-    my ($class, $threshold_map) = @_;
-    
-    croak "Threshold_map hasn't been defined" 
-        unless $threshold_map;
-    
-    my $self = {_threshold_map => $threshold_map};
-    bless $self => $class;
-    
-    return $self;
-}
-
+has 'thresholds_map'    => ( is => 'ro', required => 1);
+has 'last_level'        => ( is => 'rw', default => sub { LEVEL_NOTICE; } );
 
 sub interpret_result {
     my ($self, $result) = @_;
-    my $threshold_map = $self -> {_threshold_map};
+    my $threshold_map = $self -> thresholds_map;
     
     $self -> {_last_result} //= $result;
     my ($meta_key, $opposite_key) 
@@ -40,8 +31,6 @@ sub interpret_result {
         if ($result_changed);
     my $counter = ++$self -> {$counter_key};
     
-    $self -> {_last_level} //= LEVEL_NOTICE;
-    
     my @levels = sort keys (%{ $threshold_map -> {$meta_key} });
     # @levels
     # $counter
@@ -49,15 +38,11 @@ sub interpret_result {
     # $level_key
     if ( defined $level_key ) {
         my $new_level = $threshold_map -> {$meta_key} -> {$level_key};
-        $self -> {_last_level} = $new_level; 
+        $self->last_level($new_level); 
     }
     $self -> {_last_result} = $result;
     
-    return $self -> {_last_level};
-}
-
-sub last_level {
-    return shift->{_last_level};
+    return $self->last_level;
 }
 
 1;

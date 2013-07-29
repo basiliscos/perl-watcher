@@ -87,7 +87,7 @@ sub _install_thresholds {
         $config        -> {on} // {},
     );    
     my $map = calculate_threshods($l, $r);
-    my $memory = App::PerlWatcher::WatcherMemory->new($map);
+    my $memory = App::PerlWatcher::WatcherMemory->new(thresholds_map=>$map);
     $self->memory($memory);
 }
 
