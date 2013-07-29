@@ -1,10 +1,10 @@
-ROADMAP v.0.20
+ROADMAP to public release
 # readme
 # documentation (pod)
 # watcher action [gtk]
-# persists summary level, collapse/expand states [gtk]
+# use Mo?
+# persists summary level [engine?], collapse/expand states [gtk]
 # scrollable results [gtk]
-# icons [gtk]
 # travis-ci [gtk]
 
 ENGINE

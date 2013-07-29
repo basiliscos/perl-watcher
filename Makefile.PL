@@ -30,9 +30,10 @@ my %WriteMakefileArgs = (
     "File::ShareDir::ProjectDistDir" => "v0.4.4",
     "HTTP::Date" => "6.02",
     "Linux::Inotify2" => "1.22",
-    "Storable" => "2.39",
+    "Storable" => "2.45",
     "XML::Simple" => "2.18",
-    "XML::XPath" => "1.13"
+    "XML::XPath" => "1.13",
+    "aliased" => "0.31"
   },
   "TEST_REQUIRES" => {
     "AnyEvent::HTTPD" => "0.93",
