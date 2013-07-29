@@ -2,6 +2,7 @@ ROADMAP to public release
 # readme
 # documentation (pod)
 # watcher action [gtk]
+# use Mo?
 # persists summary level [engine?], collapse/expand states [gtk]
 # scrollable results [gtk]
 # travis-ci [gtk]
