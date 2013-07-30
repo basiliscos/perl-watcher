@@ -1,6 +1,6 @@
 package App::PerlWatcher::Frontend;
 {
-  $App::PerlWatcher::Frontend::VERSION = '0.11';
+  $App::PerlWatcher::Frontend::VERSION = '0.12';
 }
 
 use 5.12.0;

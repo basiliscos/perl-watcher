@@ -1,4 +1,6 @@
-0.11      2013-07-30 17:22:36 Europe/Minsk
+0.12      2013-07-30 17:26:47 Europe/Minsk
+    Updated Sortable to 2.45
+    Mirgration to Moo instead of bare perl v5 OOP
     [config change] FileTail: lines -> lines_number
     [config change] Rss: _items_count-> items_number
 

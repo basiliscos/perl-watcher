@@ -1,6 +1,6 @@
 package App::PerlWatcher::EventItem;
 {
-  $App::PerlWatcher::EventItem::VERSION = '0.11';
+  $App::PerlWatcher::EventItem::VERSION = '0.12';
 }
 
 use 5.12.0;

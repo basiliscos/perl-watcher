@@ -1,6 +1,6 @@
 package App::PerlWatcher::Util::Storable;
 {
-  $App::PerlWatcher::Util::Storable::VERSION = '0.11';
+  $App::PerlWatcher::Util::Storable::VERSION = '0.12';
 }
 
 use 5.12.0;

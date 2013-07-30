@@ -1,6 +1,6 @@
 package App::PerlWatcher::Status;
 {
-  $App::PerlWatcher::Status::VERSION = '0.11';
+  $App::PerlWatcher::Status::VERSION = '0.12';
 }
 
 use 5.12.0;

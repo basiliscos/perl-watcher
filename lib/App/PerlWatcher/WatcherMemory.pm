@@ -1,6 +1,6 @@
 package App::PerlWatcher::WatcherMemory;
 {
-  $App::PerlWatcher::WatcherMemory::VERSION = '0.11';
+  $App::PerlWatcher::WatcherMemory::VERSION = '0.12';
 }
 
 use 5.12.0;

@@ -1,6 +1,6 @@
 package App::PerlWatcher::Engine;
 {
-  $App::PerlWatcher::Engine::VERSION = '0.11';
+  $App::PerlWatcher::Engine::VERSION = '0.12';
 }
 
 use 5.12.0;

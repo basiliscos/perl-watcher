@@ -1,6 +1,6 @@
 package App::PerlWatcher::Watcher::Rss;
 {
-  $App::PerlWatcher::Watcher::Rss::VERSION = '0.11';
+  $App::PerlWatcher::Watcher::Rss::VERSION = '0.12';
 }
 
 use 5.12.0;
