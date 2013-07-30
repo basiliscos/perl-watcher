@@ -13,14 +13,14 @@ use Carp;
 use Devel::Comments;
 use HTTP::Date;
 use List::MoreUtils qw/any/;
-use Moo;
+use Moo::Role;
 use URI;
 
 
-#requires 'url';
-#requires 'process_http_response';
+requires 'url';
+requires 'process_http_response';
 
-extends qw/App::PerlWatcher::Watcher/;
+with qw/App::PerlWatcher::Watcher/;
 
 has 'frequency'         => ( is => 'ro', default => sub { 60; } );
 has 'uri'               => ( is => 'lazy');

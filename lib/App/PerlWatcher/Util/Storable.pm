@@ -16,12 +16,10 @@ use App::PerlWatcher::Watcher;
 use parent qw/Exporter/;
 our @EXPORT_OK = qw/freeze thaw/;
 
+local our %Watchers_Pool;
+
 sub freeze {
     my ($engine) = @_;
-    local *App::PerlWatcher::Watcher::STORABLE_freeze = sub {
-        my ($self, $cloning) = @_;
-        return $self->unique_id;
-    };
     my %watchers_memories = 
         map { $_ => $_->memory }
         @{ $engine->get_watchers };
@@ -38,22 +36,8 @@ sub freeze {
 sub thaw {
     my ($engine, $serialized) = @_;
     my $watchers = $engine->get_watchers;
-    my %watchers_pool;
-    @watchers_pool{ @$watchers } = @$watchers;
-    
-    local *App::PerlWatcher::Watcher::STORABLE_attach = sub {
-        my ($class, $cloning, $serialized) = @_;
-        my $id = $serialized;
-        my $w = $watchers_pool{$id};
-        
-        # we are forced to return dummy App::PerlWatcher::Watcher
-        # it will be filtered later
-        unless($w){
-           $w = { _unique_id => 'dummy-id'};
-           bless $w => $class;
-        }
-        return $w;
-    };
+    local our %Watchers_Pool;
+    @Watchers_Pool{ @$watchers } = @$watchers;
     
     my $stored_items = eval { Storable::thaw($serialized) };
     return 0 if $@;
@@ -66,9 +50,9 @@ sub thaw {
     my $shelf = $stored_items->{shelf};
 
     my @actual_watcher_ids
-        = grep { $watchers_pool{$_} }  keys %watchers_memories;
+        = grep { $Watchers_Pool{$_} }  keys %watchers_memories;
 
-    $watchers_pool{$_}->memory($watchers_memories{$_}) 
+    $Watchers_Pool{$_}->memory($watchers_memories{$_}) 
         for(@actual_watcher_ids);
         
     my $statuses = $shelf->statuses;

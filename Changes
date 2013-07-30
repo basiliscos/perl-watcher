@@ -1,4 +1,4 @@
-0.11      2013-07-30 16:24:08 Europe/Minsk
+0.11      2013-07-30 17:22:36 Europe/Minsk
     [config change] FileTail: lines -> lines_number
     [config change] Rss: _items_count-> items_number
 

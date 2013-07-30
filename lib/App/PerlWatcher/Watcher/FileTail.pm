@@ -24,7 +24,7 @@ has 'filter'        => ( is => 'ro', default => sub { return sub {1; } } );
 has 'inotify'       => ( is => 'lazy' );
 has 'events'        => ( is => 'lazy', default => sub { [] } );
 
-extends qw/App::PerlWatcher::Watcher/;
+with qw/App::PerlWatcher::Watcher/;
 
 sub _build_inotify {
     my $inotify = Linux::Inotify2->new

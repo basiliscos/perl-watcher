@@ -17,9 +17,9 @@ use List::Util qw( max );
 use Storable qw/freeze/;
 
 
-use Moo;#::Role;
+use Moo::Role;
 
-#requires 'description';     
+requires 'description';
 has 'engine_config'     => ( is => 'ro', required => 1);
 has 'init_args'         => ( is => 'rw');
 has 'config'            => ( is => 'lazy');
@@ -28,6 +28,7 @@ has 'memory'            => ( is => 'rw');
 has 'callback'          => ( is => 'rw');
 
 use overload fallback => 1, q/""/ => sub { $_[0]->unique_id; };
+
 
 sub BUILD {
     my ($self, $init_args) = @_;
@@ -163,6 +164,25 @@ sub _emit_event {
         items       => $items,
     );
     $callback->($status);
+}
+
+# storable-methods
+sub STORABLE_freeze {
+    "$_[0]";
+};
+
+sub STORABLE_attach {
+    my ($class, $cloning, $serialized) = @_;
+    my $id = $serialized;
+    my $w = $App::PerlWatcher::Util::Storable::Watchers_Pool{$id};
+    
+    # we are forced to return dummy App::PerlWatcher::Watcher
+    # it will be filtered later
+    unless($w){
+       $w = { _unique_id => 'dummy-id'};
+       bless $w => $class;
+    }
+    return $w;
 }
 
 1;

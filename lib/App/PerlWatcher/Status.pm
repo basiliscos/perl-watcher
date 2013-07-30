@@ -22,7 +22,7 @@ has 'timestamp'     => ( is => 'rw', default => sub { time(); });
 
 sub updated_from {
     my ($a, $b) = @_;
-    carp unless $a->watcher eq $b->watcher;
+    carp unless $a->watcher->unique_id eq $b->watcher->unique_id;
     my $updated = ($a->level != $b->level)
         || (defined($a->items) && !defined($b->items))
         || (!defined($a->items) && defined($b->items))
