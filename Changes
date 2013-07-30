@@ -1,4 +1,6 @@
 {{$NEXT}}
+    Updated Sortable to 2.45
+    Mirgration to Moo instead of bare perl v5 OOP
     [config change] FileTail: lines -> lines_number
     [config change] Rss: _items_count-> items_number
 
