@@ -73,7 +73,6 @@ sub thaw {
     @$actual_statuses{ @actual_watcher_ids } = @{$statuses}{ @actual_watcher_ids };
     $shelf->statuses($actual_statuses);
     
-     
     $engine->statuses_shelf($shelf);
     return 1;
 }

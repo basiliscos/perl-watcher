@@ -6,28 +6,63 @@ use warnings;
 
 use App::PerlWatcher::Level qw/get_by_description :levels/;
 use App::PerlWatcher::Status;
-use App::PerlWatcher::WatcherMemory;
+use aliased 'App::PerlWatcher::WatcherMemory';
 use Carp;
 use Devel::Comments;
 use Digest::MD5 qw(md5_base64);
 use List::Util qw( max );
 use Storable qw/freeze/;
 
-use overload fallback => 1,
-     '""' => 'unique_id'; 
 
-sub new {
-    my ($class, $engine_config, %config) = @_;
-    my @clean_keys = grep { (ref($config{$_}) // '?') ne 'CODE' } 
-        keys %config;
-    my @values = sort @config{ @clean_keys };
+use Moo;#::Role;
+
+#requires 'description';     
+has 'engine_config'     => ( is => 'ro', required => 1);
+has 'init_args'         => ( is => 'rw');
+has 'config'            => ( is => 'lazy');
+has 'unique_id'         => ( is => 'lazy');
+has 'memory'            => ( is => 'rw');
+has 'callback'          => ( is => 'rw');
+
+use overload fallback => 1, q/""/ => sub { $_[0]->unique_id; };
+
+sub BUILD {
+    my ($self, $init_args) = @_;
+    $self->init_args($init_args);
+    $self->memory($self->_build_memory);
+}
+
+sub _build_config {
+    my $self = shift;
+    my @clean_init_keys = 
+        grep {$_ ne 'engine_config'} 
+        keys %{ $self->init_args };
+    my %config;
+    @config{ @clean_init_keys} = @{ $self->init_args }{ @clean_init_keys };
+    return \%config;
+}
+
+sub _build_memory {
+    my $self = shift;
+    my ( $l, $r ) = (
+        $self->config        -> {on} // {},
+        $self->engine_config -> {defaults}->{behaviour},
+    );
+    my $map = calculate_threshods($l, $r);
+    return WatcherMemory->new(thresholds_map=>$map);
+}
+
+sub _build_unique_id {
+    my $self = shift;
+    my $class = ref($self);
+    my $config = $self->config;
+    my @clean_keys = grep { (ref($config->{$_}) // '?') ne 'CODE' }
+        keys %$config;
+    my @values = sort @{ $config }{ @clean_keys };
     my $hash = md5_base64(freeze(\@values));
     my $id = "$class/$hash";
     ## @values
     ## $id
-    my $self = {_unique_id => $id};
-    bless $self => $class;
-    return $self;
 }
 
 sub active {
@@ -37,29 +72,6 @@ sub active {
         $self->start if $value;
     }
     return defined( $self->{_w} );
-}
-
-sub description {
-     croak 'Method "description" not implemented by subclass';
-}
-
-sub initial_status {
-    my $self = shift;
-    return  App::PerlWatcher::Status->new(
-        watcher     => $self,
-        level       => LEVEL_ANY,
-        description => sub {  $self->description; },
-    );
-}
-
-sub unique_id {
-    return shift->{_unique_id};
-}
-
-sub memory {
-    my ($self, $value) = @_;
-    $self -> {_memory} = $value if defined($value);
-    return $self -> {_memory};
 }
 
 sub calculate_threshods {
@@ -79,17 +91,6 @@ sub calculate_threshods {
 #
 # protected methods
 #
-
-sub _install_thresholds {
-    my ( $self, $engine_config, $config ) = @_;
-    my ( $r, $l ) = (
-        $engine_config -> {defaults} -> {behaviour},
-        $config        -> {on} // {},
-    );    
-    my $map = calculate_threshods($l, $r);
-    my $memory = App::PerlWatcher::WatcherMemory->new(thresholds_map=>$map);
-    $self->memory($memory);
-}
 
 sub _merge {
     my ($l, $r) = @_;
@@ -141,11 +142,11 @@ sub _merge {
     # unwrap
     return { map { $_->{value} => $_->{level} } @l_result };
 }
-
+                  
 sub _interpret_result {
     my ($self, $result, $callback, $items) = @_;
     
-    my $level = $self->{_memory}->interpret_result($result);
+    my $level = $self->memory->interpret_result($result);
     
     $self->_emit_event($level, $callback, $items);
 }

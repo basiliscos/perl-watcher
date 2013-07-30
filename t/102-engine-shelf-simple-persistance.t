@@ -17,17 +17,9 @@ $ENV{'HOME'} = tempdir( CLEANUP => 1 );
 
 {
     package Test::PerlWatcher::TestWatcher;
-    use base qw/App::PerlWatcher::Watcher/;
-    sub new {
-        my ( $class, $engine_config, %config ) = @_;
-        my $self = $class->SUPER::new($engine_config, %config);
-        $self -> _install_thresholds($engine_config, \%config);
-        return $self;
-    }
-    sub description {
-        my $self = shift;
-        return "$self";
-    }
+    use Moo;
+    extends qw/App::PerlWatcher::Watcher/;
+    sub description { shift;  }
 }
 
 my $config = {

@@ -7,45 +7,37 @@ use warnings;
 use App::PerlWatcher::EventItem;
 use Carp;
 use Devel::Comments;
+use Moo;
 use URI;
 
-use base qw(App::PerlWatcher::Watcher::HTTP);
+has 'url'                   => ( is => 'ro', required => 1);
+has 'response_handler'      => ( is => 'ro', required => 1);
+has 'processed_response'    => ( is => 'rw');
 
-sub new {
-    my ( $class, $engine_config, %config ) = @_;
-    
-    my $response_handler = $config{'response_handler'};
-    croak("response_handler is not defined") unless defined ($response_handler);
-    
-    $config{processor} = \&_process_http;
-    my $self = $class->SUPER::new($engine_config, %config);
-    
-    $self->{_response_handler} = $response_handler;
-    
-    return $self;
-}
+extends qw/App::PerlWatcher::Watcher::HTTP/;
 
 sub description {
     my $self = shift;
-    my $desc = "HTTP [" . $self->{_title} . "]";
-    $desc .= " : " . ( $self->{_processed_response} // q{} );
+    my $desc = "HTTP [" . $self->title . "]";
+    my $response = $self->processed_response;
+    $desc .= " : " . ( $response // q{} );
     return $desc;
 }
 
-sub _process_http {
+sub process_http_response {
     my ($self, $content, $headers) = @_;
     my ($result, $success) = (undef, 0);
     
     eval {
-        $result = $self->{_response_handler}->(local $_ = $content);
+        $result = $self->response_handler->(local $_ = $content);
         $success = 1;
     };
     $result = $@ if($@);
     
     # $result
     # $success
-    $self->{_processed_response} = $result;
-    $self->_interpret_result($success, $self -> {_callback});
+    $self->processed_response($result);
+    $self->_interpret_result($success, $self->callback);
 }
 
 1;
