@@ -15,7 +15,7 @@ has 'url'               => ( is => 'ro', required => 1);
 has 'items_number'      => ( is => 'ro', default => sub { 5; } );
 has 'last_items'        => ( is => 'rw');
 
-extends qw/App::PerlWatcher::Watcher::HTTP/;
+with qw/App::PerlWatcher::Watcher::HTTP/;
 
 sub description {
     my $self = shift;

@@ -18,7 +18,7 @@ $ENV{'HOME'} = tempdir( CLEANUP => 1 );
 {
     package Test::PerlWatcher::TestWatcher;
     use Moo;
-    extends qw/App::PerlWatcher::Watcher/;
+    with qw/App::PerlWatcher::Watcher/;
     sub description { shift;  }
 }
 

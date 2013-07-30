@@ -16,7 +16,7 @@ has 'frequency'         => ( is => 'ro', default => sub{ 60; } );
 has 'timeout'           => ( is => 'lazy');
 has 'watcher_callback'  => ( is => 'lazy');
 
-extends qw/App::PerlWatcher::Watcher/;
+with qw/App::PerlWatcher::Watcher/;
 
 sub _build_timeout {
     $_[0]->config->{timeout} // $_[0]->engine_config->{defaults}->{timeout} // 5;

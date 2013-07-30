@@ -10,13 +10,20 @@ use App::PerlWatcher::Level qw/:levels/;
 use App::PerlWatcher::Status;
 use App::PerlWatcher::Shelf;
 
-my $watcher = "watcher";
+{
+    package Test::PerlWatcher::TestWatcher;
+    use Moo;
+    with qw/App::PerlWatcher::Watcher/;
+    sub description { shift;  }
+}
+
+my $watcher = Test::PerlWatcher::TestWatcher->new(engine_config=>{});
 
 my $create_status = sub {
     my $level = shift;
     return App::PerlWatcher::Status->new(
         level           => $level,
-        watcher         => \$watcher,
+        watcher         => $watcher,
     );                               
 };
                                                    

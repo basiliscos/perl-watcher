@@ -14,9 +14,9 @@ use List::Util qw( max );
 use Storable qw/freeze/;
 
 
-use Moo;#::Role;
+use Moo::Role;
 
-#requires 'description';     
+requires 'description';
 has 'engine_config'     => ( is => 'ro', required => 1);
 has 'init_args'         => ( is => 'rw');
 has 'config'            => ( is => 'lazy');

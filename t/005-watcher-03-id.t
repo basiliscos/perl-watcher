@@ -13,7 +13,7 @@ use App::PerlWatcher::Watcher;
 {
     package Test::PerlWatcher::TestWatcher;
     use Moo;
-    extends qw/App::PerlWatcher::Watcher/;
+    with qw/App::PerlWatcher::Watcher/;
     sub description { shift;  }
 }
 my %engine_config;

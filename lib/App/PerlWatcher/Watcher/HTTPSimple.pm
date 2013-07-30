@@ -14,7 +14,7 @@ has 'url'                   => ( is => 'ro', required => 1);
 has 'response_handler'      => ( is => 'ro', required => 1);
 has 'processed_response'    => ( is => 'rw');
 
-extends qw/App::PerlWatcher::Watcher::HTTP/;
+with qw/App::PerlWatcher::Watcher::HTTP/;
 
 sub description {
     my $self = shift;

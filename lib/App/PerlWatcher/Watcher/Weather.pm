@@ -22,7 +22,7 @@ has 'data'              => ( is => 'rw', default => sub{ {}; } );
 has 'url_generator'     => ( is => 'lazy');
 has 'url'               => ( is => 'lazy');
 
-extends qw/App::PerlWatcher::Watcher::HTTP/;
+with qw/App::PerlWatcher::Watcher::HTTP/;
 
 sub _build_url_generator {
     return sub {
