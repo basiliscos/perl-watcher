@@ -1,4 +1,6 @@
 {{$NEXT}}
+
+0.12      2013-07-30 17:26:47 Europe/Minsk
     Updated Sortable to 2.45
     Mirgration to Moo instead of bare perl v5 OOP
     [config change] FileTail: lines -> lines_number
