@@ -10,47 +10,19 @@ use warnings;
 use Carp;
 use Data::Dumper;
 use Devel::Comments;
+use Moo;
 
 use App::PerlWatcher::Level;
 
-sub new {
-    my ( $class, %args ) = @_;
-    
-    my $self = {
-        _watcher            => $args{watcher            },
-        _level              => $args{level              },
-        _description        => $args{description        },
-        _items              => $args{items              },
-        _timestamp          => $args{timestamp          } // time,
-    };
-    return bless $self, $class;
-}
-
-sub watcher {
-    return shift->{_watcher};
-}
-
-sub level {
-    return shift->{_level};
-}
-
-sub description {
-    return shift->{_description};
-}
-
-sub items {
-    my ($self, $value) = @_;
-    $self -> {_items} = $value if defined($value);
-    return $self -> {_items};
-}
-
-sub timestamp {
-    return shift->{_timestamp};
-}
+has 'watcher'       => ( is => 'rw');
+has 'level'         => ( is => 'rw');
+has 'description'   => ( is => 'rw');
+has 'items'         => ( is => 'rw');
+has 'timestamp'     => ( is => 'rw', default => sub { time(); });
 
 sub updated_from {
     my ($a, $b) = @_;
-    carp unless $a -> {_watcher} eq $b -> {_watcher};
+    carp unless $a->watcher eq $b->watcher;
     my $updated = ($a->level != $b->level)
         || (defined($a->items) && !defined($b->items))
         || (!defined($a->items) && defined($b->items))
@@ -88,8 +60,8 @@ sub _items_change_detector {
 sub STORABLE_freeze {
     my ($self, $cloning) = @_;
     my $values_hash_ref = {};
-    my @copy_props = qw/_watcher _level _timestamp/;
-    @$values_hash_ref{ @copy_props } = @$self{ @copy_props };
+    my @copy_props = qw/watcher level timestamp/;
+    @$values_hash_ref{ @copy_props } = map { $self->$_() } @copy_props;
     $values_hash_ref->{_description_value} = $self->description->();
     my $items = $self->items;
     $values_hash_ref->{_items_value} = $items ? $items->() : undef;
@@ -98,10 +70,12 @@ sub STORABLE_freeze {
 
 sub STORABLE_thaw {
     my ($self, $cloning, $serialized, $values_hash_ref) = @_;
-    my @copy_props = qw/_watcher _level _timestamp/;
-    @$self{ @copy_props } = @$values_hash_ref{ @copy_props };
-    $self->{_description} = sub { $values_hash_ref->{_description_value} };
-    $self->{_items} = sub { $values_hash_ref->{_items_value} }
+    my @copy_props = qw/watcher level timestamp/;
+    for my $p (@copy_props) {
+        $self->$p($values_hash_ref->{$p});
+    }
+    $self->description( sub { $values_hash_ref->{_description_value} } );
+    $self->items( sub { $values_hash_ref->{_items_value} } )
         if $values_hash_ref->{_items_value};
 }
 

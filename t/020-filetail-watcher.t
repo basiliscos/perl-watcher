@@ -84,15 +84,14 @@ ok !$filter->(local $_ = "empty");
 ok !$filter->(local $_ = "Z");
 
 my $watcher = App::PerlWatcher::Watcher::FileTail->new(
-    0,
-    (
-        file  => $filename, 
-        lines => 5,
-        filter => $filter,
-    ),
+    file            => $filename, 
+    lines_number    => 5,
+    filter          => $filter,
+    engine_config   => {},
 );
 
 ok defined($watcher), "watcher was created";
+like "$watcher", qr/FileTail/, "has overloaded toString"; 
 
 $watcher->start($callback_handler);
 $end_var->recv;

@@ -30,6 +30,7 @@ my %WriteMakefileArgs = (
     "File::ShareDir::ProjectDistDir" => "v0.4.4",
     "HTTP::Date" => "6.02",
     "Linux::Inotify2" => "1.22",
+    "Moo" => "1.003000",
     "Storable" => "2.45",
     "XML::Simple" => "2.18",
     "XML::XPath" => "1.13",

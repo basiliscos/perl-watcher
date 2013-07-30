@@ -11,41 +11,39 @@ use App::PerlWatcher::EventItem;
 use Carp;
 use Devel::Comments;
 use HTTP::Date;
+use Moo;
 use XML::Simple;
 
-use base qw(App::PerlWatcher::Watcher::HTTP);
+has 'url'               => ( is => 'ro', required => 1);
+has 'items_number'      => ( is => 'ro', default => sub { 5; } );
+has 'last_items'        => ( is => 'rw');
 
-sub new {
-    my ( $class, $engine_config, %config ) = @_;
-    $config{processor} = \&_process_rss;
-    my $self = $class->SUPER::new($engine_config, %config);
-    return $self;
-}
+extends qw/App::PerlWatcher::Watcher::HTTP/;
 
 sub description {
     my $self = shift;
-    return "RSS [" . $self->{_title} . "]";
+    return "RSS [" . $self->title . "]";
 }
 
-sub _process_rss {
+sub process_http_response {
     my ($self, $content, $headers) = @_;
     # $content
     my $xml = XMLin( $content );
     my $items = $xml -> {channel} -> {item};
     # $items
-    my @top_items = splice @$items, 0, $self -> {_items_count};
+    my @top_items = splice @$items, 0, $self->items_number;
     my @news_items = map {
             my $item = App::PerlWatcher::EventItem->new( $_ -> {title} );
             $item -> timestamp( str2time( $_ -> {pubDate} ) );
             $item;
         } @top_items;
-    $self->{_last_items} = sub { \@news_items; };
-    $self->_interpret_result(1, $self -> {_callback}, $self->{_last_items} );
+    $self->last_items( sub { \@news_items; } );
+    $self->_interpret_result(1, $self->callback,$self->last_items );
 }
 
 sub _invoke_callback {
     my ($self, $callback, $status) = @_;
-    $status->items($self->{_last_items});
+    $status->items($self->last_items);
     $callback->($status);
 }
 

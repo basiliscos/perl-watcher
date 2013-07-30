@@ -13,71 +13,44 @@ use Carp;
 use Devel::Comments;
 use HTTP::Date;
 use List::MoreUtils qw/any/;
+use Moo;
 use URI;
 
-use base qw(App::PerlWatcher::Watcher);
 
-sub new {
-    my ( $class, $engine_config, %config ) = @_;
-    my ( $url, $items_count, $frequency, $timeout, $title, $processor ) 
-        = @config{ qw/ url items frequency timeout title processor/ };
-        
-    croak("url is not defined") unless defined ($url);
-    my $uri = URI->new($url);
-    
-    $items_count //= 5;
-    $frequency   //= 60; # once in minute
-    $timeout     //= $engine_config -> {defaults} -> {timeout} // 5;
-    $title       //= $uri->host;
-    $processor   //= \&_process_http_response;
-    
-    my $self = $class->SUPER::new($engine_config, %config);
-    my $extendent_self = {
-        _uri            => $uri,
-        _items_count    => $items_count,
-        _timeout        => $timeout,
-        _frequency      => $frequency,
-        _title          => $title,
-        _processor      => $processor,
-    };
-    @$self{ keys %$extendent_self } = values %$extendent_self;
-    
-    $self -> _install_thresholds ($engine_config, \%config);
-    $self -> _install_watcher;
-    
-    return $self;
+#requires 'url';
+#requires 'process_http_response';
+
+extends qw/App::PerlWatcher::Watcher/;
+
+has 'frequency'         => ( is => 'ro', default => sub { 60; } );
+has 'uri'               => ( is => 'lazy');
+has 'timeout'           => ( is => 'lazy');
+has 'title'             => ( is => 'lazy');
+has 'watcher_callback'  => ( is => 'lazy');
+
+sub _build_uri {
+    return URI->new($_[0]->url);
 }
 
-sub start {
-    my $self = shift;
-    $self->{_callback} //= shift;
-    $self->{_w} = AnyEvent->timer(
-        after    => 0,
-        interval => $self->{_frequency},
-        cb       => sub {
-            $self -> {_watcher}->() if defined( $self -> {_w} );
-        }
-    );
+sub _build_timeout {
+    $_[0]->config->{timeout} // $_[0]->engine_config->{defaults}->{timeout} // 5;
 }
 
-sub description {
-    my $self = shift;
-    return "HTTP [" . $self->{_title} . "]";
+sub _build_title {
+    $_[0]->uri->host;
 }
 
-# private API
-
-sub _install_watcher {
+sub _build_watcher_callback {
     my $self = shift;
-    my $uri = $self -> {_uri};
-    $self -> {_watcher} = sub {
+    my $uri = $self->uri;
+    my $watcher = sub {
         $self -> {_guard} = http_get (scalar $uri,
-            timeout => $self -> {_timeout},
+            timeout => $self->timeout,
             sub {
                 my ($body, $headers) = @_;
                 if ($headers -> {Status} =~ /^2/) {
                     # $body
-                    $self->{_processor}->($self, $body, $headers);
+                    $self->process_http_response($body, $headers);
                 }
                 else{
                     my $reason = $headers -> {Status};
@@ -87,7 +60,7 @@ sub _install_watcher {
                     $self->_interpret_result(0, sub {
                             my $status = shift;
                             $self->_invoke_callback(
-                                $self -> {_callback},
+                                $self->callback,
                                 $status
                             );
                     });
@@ -95,17 +68,34 @@ sub _install_watcher {
             }
         );
     };
+    return $watcher;
 }
+
+sub start {
+    my ($self, $callback) = @_;
+    $self->callback($callback) if $callback;
+    
+    $self->{_w} = AnyEvent->timer(
+        after    => 0,
+        interval => $self->frequency,
+        cb       => sub {
+            my $watcher_cb = $self->watcher_callback;
+            $watcher_cb->() if defined( $self -> {_w} );
+        }
+    );
+}
+
+sub description {
+    my $self = shift;
+    return "HTTP [" . $self->title . "]";
+}
+
+# private API
 
 # intendent to be overriden in descendants
 sub _invoke_callback {
     my ($self, $callback, $status) = @_;
     $callback->($status);
-}
-
-sub _process_http_response {
-    my ($self, $body, $headers) = @_;
-    ...;
 }
 
 1;

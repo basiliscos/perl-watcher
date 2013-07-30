@@ -16,44 +16,31 @@ use Carp;
 use Devel::Comments;
 use File::ReadBackwards;
 use Linux::Inotify2;
+use Moo;
 
-use base qw(App::PerlWatcher::Watcher);
+has 'file'          => ( is => 'ro', required => 1);
+has 'lines_number'  => ( is => 'ro', required => 1);
+has 'filter'        => ( is => 'ro', default => sub { return sub {1; } } );
+has 'inotify'       => ( is => 'lazy' );
+has 'events'        => ( is => 'lazy', default => sub { [] } );
 
-sub new {
-    my ( $class, $engine_config, %config ) = @_;
-    
-    my ( $file, $line_number, $filter ) = @config{ qw/ file lines filter / };
-    
-    $line_number //= 10;
-    croak("file is undefined") unless defined ($file);
+extends qw/App::PerlWatcher::Watcher/;
 
+sub _build_inotify {
     my $inotify = Linux::Inotify2->new
-      or croak("unable to create new inotify object: $!");
-  
-    $filter //= sub { 1 },
-
-    my $self = $class->SUPER::new($engine_config, %config);
-    my $extendent_self = {
-        _inotify     => $inotify,
-        _line_number => $line_number,
-        _file        => $file,
-        _events      => [],
-        _filter      => $filter,
-    };
-    @$self{ keys %$extendent_self } = values %$extendent_self;
-
-    return $self;
+        or croak("unable to create new inotify object: $!");
+    return $inotify; 
 }
 
 sub start {
     # starting watch file
-    my $self = shift;
-    $self->{_callback} //= shift;
+    my ($self, $callback) = @_;
+    $self->callback($callback) if $callback;
 
     my $file_handle = $self->_initial_read;
 
-    $self->{_inotify}->watch(
-        $self->{_file},
+    $self->inotify->watch(
+        $self->file,
         IN_MODIFY,
         sub {
             my $e    = shift;
@@ -82,10 +69,10 @@ sub start {
     );
 
     $self->{_w} = AnyEvent->io(
-        fh   => $self->{_inotify}->fileno,
+        fh   => $self->inotify->fileno,
         poll => 'r',
         cb   => sub {
-            $self->{_inotify}->poll
+            $self->inotify->poll
               if defined( $self->{_w} );
         },
     );
@@ -93,20 +80,20 @@ sub start {
 
 sub description {
     my $self = shift;
-    return "FileWatcher [" . $self->{_file} . "]";
+    return "FileWatcher [" . $self->file . "]";
 }
 
 sub _add_line {
     my ( $self, $line ) = @_;
     if ( defined $line ) {
         chomp $line;
-        if ( $self->{_filter}->(local $_ = $line) ) {
+        if ( $self->filter->(local $_ = $line) ) {
             my $event_item = App::PerlWatcher::EventItem->new($line);
             $event_item -> timestamp(0);
             # $line
-            my $evens_queue = $self->{_events};
+            my $evens_queue = $self->events;
             push @$evens_queue, $event_item;
-            shift @$evens_queue if @$evens_queue > $self->{_line_number};
+            shift @$evens_queue if @$evens_queue > $self->lines_number;
             $self->_trigger_callback;
         }
     }
@@ -114,27 +101,27 @@ sub _add_line {
 
 sub _trigger_callback {
     my ($self) = @_;
-    my @events = @{ $self->{_events} };
+    my @events = @{ $self->events };
     my $status = App::PerlWatcher::Status->new(
         watcher     => $self,
         level       => LEVEL_NOTICE,
         description => sub { $self->description },
         items       => sub { \@events },
     );
-    $self->{_callback}->($status);
+    $self->callback->($status);
 }
 
 sub _initial_read {
     my ($self)       = @_;
-    my $frb          = File::ReadBackwards->new( $self->{_file} );
-    my $end_position = $frb->tell;
+    my $frb          = File::ReadBackwards->new( $self->file );
+    my $end_position = $frb->tell;  
     my @last_lines;
     my $line;
     do {
         $line = $frb->readline;
         unshift @last_lines, $line 
-            if ( $line  && $self->{_filter}->(local $_ = $line) );
-    } while (defined($line) && @last_lines < $self->{_line_number} );
+            if ( $line  && $self->filter->(local $_ = $line) );
+    } while (defined($line) && @last_lines < $self->lines_number );
     
     $self->_add_line($_) for (@last_lines);
 

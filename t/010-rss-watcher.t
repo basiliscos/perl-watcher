@@ -115,10 +115,13 @@ my $engine_config = {
 };
 
 my $watcher = App::PerlWatcher::Watcher::Rss->new(
-    $engine_config,
-    (   url => $rss_url1, items => 5, frequency => 1, timeout => 1, title => 'la-la-title',
-        on => { fail => { 2 => 'info' } },
-    ),
+    url         => $rss_url1, 
+    items       => 5, 
+    frequency   => 1, 
+    timeout     => 1, 
+    title       => 'la-la-title',
+    on          => { fail => { 2 => 'info' } },
+    engine_config => $engine_config
 );
 
 ok defined($watcher), "watcher was created";

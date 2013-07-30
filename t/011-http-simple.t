@@ -117,7 +117,7 @@ my $engine_config = {
     },
 };
 
-my %config = (
+my $watcher = App::PerlWatcher::Watcher::HTTPSimple->new(
     url                 =>  $url,
     title               =>  'eur/usd',
     frequency           => 0.1,
@@ -127,11 +127,7 @@ my %config = (
         ok      => { 1  => 'notice' },
         fail    => { 2 => 'info'   },
     },
-);
-
-
-my $watcher = App::PerlWatcher::Watcher::HTTPSimple->new(
-    $engine_config, %config,
+    engine_config => $engine_config
 );
 
 ok defined($watcher), "watcher was created";

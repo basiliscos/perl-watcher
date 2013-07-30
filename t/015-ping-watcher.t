@@ -75,8 +75,11 @@ my $engine_config = {
 };
 
 my $watcher = App::PerlWatcher::Watcher::Ping->new(
-    $engine_config,
-    (host => "localhost", port => $server->port, frequency => 0.1, timeout => 1),
+    host            => "localhost", 
+    port            => $server->port, 
+    frequency       => 0.1, 
+    timeout         => 1,
+    engine_config   => $engine_config,
 );
 
 ok defined($watcher), "watcher was created";

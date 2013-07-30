@@ -88,7 +88,7 @@ my $engine_config = {
     },
 };
 
-my %config = (
+my $watcher = App::PerlWatcher::Watcher::Weather->new(
     latitude            => 53.54,
     longitude           => 27.34,
     url_generator       => sub { return $url},
@@ -97,11 +97,7 @@ my %config = (
         ok      => { 1  => 'notice' },
         fail    => { 2 => 'info'   },
     },
-);
-
-
-my $watcher = App::PerlWatcher::Watcher::Weather->new(
-    $engine_config, %config,
+    engine_config       => $engine_config,
 );
 
 ok defined($watcher), "watcher was created";

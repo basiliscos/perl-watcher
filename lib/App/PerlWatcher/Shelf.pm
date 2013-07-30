@@ -48,6 +48,4 @@ sub statuses {
     return $self -> {_statuses};
 }
 
-
-
 1;
