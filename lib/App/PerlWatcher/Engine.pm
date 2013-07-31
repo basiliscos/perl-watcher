@@ -20,7 +20,7 @@ use App::PerlWatcher::Shelf;
 use App::PerlWatcher::Util::Bootstrap qw/get_home_dir/;
 use App::PerlWatcher::Util::Storable qw/freeze thaw/;
 
-has 'frontend'          => ( is => 'ro', required => 0);
+has 'frontend'          => ( is => 'rw');
 has 'config'            => ( is => 'ro', required => 0);
 has 'backend_id'        => ( is => 'ro', required => 1);
 has 'statuses_file'     => ( is => 'ro', default => sub {
