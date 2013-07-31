@@ -20,7 +20,7 @@ my $b = 0;
 my $server;
 
 sub getWeather {
-    my $file = file(dirname(__FILE__) . "/data/yr.no-weatherapi-locationforecast-1.8-minsk.xml");
+    my $file = file(dirname(__FILE__) . "/data/yr.no-locationforecast.xml");
     return scalar $file->slurp(iomode => '<:encoding(UTF-8)');
 }
 

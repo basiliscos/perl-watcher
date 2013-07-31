@@ -37,7 +37,7 @@ sub _equals_items {
     my ($a, $b) = @_;
     # $a
     # $b
-    my $result = !( ($a->content cmp $b->content) || ($a->timestamp <=> $b->timestamp) );
+    my $result = !($a->content cmp $b->content); #|| ($a->timestamp <=> $b->timestamp) );
     # $result
     return $result; 
 }
