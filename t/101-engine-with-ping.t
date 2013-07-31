@@ -12,7 +12,7 @@ use File::Temp qw/ tempdir /;
 use Test::More;
 use Test::TCP;
 
-use App::PerlWatcher::Engine;
+use aliased 'App::PerlWatcher::Engine';
 use aliased 'App::PerlWatcher::Frontend';
 use App::PerlWatcher::Level qw/:levels/;
 use App::PerlWatcher::Status;
@@ -106,9 +106,12 @@ my $config = {
         },
     ],
 };
-$engine = App::PerlWatcher::Engine->new($config, 'AnyEvent');
+$engine = Engine->new(
+    config      => $config, 
+    backend_id  => 'AnyEvent',
+    frontend    => $frontend,
+    );
 ok $engine;
-$engine->frontend($frontend);
 
 my $end_var = AnyEvent->condvar;
 my $w = AnyEvent->timer (

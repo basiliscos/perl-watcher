@@ -22,11 +22,11 @@ sub freeze {
     my ($engine) = @_;
     my %watchers_memories = 
         map { $_ => $_->memory }
-        @{ $engine->get_watchers };
+        @{ $engine->watchers };
         
     my $stored_items = {
         version           => $App::PerlWatcher::Engine::VERSION // 'dev',
-        shelf             => $engine->statuses_shelf,
+        shelf             => $engine->shelf,
         watchers_memories => \%watchers_memories,
     };
     return Storable::freeze($stored_items);
@@ -35,7 +35,7 @@ sub freeze {
 # return true on success
 sub thaw {
     my ($engine, $serialized) = @_;
-    my $watchers = $engine->get_watchers;
+    my $watchers = $engine->watchers;
     local our %Watchers_Pool;
     @Watchers_Pool{ @$watchers } = @$watchers;
     
@@ -60,7 +60,7 @@ sub thaw {
     @$actual_statuses{ @actual_watcher_ids } = @{$statuses}{ @actual_watcher_ids };
     $shelf->statuses($actual_statuses);
     
-    $engine->statuses_shelf($shelf);
+    $engine->shelf($shelf);
     return 1;
 }
 

@@ -12,7 +12,7 @@ use File::Temp qw/ tempdir /;
 use Test::More;
 use Test::TCP;
 
-use App::PerlWatcher::Engine;
+use aliased 'App::PerlWatcher::Engine';
 use App::PerlWatcher::Level qw/:levels/;
 use App::PerlWatcher::Status;
 use App::PerlWatcher::Util::Bootstrap qw/config/;
@@ -22,13 +22,13 @@ $ENV{'HOME'} = tempdir( CLEANUP => 1 );
 
 my $config_path = dirname(__FILE__) . "/../share/examples/engine.conf.example";
 my $config = config($config_path);
-my $engine = App::PerlWatcher::Engine->new($config, 'AnyEvent');
+my $engine = Engine->new(config => $config, backend_id => 'AnyEvent');
 ok $engine;
 
-my $shelf = $engine->statuses_shelf;
+my $shelf = $engine->shelf;
 my $statuses = [];
 
-for my $w ( @{ $engine->get_watchers } ) {
+for my $w ( @{ $engine->watchers } ) {
     my $status = App::PerlWatcher::Status->new(
         watcher     =>  $w,
         level       => LEVEL_INFO,
@@ -40,9 +40,9 @@ for my $w ( @{ $engine->get_watchers } ) {
 
 my $serialized = freeze($engine);
 
-$engine = App::PerlWatcher::Engine->new($config, 'AnyEvent');
+$engine = Engine->new(config => $config, backend_id => 'AnyEvent');
 ok thaw($engine, $serialized);
-my $thawed_shelf = $engine->statuses_shelf;
+my $thawed_shelf = $engine->shelf;
 
 for ( @$statuses ) {
     ok !$thawed_shelf -> status_changed($_);
