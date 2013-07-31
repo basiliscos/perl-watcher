@@ -17,6 +17,10 @@ use aliased 'App::PerlWatcher::Frontend';
 use App::PerlWatcher::Level qw/:levels/;
 use App::PerlWatcher::Status;
 use App::PerlWatcher::Shelf;
+
+use FindBin;
+BEGIN { unshift @INC, "$FindBin::Bin/lib" }
+
 use Test::PerlWatcher::FrontEnd;
 
 $ENV{'HOME'} = tempdir( CLEANUP => 1 );
