@@ -1,5 +1,6 @@
 .travis.yml
 App-PerlWatcher-Engine-0.12/.travis.yml
+App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/.travis.yml
 Changes
 LICENSE
 MANIFEST
@@ -13,6 +14,7 @@ lib/App/PerlWatcher/Engine.pm
 lib/App/PerlWatcher/EventItem.pm
 lib/App/PerlWatcher/Frontend.pm
 lib/App/PerlWatcher/Level.pm
+lib/App/PerlWatcher/Openable.pm
 lib/App/PerlWatcher/Shelf.pm
 lib/App/PerlWatcher/Status.pm
 lib/App/PerlWatcher/UI/AnyEvent/EngineBackend.pm

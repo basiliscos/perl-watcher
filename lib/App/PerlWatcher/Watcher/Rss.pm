@@ -8,6 +8,7 @@ use strict;
 use warnings;
 
 use App::PerlWatcher::EventItem;
+use aliased 'App::PerlWatcher::Openable';
 use Carp;
 use Devel::Comments;
 use HTTP::Date;
@@ -37,6 +38,8 @@ sub process_http_response {
                 content   => $_->{title},
                 timestamp => str2time( $_ -> {pubDate} ),
             );
+            my $url = $_->{link};
+            Moo::Role->apply_roles_to_object($item, qw/App::PerlWatcher::Openable/);
             $item;
         } @top_items;
     $self->last_items( sub { \@news_items; } );
