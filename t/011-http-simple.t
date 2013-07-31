@@ -8,7 +8,6 @@ use AnyEvent;
 use AnyEvent::HTTPD;
 use Devel::Comments;
 use File::Basename;
-use FindBin;
 use Test::More;
 
 use App::PerlWatcher::Level qw/:levels/;

@@ -8,16 +8,16 @@ use AnyEvent;
 use Devel::Comments;
 use IO::Socket::INET;
 use File::Basename;
-use FindBin;
 use File::Temp qw/ tempdir /;
 use Test::More;
 use Test::TCP;
 
 use App::PerlWatcher::Engine;
-use App::PerlWatcher::Frontend;
+use aliased 'App::PerlWatcher::Frontend';
 use App::PerlWatcher::Level qw/:levels/;
 use App::PerlWatcher::Status;
 use App::PerlWatcher::Shelf;
+use Test::PerlWatcher::FrontEnd;
 
 $ENV{'HOME'} = tempdir( CLEANUP => 1 );
 
@@ -78,15 +78,7 @@ my $callback_handler = sub {
     return $scenario->[$callback_invocations++]->{res}->(@_);
 };
 
-{
-    package Test::PerlWatcher::FrontEnd;
-    use base qw/App::PerlWatcher::Frontend/;              
-    sub update {
-        my ( $self, $status ) = @_;
-        $callback_handler->($status);
-    }
-}
-my $frontend = Test::PerlWatcher::FrontEnd->new($engine);
+my $frontend = Test::PerlWatcher::FrontEnd->new(engine => $engine, cb => $callback_handler);
 
 my $config = {
     defaults    => {

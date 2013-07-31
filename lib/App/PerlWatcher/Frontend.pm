@@ -8,33 +8,10 @@ use strict;
 use warnings;
 
 use Carp;
+use Moo::Role;
 
-sub new {
-    my ( $class, $engine ) = @_;
-    my $self = {
-        _engine     => $engine,
-        _last_seen  => 0, 
-    };
-    bless $self, $class;
-}
-
-sub update {
-    my ( $self, $status ) = @_;
-    croak 'Method "show" not implemented by subclass';
-}
-
-sub show {
-     croak 'Method "show" not implemented by subclass';
-}
-
-sub last_seen {
-    my ($self, $time) = @_;
-    $self -> {_last_seen} = $time if ( defined $time );
-    return $self -> {_last_seen};
-}
-
-sub engine {
-    return shift -> {_engine};
-}
+requires 'update';
+has 'engine'       => ( is => 'ro', required => 1 );
+has 'last_seen'    => ( is => 'rw', default => sub{ time; } );
 
 1;

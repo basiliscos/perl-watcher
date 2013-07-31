@@ -15,13 +15,6 @@ use App::PerlWatcher::Util::Storable qw/freeze thaw/;
 
 $ENV{'HOME'} = tempdir( CLEANUP => 1 );
 
-{
-    package Test::PerlWatcher::TestWatcher;
-    use Moo;
-    with qw/App::PerlWatcher::Watcher/;
-    sub description { shift;  }
-}
-
 my $config = {
     defaults    => {
         timeout     => 1,
@@ -51,8 +44,8 @@ my $watcher = @{ $engine->get_watchers }[0];
 ok $watcher;
 
 my $items = [ 
-    App::PerlWatcher::EventItem->new("a"),
-    App::PerlWatcher::EventItem->new("b"),
+    App::PerlWatcher::EventItem->new(content => "a"),
+    App::PerlWatcher::EventItem->new(content => "b"),
 ];
 
 my $create_status = sub {
@@ -70,7 +63,7 @@ my $s1 = $create_status->(LEVEL_NOTICE);
 my $s2 = $create_status->(LEVEL_NOTICE);
 $shelf -> stash_status($s1);
 ok !$shelf -> status_changed($s2);
-is_deeply $shelf->{_statuses}{$s1->watcher}->items()->(), $items;
+is_deeply $shelf->statuses->{$s1->watcher}->items()->(), $items;
 
 my $serialized = freeze($engine);
 # new engine forces new watcher instances to be created
@@ -80,7 +73,7 @@ my $thawed_shelf = $engine->statuses_shelf;
 
 ok !$thawed_shelf -> status_changed($s1);
 ok !$thawed_shelf -> status_changed($s2);
-is_deeply $thawed_shelf->{_statuses}{$s1->watcher}->items()->(), $items;
+is_deeply $thawed_shelf->statuses->{$s1->watcher}->items()->(), $items;
 
 
 # check that watcher's memory is restored

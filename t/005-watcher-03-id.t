@@ -5,17 +5,10 @@ use strict;
 use warnings;
 
 use Devel::Comments;
-use FindBin;
 use Test::More;
 
-use App::PerlWatcher::Watcher;
+use Test::PerlWatcher::TestWatcher;
 
-{
-    package Test::PerlWatcher::TestWatcher;
-    use Moo;
-    with qw/App::PerlWatcher::Watcher/;
-    sub description { shift;  }
-}
 my %engine_config;
 my %watcher_init = (a=>'b', c=>1, e=>{d=>5}, engine_config => \%engine_config);
 my $w1 = Test::PerlWatcher::TestWatcher->new(%watcher_init); 

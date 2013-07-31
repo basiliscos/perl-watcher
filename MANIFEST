@@ -1,5 +1,6 @@
 .travis.yml
 App-PerlWatcher-Engine-0.12/.travis.yml
+App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/.travis.yml
 Changes
 LICENSE
 MANIFEST
@@ -46,3 +47,5 @@ t/data/eur-usd.csv
 t/data/opennet.ru.rss
 t/data/perlpodcast.ru.rss
 t/data/yr.no-locationforecast.xml
+t/lib/Test/PerlWatcher/FrontEnd.pm
+t/lib/Test/PerlWatcher/TestWatcher.pm

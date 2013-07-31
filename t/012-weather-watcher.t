@@ -8,7 +8,6 @@ use AnyEvent;
 use AnyEvent::HTTPD;
 use Devel::Comments;
 use File::Basename;
-use FindBin;
 use Path::Class qw(file); 
 use Test::More;
 

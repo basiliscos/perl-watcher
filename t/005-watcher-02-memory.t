@@ -5,7 +5,6 @@ use strict;
 use warnings;
 
 use Devel::Comments;
-use FindBin;
 use Test::More;
 
 use App::PerlWatcher::Level qw/:levels/;

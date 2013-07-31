@@ -9,13 +9,7 @@ use Test::More;
 use App::PerlWatcher::Level qw/:levels/;
 use App::PerlWatcher::Status;
 use App::PerlWatcher::Shelf;
-
-{
-    package Test::PerlWatcher::TestWatcher;
-    use Moo;
-    with qw/App::PerlWatcher::Watcher/;
-    sub description { shift;  }
-}
+use Test::PerlWatcher::TestWatcher;
 
 my $watcher = Test::PerlWatcher::TestWatcher->new(engine_config=>{});
 
