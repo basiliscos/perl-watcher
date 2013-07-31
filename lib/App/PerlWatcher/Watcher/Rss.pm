@@ -30,8 +30,10 @@ sub process_http_response {
     # $items
     my @top_items = splice @$items, 0, $self->items_number;
     my @news_items = map {
-            my $item = App::PerlWatcher::EventItem->new( $_ -> {title} );
-            $item -> timestamp( str2time( $_ -> {pubDate} ) );
+            my $item = App::PerlWatcher::EventItem->new(
+                content   => $_->{title},
+                timestamp => str2time( $_ -> {pubDate} ),
+            );
             $item;
         } @top_items;
     $self->last_items( sub { \@news_items; } );

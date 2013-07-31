@@ -51,8 +51,8 @@ my $watcher = @{ $engine->get_watchers }[0];
 ok $watcher;
 
 my $items = [ 
-    App::PerlWatcher::EventItem->new("a"),
-    App::PerlWatcher::EventItem->new("b"),
+    App::PerlWatcher::EventItem->new(content => "a"),
+    App::PerlWatcher::EventItem->new(content => "b"),
 ];
 
 my $create_status = sub {

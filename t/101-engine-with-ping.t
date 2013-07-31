@@ -14,7 +14,7 @@ use Test::More;
 use Test::TCP;
 
 use App::PerlWatcher::Engine;
-use App::PerlWatcher::Frontend;
+use aliased 'App::PerlWatcher::Frontend';
 use App::PerlWatcher::Level qw/:levels/;
 use App::PerlWatcher::Status;
 use App::PerlWatcher::Shelf;
@@ -80,13 +80,16 @@ my $callback_handler = sub {
 
 {
     package Test::PerlWatcher::FrontEnd;
-    use base qw/App::PerlWatcher::Frontend/;              
+    use Moo;
+    with 'App::PerlWatcher::Frontend';
+    
     sub update {
         my ( $self, $status ) = @_;
         $callback_handler->($status);
     }
+    sub show { }
 }
-my $frontend = Test::PerlWatcher::FrontEnd->new($engine);
+my $frontend = Test::PerlWatcher::FrontEnd->new(engine => $engine);
 
 my $config = {
     defaults    => {
