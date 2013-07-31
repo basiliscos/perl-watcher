@@ -9,6 +9,10 @@ use Test::More;
 use App::PerlWatcher::Level qw/:levels/;
 use App::PerlWatcher::Status;
 use App::PerlWatcher::Shelf;
+
+use FindBin;
+BEGIN { unshift @INC, "$FindBin::Bin/lib" }
+
 use Test::PerlWatcher::TestWatcher;
 
 my $watcher = Test::PerlWatcher::TestWatcher->new(engine_config=>{});
