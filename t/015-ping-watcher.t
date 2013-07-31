@@ -9,7 +9,6 @@ use Carp;
 use Devel::Comments;
 use IO::Socket::INET;
 use File::Basename;
-use FindBin;
 use Test::More;
 use Test::TCP;
 

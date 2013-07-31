@@ -9,7 +9,6 @@ use Devel::Comments;
 use IO::Socket::INET;
 use File::Basename;
 use File::Temp qw/ tempdir /;
-use FindBin;
 use Test::More;
 use Test::TCP;
 

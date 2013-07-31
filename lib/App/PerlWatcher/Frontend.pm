@@ -8,7 +8,6 @@ use Carp;
 use Moo::Role;
 
 requires 'update';
-requires 'show';
 has 'engine'       => ( is => 'ro', required => 1 );
 has 'last_seen'    => ( is => 'rw', default => sub{ time; } );
 

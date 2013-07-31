@@ -9,7 +9,6 @@ use Carp;
 use Devel::Comments;
 use File::Basename;
 use File::Temp qw/ tempdir /;
-use FindBin;
 use Test::More;
 
 use App::PerlWatcher::Watcher::FileTail;

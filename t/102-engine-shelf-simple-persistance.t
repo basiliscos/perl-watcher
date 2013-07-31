@@ -15,13 +15,6 @@ use App::PerlWatcher::Util::Storable qw/freeze thaw/;
 
 $ENV{'HOME'} = tempdir( CLEANUP => 1 );
 
-{
-    package Test::PerlWatcher::TestWatcher;
-    use Moo;
-    with qw/App::PerlWatcher::Watcher/;
-    sub description { shift;  }
-}
-
 my $config = {
     defaults    => {
         timeout     => 1,
