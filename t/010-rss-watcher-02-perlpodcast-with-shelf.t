@@ -35,7 +35,7 @@ my $scenario = [
             my $status = shift;
             is $status->level, LEVEL_NOTICE;
             my $items = $status->items->();
-            is @{ $items }, 5, "got 5 items (#1)";
+            is @{ $items }, 2, "got 2 items (#1)";
             $shelf->stash_status($status);
         },
     },
@@ -47,7 +47,7 @@ my $scenario = [
             my $status = shift;
             is $status->level, LEVEL_NOTICE;
             my $items = $status->items->();
-            is @{ $items }, 5, "got 5 items (#2)";
+            is @{ $items }, 2, "got 2 items (#2)";
             ok !$shelf -> status_changed($status);
             $server = undef;
             $end_var->send;
@@ -79,7 +79,7 @@ $server->reg_cb (
         );
     },
 );
-
+                               
 ok defined($server), "served defined";
 my $rss_url1 = "http://" . $server->host . ":" . $server->port . "/rss1";
 
@@ -97,7 +97,7 @@ my $engine_config = {
 
 my $watcher = App::PerlWatcher::Watcher::Rss->new(
     url         => $rss_url1, 
-    items       => 5, 
+    items_number=> 2, 
     frequency   => 1, 
     timeout     => 1, 
     title       => 'la-la-title',
