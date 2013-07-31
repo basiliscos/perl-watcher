@@ -12,14 +12,14 @@ use File::Temp qw/ tempdir /;
 use Test::More;
 use Test::TCP;
 
-use App::PerlWatcher::Engine;
+use aliased qw/App::PerlWatcher::Engine/;
 use App::PerlWatcher::Level qw/:levels/;
 use App::PerlWatcher::Status;
 
 $ENV{'HOME'} = tempdir( CLEANUP => 1 );
 
 my $config = {};
-my $engine = App::PerlWatcher::Engine->new($config, 'AnyEvent');
+my $engine = Engine->new(config => $config, backend_id => 'AnyEvent');
 ok $engine;
 
 # start/stop test
@@ -65,8 +65,8 @@ $config = {
         },
     ],
 };
-$engine = App::PerlWatcher::Engine->new($config, 'AnyEvent');
-my $watchers = $engine->get_watchers;
+$engine = Engine->new(config => $config, backend_id => 'AnyEvent');
+my $watchers = $engine->watchers;
 my $statuses = [];
 my $callback = sub { push @$statuses, shift };
 like $watchers->[0]->description, qr/hostA/, "hostA is the 1st";

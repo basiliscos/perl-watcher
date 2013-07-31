@@ -7,7 +7,7 @@ use warnings;
 use File::Temp qw/ tempdir /;
 use Test::More;
 
-use App::PerlWatcher::Engine;
+use aliased 'App::PerlWatcher::Engine';
 use App::PerlWatcher::EventItem;
 use App::PerlWatcher::Level qw/:levels/;
 use App::PerlWatcher::Status;
@@ -40,10 +40,10 @@ my $config = {
     ],
 };
 
-my $engine = App::PerlWatcher::Engine->new($config, 'AnyEvent');
+my $engine = Engine->new(config => $config, backend_id => 'AnyEvent');
 ok $engine;
 
-my $watcher = @{ $engine->get_watchers }[0];
+my $watcher = $engine->watchers->[0];
 ok $watcher;
 
 my $items = [ 
@@ -61,7 +61,7 @@ my $create_status = sub {
     );                               
 };
 
-my $shelf = $engine->statuses_shelf;
+my $shelf = $engine->shelf;
 my $s1 = $create_status->(LEVEL_NOTICE);
 my $s2 = $create_status->(LEVEL_NOTICE);
 $shelf -> stash_status($s1);
@@ -72,7 +72,7 @@ my $serialized = freeze($engine);
 # new engine forces new watcher instances to be created
 
 ok thaw($engine, $serialized);
-my $thawed_shelf = $engine->statuses_shelf;
+my $thawed_shelf = $engine->shelf;
 
 ok !$thawed_shelf -> status_changed($s1);
 ok !$thawed_shelf -> status_changed($s2);
@@ -80,35 +80,35 @@ is_deeply $thawed_shelf->statuses->{$s1->watcher}->items()->(), $items;
 
 
 # check that watcher's memory is restored
-$engine = App::PerlWatcher::Engine->new($config, 'AnyEvent');
-$watcher = @{ $engine->get_watchers }[0];
+$engine = Engine->new(config => $config, backend_id => 'AnyEvent');
+$watcher = $engine->watchers->[0];
 my $memory = $watcher->memory;
 is $memory->interpret_result(1), LEVEL_NOTICE;
 is $memory->interpret_result(1), LEVEL_INFO;
 is $memory->last_level, LEVEL_INFO;
 $serialized = freeze($engine);
-$engine = App::PerlWatcher::Engine->new($config, 'AnyEvent');
+$engine = Engine->new(config => $config, backend_id => 'AnyEvent');
 
 ok thaw($engine, $serialized);
 
-$thawed_shelf = $engine->statuses_shelf;
-$watcher = @{ $engine->get_watchers }[0];
+$thawed_shelf = $engine->shelf;
+$watcher = $engine->watchers->[0];
 ok $watcher;
 is $watcher->memory->last_level, LEVEL_INFO;
 
 # change the config -> no wather and event should be restored 
 $config->{watchers}[0]{config}{frequency} = 2;
-$engine = App::PerlWatcher::Engine->new($config, 'AnyEvent');
+$engine = Engine->new(config => $config, backend_id => 'AnyEvent');
 
 ok thaw($engine, $serialized);
 
-$thawed_shelf = $engine->statuses_shelf;
+$thawed_shelf = $engine->shelf;
 ok $thawed_shelf -> status_changed($s1);
 ok $thawed_shelf -> status_changed($s2);
 
 # corrupt the data file
-App::PerlWatcher::Engine::_statuses_file->spew(q/corrupted data/);
-$engine = App::PerlWatcher::Engine->new($config, 'AnyEvent');
+$engine->statuses_file->spew(q/corrupted data/);
+$engine = Engine->new(config => $config, backend_id => 'AnyEvent');
 ok $engine;
 
 done_testing();

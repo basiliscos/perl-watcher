@@ -26,7 +26,6 @@ has 'callback'          => ( is => 'rw');
 
 use overload fallback => 1, q/""/ => sub { $_[0]->unique_id; };
 
-
 sub BUILD {
     my ($self, $init_args) = @_;
     $self->init_args($init_args);
