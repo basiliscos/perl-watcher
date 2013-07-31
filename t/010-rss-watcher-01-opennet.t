@@ -9,6 +9,7 @@ use AnyEvent::HTTPD;
 use Devel::Comments;
 use File::Basename;
 use FindBin;
+use Path::Class;
 use Test::More;
 
 use App::PerlWatcher::Level qw/:levels/;
@@ -16,11 +17,8 @@ use App::PerlWatcher::Status;
 use App::PerlWatcher::Watcher::Rss;
 
 sub getRss {
-    my $file = dirname(__FILE__) . "/data/rss1.rss";
-    open my $fh, "<", $file or 
-        die "could not open $file: $!";
-    my $output = do { local $/; <$fh> };
-    return $output;
+    my $file = file(dirname(__FILE__) . "/data/opennet.ru.rss");
+    return scalar $file->slurp;
 }
 
 my $server;
@@ -130,9 +128,8 @@ like $watcher->description, qr/la-la-title/, "check watcher title";
 $watcher->start($callback_handler);
 $end_var->recv;
 
-# invoked in other forked process. Not testing
-#is $server_invocations  , scalar @$scenario, "correct number of server invocations";
-is $callback_invocations, scalar @$scenario, "correct number of callback invocations";
+is $server_invocations , scalar (grep { $_->{req} } @$scenario), "correct number of server invocations";
+is $callback_invocations , scalar (grep { $_->{res} } @$scenario), "correct number of callback invocations";
 
 ok !$s1->updated_from($s1);
 ok !$s1->updated_from($s2);
