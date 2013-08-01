@@ -35,6 +35,8 @@ my $scenario = [
             is $status->level, LEVEL_NOTICE;
             my $items = $status->items->();
             is @{ $items }, 5, "got 5 items (#1)";
+            ok $_->does('App::PerlWatcher::Openable') && $_->url, "EventItem is openable"
+                for (@{ $items });
             $s1 = $status;
         },
     },
@@ -47,6 +49,8 @@ my $scenario = [
             is $status->level, LEVEL_NOTICE;
             my $items = $status->items->();
             is @{ $items }, 5, "got 5 items (#2)";
+            ok $_->does('App::PerlWatcher::Openable') && $_->url, "EventItem is openable"
+                for (@{ $items });
             $s2 = $status;
             $server = undef;
         },
@@ -58,6 +62,8 @@ my $scenario = [
             my $status = shift;
             is $status->level, LEVEL_NOTICE;
             my $items = $status->items->();
+            ok $_->does('App::PerlWatcher::Openable') && $_->url, "EventItem is openable"
+                for (@{ $items });
             is @{ $items }, 5, "got 5 items (#2)";
         },
     },

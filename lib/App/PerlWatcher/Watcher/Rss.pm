@@ -40,6 +40,7 @@ sub process_http_response {
             );
             my $url = $_->{link};
             Moo::Role->apply_roles_to_object($item, qw/App::PerlWatcher::Openable/);
+            $item->url($url);
             $item;
         } @top_items;
     $self->last_items( sub { \@news_items; } );

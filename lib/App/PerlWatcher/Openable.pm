@@ -19,4 +19,10 @@ sub open_url {
         or carp ("executing 'xdg-open $url' error: $?");
 }
 
+=head1 SYNOPSIS
+    Moo::Role->apply_roles_to_object($item, qw/App::PerlWatcher::Openable/);
+    $item->url('http://google.com');
+    $item->open_url;
+=cut
+
 1;
