@@ -35,6 +35,8 @@ my $scenario = [
             is $status->level, LEVEL_NOTICE;
             my $items = $status->items->();
             is @{ $items }, 2, "got 2 items (#1)";
+            ok $_->does('App::PerlWatcher::Openable'), "EventItem is openable"
+                for (@{ $items });
             $shelf->stash_status($status);
         },
     },
@@ -47,6 +49,8 @@ my $scenario = [
             is $status->level, LEVEL_NOTICE;
             my $items = $status->items->();
             is @{ $items }, 2, "got 2 items (#2)";
+            ok $_->does('App::PerlWatcher::Openable'), "EventItem is openable"
+                for (@{ $items });
             ok !$shelf -> status_changed($status);
             $server = undef;
             $end_var->send;
