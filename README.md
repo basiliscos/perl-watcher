@@ -1,6 +1,8 @@
 perl-watcher
 ============
 
+![Build status](https://api.travis-ci.org/basiliscos/perl-watcher.png "Build status")
+
 Nagios-inspired system tray events desktop watcher / notifier. 
 
 Currenlty it uses only GTK2+ backend, but it should be easy to use 
