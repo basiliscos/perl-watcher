@@ -8,6 +8,9 @@ Nagios-inspired system tray events desktop watcher / notifier.
 Currenlty it uses only GTK2+ backend, but it should be easy to use 
 the others.
 
+It looks like: 
+
+![PerlWatcher GTK2 screenshot](https://raw.github.com/basiliscos/images/master/PerlWatcher-0.12.png "PerlWatcher GTK2 screenshot")
 
 COPYRIGHT AND LICENSE
     This software is copyright (c) 2013 by Ivan Baidakou.
