@@ -1,8 +1,6 @@
 ROADMAP to public release
 # readme
 # documentation (pod)
-# watcher/event-item action [gtk]
-# handle sig-term/ctrl-c
 # persists summary level [engine?], collapse/expand states [gtk]
 # scrollable results [gtk]
 # travis-ci [gtk]
