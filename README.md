@@ -9,20 +9,20 @@ desktop application.
 
 There is too many programs (system update, news, weather etc), which notify you about it via it's own style. 
 
-Do you need to track and aggregate events from the different sources? PerlWatcher can do simplyfied
+Do you need to track and aggregate events from the different sources? PerlWatcher can do simplified
 infrastructure monitoring (pinging them), track stock quotes, weather, new software updates, 
-poll the remote CMS for rss updates, 
-be notified by local news or by some changes on your /var/log/messages? Do you want to have possiblity to 
+poll the remote VCS for RSS updates, 
+be notified by local news or by some changes on your /var/log/messages? Do you want to have possibility to 
 easily write your own event-watcher in the case you local media-content provider does not have any API
-no notify you about new films and you fill yourself hackish enought to do some reverse engeneering 
+no notify you about new films and you fill yourself hackish enough to do some reverse engineering 
 for writing your watcher? 
 
 If yes, than PerlWatcher is designed for that purpose. 
 
-PerlWatcher supports also an differen levels of notification: "notice", "info" .. "alert". They 
+PerlWatcher supports also an different levels of notification: "notice", "info" .. "alert". They 
 indicate how important the event is for you: if you are doing an boring task it's natural to switch
 attention to anything else for couple of seconds; but if the task is serious it can rise the notification
-level to 'alert' to be distrurbed only by blackout on remote servers :)
+level to 'alert' to be disturbed only by blackout on remote servers :)
 
 It looks like (Gtk2 UI): 
 
@@ -35,8 +35,8 @@ PerlWatcher isn't designed to be fully functional RSS-Aggregator, because:
 * RSS-feeds news often aren't complete as web version, because web-masters need you to 
 go to the site and see the banners. It isn't very pleasant to read only the half part of the news, and 
 then go to the site to see the full version. 
-* PerlWatcher is designed to be lightweight: displaying simple text (headers) is enought for that, 
-while showing the html with images isn't so. 
+* PerlWatcher is designed to be lightweight: displaying simple text (headers) is enough for that, 
+while showing the HTML with images isn't so. 
 
 ## Installation
 ```
@@ -82,16 +82,16 @@ Edit ~/.perl-watcher/engine.conf and add/modify watchers like:
 
 ## Development
 
-Any help, critique, suggestions, requests, advices... are welcome. Especially, I have troubles with Gtk2 UI.
+Any help, critique, suggestions, requests, advises... are welcome. Especially, I have troubles with Gtk2 UI.
 
-Current roadmap can be found here https://github.com/basiliscos/perl-watcher/blob/master/TODO
+Current road map can be found here https://github.com/basiliscos/perl-watcher/blob/master/TODO
 
 ## Design
 
 PerlWatcher is written in Modern Perl.
 
-PerlWatcher is composed of Engine (including basic watchers) and UI. Currently Currenlty it uses only 
-GTK2+ backend, but it should be easy to use the others, like: KDE, console or even aggregate it as tmux-extension.
+PerlWatcher is composed of Engine (including basic watchers) and UI. Currently it uses only 
+GTK2+ back-end, but it should be easy to use the others, like: KDE, console or even aggregate it as tmux-extension.
 
 
 ## COPYRIGHT AND LICENSE
