@@ -37,8 +37,8 @@ sub BUILD {
 
 sub _build_config {
     my $self = shift;
-    my @clean_init_keys = 
-        grep {$_ ne 'engine_config'} 
+    my @clean_init_keys =
+        grep {$_ ne 'engine_config'}
         keys %{ $self->init_args };
     my %config;
     @config{ @clean_init_keys} = @{ $self->init_args }{ @clean_init_keys };
@@ -97,9 +97,9 @@ sub calculate_threshods {
 
 sub _merge {
     my ($l, $r) = @_;
-    
+
     my $max_re = qr/(.*)\/max/;
-    my $level = sub { 
+    my $level = sub {
         my $a = shift;
         return ($a =~ /$max_re/) ? $1 : $a;
     };
@@ -111,46 +111,46 @@ sub _merge {
         my %level_for = reverse %cleaned;
         my @levels = keys %level_for;
         ## @levels;
-        my @prepared_result =  
+        my @prepared_result =
             sort { $a->{weight} <=> $b->{weight} }
-            map { 
+            map {
                     my $value = $level_for{$_};
                     my $max = $hash_ref->{ $value } =~ /$max_re/;
                     {
-                        level   => $_, 
-                        value   => $value, 
+                        level   => $_,
+                        value   => $value,
                         weight  => get_by_description($_)->value,
-                        max     => $max,   
+                        max     => $max,
                     };
             } @levels;
         return @prepared_result;
     };
-    
+
     # prepare/wrap left part
     my @l_result = $wrap->($l);
     ## @l_result
-    my $max_weight = max 
-        map { $_->{weight} } 
+    my $max_weight = max
+        map { $_->{weight} }
         grep { $_->{max} } @l_result;
     my %l_value_of = map { $_->{level} => $_ } @l_result;
-    
-    # join with right part (if there was no key in left) 
+
+    # join with right part (if there was no key in left)
     my @r_result =
         grep { $max_weight ? ($_->{weight} <= $max_weight) : 1 }
         grep { !exists $l_value_of{ $_->{level} }  }
         $wrap->($r);
     push @l_result, $_ for ( @r_result );
     ## @l_result
-    
+
     # unwrap
     return { map { $_->{value} => $_->{level} } @l_result };
 }
-                  
+
 sub _interpret_result {
     my ($self, $result, $callback, $items) = @_;
-    
+
     my $level = $self->memory->interpret_result($result);
-    
+
     $self->_emit_event($level, $callback, $items);
 }
 
@@ -174,7 +174,7 @@ sub STORABLE_attach {
     my ($class, $cloning, $serialized) = @_;
     my $id = $serialized;
     my $w = $App::PerlWatcher::Util::Storable::Watchers_Pool{$id};
-    
+
     # we are forced to return dummy App::PerlWatcher::Watcher
     # it will be filtered later
     unless($w){

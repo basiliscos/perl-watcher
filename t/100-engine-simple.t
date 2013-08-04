@@ -25,7 +25,7 @@ ok $engine;
 # start/stop test
 my $stopped = 0;
 my $w = AnyEvent->timer (
-    after => 0, 
+    after => 0,
     cb => sub {
         $engine->stop;
         $stopped = 0;
@@ -35,13 +35,12 @@ $engine->start;
 ok $stopped == 0;
 
 $config = {
-    backend => 'Gtk2',
     defaults    => {
         timeout     => 1,
         behaviour   => {
-            ok  => { 
-                1 => 'notice', 
-                2 => 'info' 
+            ok  => {
+                1 => 'notice',
+                2 => 'info'
             },
             fail => { 1 => 'alert' }
         },
