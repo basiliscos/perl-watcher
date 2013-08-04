@@ -29,9 +29,9 @@ has 'watchers_order'    => ( is => 'lazy');
 has 'shelf'             => ( is => 'rw');
 
 sub _build_backend {
-    my $backend_id = shift->backend_id; 
+    my $backend_id = shift->backend_id;
     my $backend_class = 'App::PerlWatcher::UI::' . $backend_id . '::EngineBackend';
-    my $backend;                 
+    my $backend;
     eval {
         load_class($backend_class);
         $backend = $backend_class -> new;
@@ -45,7 +45,7 @@ sub _build_watchers {
     my $config = $self->config;
     my @r;
     for my $watcher_definition ( @{ $config -> {watchers} } ) {
-        my ($class, $watcher_config ) 
+        my ($class, $watcher_config )
             = @{ $watcher_definition }{ qw/class config/ };
         my $watcher;
         eval {
@@ -71,9 +71,9 @@ sub _build_shelf {
     my $statuses_file = $self->statuses_file;
     if ( -r $statuses_file ) {
         my $data = $statuses_file->slurp;
-        thaw($self, $data) 
-            and return $self->shelf; 
-    } 
+        thaw($self, $data)
+            and return $self->shelf;
+    }
     return App::PerlWatcher::Shelf->new;
 }
 
@@ -101,7 +101,7 @@ sub start {
 sub stop {
     my $self = shift;
     $self->backend->stop_loop;
-    
+
     my $data = freeze($self);
     $self->statuses_file->spew($data);
 }
