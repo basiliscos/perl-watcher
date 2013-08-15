@@ -1,4 +1,5 @@
 package App::PerlWatcher::Engine;
+# ABSTRACT: Creates Watchers and lets them  notify Frontend with their's Statuses
 
 use 5.12.0;
 use strict;
