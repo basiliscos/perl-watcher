@@ -2,6 +2,7 @@ package App::PerlWatcher::Frontend;
 {
   $App::PerlWatcher::Frontend::VERSION = '0.12';
 }
+# ABSTRACT: The base role to which will be notified of updated watcher statuses. 
 
 use 5.12.0;
 use strict;
@@ -10,8 +11,13 @@ use warnings;
 use Carp;
 use Moo::Role;
 
+
 requires 'update';
+
+
 has 'engine'       => ( is => 'ro', required => 1 );
+
+
 has 'last_seen'    => ( is => 'rw', default => sub{ time; } );
 
 1;
@@ -22,11 +28,27 @@ __END__
 
 =head1 NAME
 
-App::PerlWatcher::Frontend
+App::PerlWatcher::Frontend - The base role to which will be notified of updated watcher statuses. 
 
 =head1 VERSION
 
 version 0.12
+
+=head1 ATTRIBUTES
+
+=head2 Engine
+
+Holds reference to Engine
+
+=head2 last_seen
+
+The timestamp last seen of user-visible watcher statuses.
+
+=head1 METHODS
+
+=head2 start
+
+The update method will be called with Status, which has been updated.
 
 =head1 AUTHOR
 
