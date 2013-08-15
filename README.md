@@ -24,7 +24,7 @@ If yes, than PerlWatcher is designed for that purpose.
 PerlWatcher supports also an different levels of notification: "notice",
 "info" .. "alert". They indicate how important the event is for you: if you are
 doing an boring task it's natural to switch attention to anything else for
-couple of seconds; but if the task is serious it can rise the notification
+couple of seconds; but if the task is serious you can rise the notification
 level to 'alert' to be disturbed only by blackout on remote servers :)
 
 It looks like (Gtk2 UI):
@@ -83,6 +83,11 @@ Edit ~/.perl-watcher/engine.conf and add/modify watchers like:
         },
 
 ```
+Explanation: here the PerlWatcher will 
+* montitor google.com by pinging it's port 80 every 10 seconds, and after 5 
+unsuccessfull pings it will set status 'alert'; 
+* fetch top 5 news from opennet.ru every minute, and in case of 10 failures it
+will set 'info' status to the watcher.
 
 ## Development
 
@@ -95,9 +100,10 @@ Current road map can be found here https://github.com/basiliscos/perl-watcher/bl
 
 PerlWatcher is written in Modern Perl using AnyEvent and Moo.
 
-PerlWatcher is composed of Engine (including basic watchers) and UI. Currently
-it uses only GTK2+ back-end, but it should be easy to use the others, like:
-KDE, console or even aggregate it as tmux-extension.
+PerlWatcher is composed of Engine (including basic watchers) and UI. Watchers are
+completly decoupled from UI, so it should be possible to use any possible Watcher
+with any UI. Currently UI frontend use GTK2+, but it should be easy to use the others, 
+like: KDE, console or even aggregate it as tmux-extension.
 
 
 ## COPYRIGHT AND LICENSE
