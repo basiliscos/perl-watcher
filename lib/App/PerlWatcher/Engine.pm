@@ -2,7 +2,7 @@ package App::PerlWatcher::Engine;
 {
   $App::PerlWatcher::Engine::VERSION = '0.12';
 }
-# ABSTRACT: Creates Watchers and lets them  notify Frontend with theys Statuses
+# ABSTRACT: Creates Watchers and lets them  notify Frontend with their's Statuses
 
 use 5.12.0;
 use strict;
@@ -144,7 +144,7 @@ __END__
 
 =head1 NAME
 
-App::PerlWatcher::Engine - Creates Watchers and lets them  notify Frontend with theys Statuses
+App::PerlWatcher::Engine - Creates Watchers and lets them  notify Frontend with their's Statuses
 
 =head1 VERSION
 

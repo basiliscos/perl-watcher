@@ -2,6 +2,7 @@ package App::PerlWatcher::EventItem;
 {
   $App::PerlWatcher::EventItem::VERSION = '0.12';
 }
+# ABSTRACT: Used to store event items (file lines, rss news headers and so on).
 
 use 5.12.0;
 use strict;
@@ -10,6 +11,7 @@ use warnings;
 use Moo;
 
 has 'content'   => ( is => 'ro', required => 1 );
+
 has 'timestamp' => ( is => 'ro', default => sub{ time; } );
 
 1;
@@ -20,11 +22,21 @@ __END__
 
 =head1 NAME
 
-App::PerlWatcher::EventItem
+App::PerlWatcher::EventItem - Used to store event items (file lines, rss news headers and so on).
 
 =head1 VERSION
 
 version 0.12
+
+=head1 ATTRIBUTES
+
+=head2 content
+
+Contains string description of particular event
+
+=head2 content
+
+The timestamp of event item. By default it is the current time.
 
 =head1 AUTHOR
 

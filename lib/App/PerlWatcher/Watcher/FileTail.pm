@@ -91,7 +91,7 @@ sub _add_line {
             my $event_item = App::PerlWatcher::EventItem->new(
                 content     => $line,
                 timestamp   => 0,
-                );
+            );
             # $line
             my $evens_queue = $self->events;
             push @$evens_queue, $event_item;
