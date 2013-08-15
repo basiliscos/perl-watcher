@@ -21,118 +21,27 @@ use App::PerlWatcher::Shelf;
 use App::PerlWatcher::Util::Bootstrap qw/get_home_dir/;
 use App::PerlWatcher::Util::Storable qw/freeze thaw/;
 
-=head1 SYNOPSIS
-
- # define own frontend in separate package
-
- package My::FrontEnd;
-
- use Moo;
- with 'App::PerlWatcher::Frontend';
-
- sub update {
-    my ( $self, $status ) = @_;
-    say $status->level;
- }
-
-
- # define engine config with reqired watchers
-
- $config = {
-    watchers => [
-        {
-            class => 'App::PerlWatcher::Watcher::Ping',
-            config => {
-                host    =>  'google.com',
-                port    =>  80,
-                frequency   =>  10,
-                timeout     => 1,
-                on => {
-		  fail => {
-                      3   =>  'info',
-		      5   =>  'warn',
-		      8   =>  'alert',
-		    }
-                   ok   => { 1 => 'notice'},
-                },
-            },
-        },
-    ],
- };
-
- # initialization: bring all pieces together
- my $frontend = My::FrontEnd->new(engine => $engine);
-
- $engine = Engine->new(config => $config, backend_id => 'AnyEvent')
- $engine->frontend( $app );
-
- $engine->start;
- # now if google is down, it says ping status with interpetation
- # notice
- # notice
- # notice
- # info
- # info
- # warn
- # ...
-
-=cut
 
 has 'frontend'          => ( is => 'rw');
 
-=attr config
-
-Required config, which defines watchers behaviour. See engine.conf.example
-
-=cut
 
 has 'config'            => ( is => 'ro', required => 0);
 
-=attr backend_id
-
-AnyEvent supported backed (loop engine), generally defined by using frontend,
-i.e. for Gtk2-frontednt it should call Gtk2->main
-
-=cut
 
 has 'backend_id'        => ( is => 'ro', required => 1);
 
-=attr statuses_file
-
-Defines, where the Engine state is to be serialized. Default value:
-$HOME/.perl-watcher/statuses-shelf.data
-
-=cut
 
 has 'statuses_file'     => ( is => 'ro', default => sub {
         return file(File::Spec->catfile(get_home_dir(), "statuses-shelf.data"));
     });
 has 'backend'           => ( is => 'lazy');
 
-=attr watchers
-
-An array_ref of Watcher instances. Watchers order is the same as it was
-defined in config
-
-=cut
 
 has 'watchers'          => ( is => 'lazy');
 
-=attr watchers_order
-
-Return an map "watcher to watcher order".
-
-=cut
 
 has 'watchers_order'    => ( is => 'lazy');
 
-=attr shelf
-
-Defines statuses shelf, where remembered watcher statuses are stored. It is
-needed because, where could be statuses, to which user does not payed attention,
-and they should not be stored.
-
-=cut
 
 has 'shelf'             => ( is => 'rw');
 
@@ -190,11 +99,6 @@ sub BUILD {
     $self->shelf($self->_build_shelf);
 }
 
-=method start
-
-Starts all watchers and backend.
-
-=cut
 
 sub start {
     my $self = shift;
@@ -212,12 +116,6 @@ sub start {
     $self->backend->start_loop;
 }
 
-=method stop
-
-Stops backend, all watchers and persists current state (watchers memories
-and shelf)
-
-=cut
 
 sub stop {
     my $self = shift;
@@ -227,12 +125,6 @@ sub stop {
     $self->statuses_file->spew($data);
 }
 
-=method sort_statuses
-
-Helper method which sorts statuses in accordance with theirs watchers
-order
-
-=cut
 
 sub sort_statuses {
     my ($self, $statuses) = @_;
@@ -245,3 +137,130 @@ sub sort_statuses {
 }
 
 1;
+
+__END__
+
+=pod
+
+=head1 NAME
+
+App::PerlWatcher::Engine - Creates Watchers and lets them  notify Frontend with theys Statuses
+
+=head1 VERSION
+
+version 0.12
+
+=head1 SYNOPSIS
+
+ # define own frontend in separate package
+
+ package My::FrontEnd;
+
+ use Moo;
+ with 'App::PerlWatcher::Frontend';
+
+ sub update {
+    my ( $self, $status ) = @_;
+    say $status->level;
+ }
+
+
+ # define engine config with reqired watchers
+
+ $config = {
+    watchers => [
+        {
+            class => 'App::PerlWatcher::Watcher::Ping',
+            config => {
+                host    =>  'google.com',
+                port    =>  80,
+                frequency   =>  10,
+                timeout     => 1,
+                on => {
+		  fail => {
+                      3   =>  'info',
+		      5   =>  'warn',
+		      8   =>  'alert',
+		    }
+                   ok   => { 1 => 'notice'},
+                },
+            },
+        },
+    ],
+ };
+
+ # initialization: bring all pieces together
+ my $frontend = My::FrontEnd->new(engine => $engine);
+
+ $engine = Engine->new(config => $config, backend_id => 'AnyEvent')
+ $engine->frontend( $app );
+
+ $engine->start;
+ # now if google is down, it says ping status with interpetation
+ # notice
+ # notice
+ # notice
+ # info
+ # info
+ # warn
+ # ...
+
+=head1 ATTRIBUTES
+
+=head2 config
+
+Required config, which defines watchers behaviour. See engine.conf.example
+
+=head2 backend_id
+
+AnyEvent supported backed (loop engine), generally defined by using frontend,
+i.e. for Gtk2-frontednt it should call Gtk2->main
+
+=head2 statuses_file
+
+Defines, where the Engine state is to be serialized. Default value:
+$HOME/.perl-watcher/statuses-shelf.data
+
+=head2 watchers
+
+An array_ref of Watcher instances. Watchers order is the same as it was
+defined in config
+
+=head2 watchers_order
+
+Return an map "watcher to watcher order".
+
+=head2 shelf
+
+Defines statuses shelf, where remembered watcher statuses are stored. It is
+needed because, where could be statuses, to which user does not payed attention,
+and they should not be stored.
+
+=head1 METHODS
+
+=head2 start
+
+Starts all watchers and backend.
+
+=head2 stop
+
+Stops backend, all watchers and persists current state (watchers memories
+and shelf)
+
+=head2 sort_statuses
+
+Helper method which sorts statuses in accordance with theirs watchers
+order
+
+=head1 AUTHOR
+
+Ivan Baidakou <dmol@gmx.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2013 by Ivan Baidakou.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
