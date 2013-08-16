@@ -10,7 +10,7 @@ use Devel::Comments;
 use File::Basename;
 use Test::More;
 
-use App::PerlWatcher::Level qw/:levels/;
+use App::PerlWatcher::Levels;
 use App::PerlWatcher::Status;
 use App::PerlWatcher::Watcher::HTTPSimple;
 

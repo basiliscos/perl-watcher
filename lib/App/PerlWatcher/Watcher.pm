@@ -7,7 +7,7 @@ use 5.12.0;
 use strict;
 use warnings;
 
-use App::PerlWatcher::Level qw/get_by_description :levels/;
+use App::PerlWatcher::Levels;
 use App::PerlWatcher::Status;
 use aliased 'App::PerlWatcher::WatcherMemory';
 use Carp;

@@ -13,7 +13,7 @@ use Test::More;
 use Test::TCP;
 
 use aliased 'App::PerlWatcher::Engine';
-use App::PerlWatcher::Level qw/:levels/;
+use App::PerlWatcher::Levels;
 use App::PerlWatcher::Status;
 use App::PerlWatcher::Util::Bootstrap qw/config/;
 use App::PerlWatcher::Util::Storable qw/freeze thaw/;

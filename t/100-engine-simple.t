@@ -13,7 +13,7 @@ use Test::More;
 use Test::TCP;
 
 use aliased qw/App::PerlWatcher::Engine/;
-use App::PerlWatcher::Level qw/:levels/;
+use App::PerlWatcher::Levels;
 use App::PerlWatcher::Status;
 
 $ENV{'HOME'} = tempdir( CLEANUP => 1 );

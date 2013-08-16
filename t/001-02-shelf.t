@@ -6,7 +6,7 @@ use warnings;
 
 use Test::More;
 
-use App::PerlWatcher::Level qw/:levels/;
+use App::PerlWatcher::Levels;
 use App::PerlWatcher::Status;
 use App::PerlWatcher::Shelf;
 
@@ -22,9 +22,9 @@ my $create_status = sub {
     return App::PerlWatcher::Status->new(
         level           => $level,
         watcher         => $watcher,
-    );                               
+    );
 };
-                                                   
+
 my $shelf = App::PerlWatcher::Shelf->new;
 
 my $s1 = $create_status->(LEVEL_NOTICE);
@@ -42,4 +42,3 @@ my $s3 = $create_status->(LEVEL_INFO);
 ok $shelf -> status_changed($s3);
 
 done_testing();
-

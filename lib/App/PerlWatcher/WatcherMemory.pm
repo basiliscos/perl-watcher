@@ -11,7 +11,7 @@ use Carp;
 use List::Util qw( max );
 use Moo;
 
-use App::PerlWatcher::Level qw/:levels/;
+use App::PerlWatcher::Levels;
 
 has 'thresholds_map'    => ( is => 'ro', required => 1);
 has 'last_level'        => ( is => 'rw', default => sub { LEVEL_NOTICE; } );

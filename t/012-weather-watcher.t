@@ -11,7 +11,7 @@ use File::Basename;
 use Path::Class qw(file); 
 use Test::More;
 
-use App::PerlWatcher::Level qw/:levels/;
+use App::PerlWatcher::Levels;
 use App::PerlWatcher::Status;
 use App::PerlWatcher::Watcher::Weather;
 
