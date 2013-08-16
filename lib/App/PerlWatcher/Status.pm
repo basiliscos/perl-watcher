@@ -2,6 +2,7 @@ package App::PerlWatcher::Status;
 {
   $App::PerlWatcher::Status::VERSION = '0.12';
 }
+# ABSTRACT: Represents the result of single watcher poll
 
 use 5.12.0;
 use strict;
@@ -14,11 +15,21 @@ use Moo;
 
 use App::PerlWatcher::Level;
 
+
 has 'watcher'       => ( is => 'rw');
+
+
 has 'level'         => ( is => 'rw');
+
+
 has 'description'   => ( is => 'rw');
+
+
 has 'items'         => ( is => 'rw');
+
+
 has 'timestamp'     => ( is => 'rw', default => sub { time(); });
+
 
 sub updated_from {
     my ($a, $b) = @_;
@@ -87,11 +98,43 @@ __END__
 
 =head1 NAME
 
-App::PerlWatcher::Status
+App::PerlWatcher::Status - Represents the result of single watcher poll
 
 =head1 VERSION
 
 version 0.12
+
+=head1 ATTRIBUTES
+
+=head2 watcher
+
+The watcher, to which current status relates to
+
+=head2 level
+
+The level of severity of single watcher poll (notice..alert)
+
+=head2 description
+
+Closure, which beign invoked, returns string, describing current
+status.
+
+=head2 items
+
+Closure, which beign invoked, returns array ref of EventItems.
+
+=head2 timestamp
+
+The timestamp of status. The default value is just a current time.
+
+=head1 METHODS
+
+=head2 updated_from
+
+Checks weather the current status $a differs from the other status $b.
+The both statuses considered the same if they have the same level and
+the same items. Items are compared by content. All timestamps have no
+affect on the result.
 
 =head1 AUTHOR
 

@@ -2,6 +2,7 @@ package App::PerlWatcher::Shelf;
 {
   $App::PerlWatcher::Shelf::VERSION = '0.12';
 }
+# ABSTRACT: Used to stash (store) statuses for further detection weather they has been changed.
 
 use 5.12.0;
 use strict;
@@ -14,18 +15,18 @@ use Storable;
 
 has 'statuses'  => ( is => 'rw', default => sub { {}; } );
 
+
 sub stash_status {
     my ($self, $status) = @_;
     my $same_as_previous = 0;
     if ( defined($status) ) {
         my $previous = $self->statuses->{ $status -> watcher };
-        $same_as_previous = 1 
-            if ( defined($previous)  
-                 and refaddr($previous) == refaddr($status) );
+        $same_as_previous = $previous && (refaddr($previous) == refaddr($status));
         $self->statuses->{ $status -> watcher } = $status;
     }
     return $same_as_previous;
 }
+
 
 sub status_changed {
     my ($self, $status) = @_;
@@ -45,11 +46,29 @@ __END__
 
 =head1 NAME
 
-App::PerlWatcher::Shelf
+App::PerlWatcher::Shelf - Used to stash (store) statuses for further detection weather they has been changed.
 
 =head1 VERSION
 
 version 0.12
+
+=head1 ATTRIBUTES
+
+=head2 statuses
+
+The hash ref, with key watcher (actually watcher unique id) and the value is the watchers'
+status.
+
+=head1 METHODS
+
+=head2 stash_status
+
+Stores the status. Returns true if the previous stashed value isn't the same as the provided stashed value.
+
+=head2 status_changed
+
+Checks weather the provided status value differs from stashed one.
+Actual logic is delegated to $status->updated_from
 
 =head1 AUTHOR
 
