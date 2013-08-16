@@ -6,7 +6,10 @@ use warnings;
 
 use Test::More;
 
-use App::PerlWatcher::Level qw/:levels/;
+use_ok 'App::PerlWatcher::Level';
+use_ok 'App::PerlWatcher::Levels';
+
+use App::PerlWatcher::Levels;
 
 ok LEVEL_ANY    < LEVEL_NOTICE;
 ok LEVEL_NOTICE < LEVEL_INFO;

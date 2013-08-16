@@ -7,7 +7,7 @@ use warnings;
 use Devel::Comments;
 use Test::More;
 
-use App::PerlWatcher::Level qw/:levels/;
+use App::PerlWatcher::Levels;
 use App::PerlWatcher::Status;
 use App::PerlWatcher::Watcher;
 use App::PerlWatcher::WatcherMemory;

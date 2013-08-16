@@ -14,7 +14,7 @@ use Test::TCP;
 
 use aliased 'App::PerlWatcher::Engine';
 use aliased 'App::PerlWatcher::Frontend';
-use App::PerlWatcher::Level qw/:levels/;
+use App::PerlWatcher::Levels;
 use App::PerlWatcher::Status;
 use App::PerlWatcher::Shelf;
 

@@ -6,7 +6,7 @@ use warnings;
 
 use AnyEvent::Handle;
 use App::PerlWatcher::EventItem;
-use App::PerlWatcher::Level qw/:levels/;
+use App::PerlWatcher::Levels;
 use App::PerlWatcher::Status;
 use App::PerlWatcher::Watcher;
 use Carp;
