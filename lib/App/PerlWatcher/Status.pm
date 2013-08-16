@@ -1,4 +1,5 @@
 package App::PerlWatcher::Status;
+# ABSTRACT: Represents the result of single watcher poll
 
 use 5.12.0;
 use strict;
@@ -11,11 +12,55 @@ use Moo;
 
 use App::PerlWatcher::Level;
 
+=attr watcher
+
+The watcher, to which current status relates to
+
+=cut
+
 has 'watcher'       => ( is => 'rw');
+
+=attr level
+
+The level of severity of single watcher poll (notice..alert)
+
+=cut
+
 has 'level'         => ( is => 'rw');
+
+=attr description
+
+Closure, which beign invoked, returns string, describing current
+status.
+
+=cut
+
 has 'description'   => ( is => 'rw');
+
+=attr items
+
+Closure, which beign invoked, returns array ref of EventItems.
+
+=cut 
+
 has 'items'         => ( is => 'rw');
+
+=attr timestamp
+
+The timestamp of status. The default value is just a current time.
+
+=cut
+
 has 'timestamp'     => ( is => 'rw', default => sub { time(); });
+
+=method updated_from
+
+Checks weather the current status $a differs from the other status $b.
+The both statuses considered the same if they have the same level and
+the same items. Items are compared by content. All timestamps have no
+affect on the result.
+
+=cut
 
 sub updated_from {
     my ($a, $b) = @_;
