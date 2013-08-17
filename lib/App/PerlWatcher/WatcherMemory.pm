@@ -2,6 +2,7 @@ package App::PerlWatcher::WatcherMemory;
 {
   $App::PerlWatcher::WatcherMemory::VERSION = '0.12';
 }
+# ABSTRACT: Represents watcher memory, which can be persisted (detached) from Watcher
 
 use 5.12.0;
 use strict;
@@ -13,8 +14,12 @@ use Moo;
 
 use App::PerlWatcher::Levels;
 
+
 has 'thresholds_map'    => ( is => 'ro', required => 1);
+
+
 has 'last_level'        => ( is => 'rw', default => sub { LEVEL_NOTICE; } );
+
 
 sub interpret_result {
     my ($self, $result) = @_;
@@ -56,11 +61,37 @@ __END__
 
 =head1 NAME
 
-App::PerlWatcher::WatcherMemory
+App::PerlWatcher::WatcherMemory - Represents watcher memory, which can be persisted (detached) from Watcher
 
 =head1 VERSION
 
 version 0.12
+
+=head1 ATTRIBUTES
+
+=head2 thresholds_map
+
+The map, which represents how to interpret successul or unsuccessful result, i.e.
+which level of severity it is. It looks like:
+
+ my $map = {
+    fail => { 
+        3   =>  'info',
+        5   =>  'alert',
+    },
+    ok  => { 3 => 'notice' },
+ };
+
+=head2 last_level
+
+Represents last emitted watcher level. 
+
+=head1 METHODS
+
+=head2 interpret_result
+
+Does result interpretation in accordanse with thresholds_map. The result is boolean: true
+or false (or coerced to them). Returns the resulting level of interpretation.
 
 =head1 AUTHOR
 
