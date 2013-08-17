@@ -2,6 +2,7 @@ package App::PerlWatcher::Watcher;
 {
   $App::PerlWatcher::Watcher::VERSION = '0.12';
 }
+# ABSTRACT: Observes some external source of events and emits the result of polling them
 
 use 5.12.0;
 use strict;
@@ -16,15 +17,27 @@ use Digest::MD5 qw(md5_base64);
 use List::Util qw( max );
 use Storable qw/freeze/;
 
-
 use Moo::Role;
 
+
 requires 'description';
+
+
 has 'engine_config'     => ( is => 'ro', required => 1);
+
+
 has 'init_args'         => ( is => 'rw');
+
+
 has 'config'            => ( is => 'lazy');
+
+
 has 'unique_id'         => ( is => 'lazy');
+
+
 has 'memory'            => ( is => 'rw');
+
+
 has 'callback'          => ( is => 'rw');
 
 use overload fallback => 1, q/""/ => sub { $_[0]->unique_id; };
@@ -68,6 +81,7 @@ sub _build_unique_id {
     ## $id
 }
 
+
 sub active {
     my ( $self, $value ) = @_;
     if ( defined($value) ) {
@@ -76,6 +90,7 @@ sub active {
     }
     return defined( $self->{_w} );
 }
+
 
 sub calculate_threshods {
     my ($l, $r) = @_;
@@ -192,11 +207,61 @@ __END__
 
 =head1 NAME
 
-App::PerlWatcher::Watcher
+App::PerlWatcher::Watcher - Observes some external source of events and emits the result of polling them
 
 =head1 VERSION
 
 version 0.12
+
+=head1 ATTRIBUTES
+
+=head2 engine_config
+
+Holds an reference to engine config (used in construction watcher's thresholds_map)
+
+=head2 init_args
+
+Remembers the arguments for watcher construction (used in construction watcher's
+thresholds_map and unique_id)
+
+=head2 config
+
+The wacher configuration hash ref.
+
+=head2 unique_id
+
+Represents watchers unique_id, calculated from concrete watcher class and
+watcher's config. The unique_id is overloaded "to-string" operation, so
+watcher can be used to as hash key. unique_id is also used when the
+PerlWatcher state is been persisted : the watcher itself isn't stored, but
+it's unique_id is stored. That guarantees that unique_id is the same between
+PerlWatcher invokations (that's why the perl internal hash funciton isn't used)
+
+=head2 memory
+
+Stores current wacher state (memory). When the watcher is persisted, only it's memory
+and unique_id are stored.
+
+=head2 callback
+
+The subroutine reference, which is been called on every poll of watcher external source.
+It's argument is the State.
+
+=head1 METHODS
+
+=head2 description
+
+The string description of the watcher
+
+=head2 active
+
+Turns on and off the wacher.
+
+=head2 calculate_threshods
+
+Calculates the thresholds_map based on the left map and righ map
+The left map has precedence. Usualy the left map is the watchers
+config, while the righ map is the generic PerlWatcher/Engine config
 
 =head1 AUTHOR
 
