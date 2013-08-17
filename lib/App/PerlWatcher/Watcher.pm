@@ -1,4 +1,5 @@
 package App::PerlWatcher::Watcher;
+# ABSTRACT: Observes some external source of events and emits the result of polling them
 
 use 5.12.0;
 use strict;
@@ -13,15 +14,70 @@ use Digest::MD5 qw(md5_base64);
 use List::Util qw( max );
 use Storable qw/freeze/;
 
-
 use Moo::Role;
 
+=method description
+
+The string description of the watcher
+
+=cut
+
 requires 'description';
+
+=attr engine_config
+
+Holds an reference to engine config (used in construction watcher's thresholds_map)
+
+=cut
+
 has 'engine_config'     => ( is => 'ro', required => 1);
+
+=attr init_args
+
+Remembers the arguments for watcher construction (used in construction watcher's
+thresholds_map and unique_id)
+
+=cut
+
 has 'init_args'         => ( is => 'rw');
+
+=attr config
+
+The wacher configuration hash ref.
+
+=cut
+
 has 'config'            => ( is => 'lazy');
+
+=attr unique_id
+
+Represents watchers unique_id, calculated from concrete watcher class and
+watcher's config. The unique_id is overloaded "to-string" operation, so
+watcher can be used to as hash key. unique_id is also used when the
+PerlWatcher state is been persisted : the watcher itself isn't stored, but
+it's unique_id is stored. That guarantees that unique_id is the same between
+PerlWatcher invokations (that's why the perl internal hash funciton isn't used)
+
+=cut
+
 has 'unique_id'         => ( is => 'lazy');
+
+=attr memory
+
+Stores current wacher state (memory). When the watcher is persisted, only it's memory
+and unique_id are stored.
+
+=cut
+
 has 'memory'            => ( is => 'rw');
+
+=attr callback
+
+The subroutine reference, which is been called on every poll of watcher external source.
+It's argument is the State.
+
+=cut
+
 has 'callback'          => ( is => 'rw');
 
 use overload fallback => 1, q/""/ => sub { $_[0]->unique_id; };
@@ -65,6 +121,12 @@ sub _build_unique_id {
     ## $id
 }
 
+=method active
+
+Turns on and off the wacher.
+
+=cut 
+
 sub active {
     my ( $self, $value ) = @_;
     if ( defined($value) ) {
@@ -73,6 +135,14 @@ sub active {
     }
     return defined( $self->{_w} );
 }
+
+=method calculate_threshods
+
+Calculates the thresholds_map based on the left map and righ map
+The left map has precedence. Usualy the left map is the watchers
+config, while the righ map is the generic PerlWatcher/Engine config
+
+=cut
 
 sub calculate_threshods {
     my ($l, $r) = @_;
