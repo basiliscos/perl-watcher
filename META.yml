@@ -29,4 +29,4 @@ requires:
   XML::Simple: 2.18
   XML::XPath: 1.13
   aliased: 0.31
-version: 0.12
+version: 0.13

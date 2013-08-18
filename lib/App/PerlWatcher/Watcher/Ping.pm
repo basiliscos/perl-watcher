@@ -1,6 +1,6 @@
 package App::PerlWatcher::Watcher::Ping;
 {
-  $App::PerlWatcher::Watcher::Ping::VERSION = '0.12';
+  $App::PerlWatcher::Watcher::Ping::VERSION = '0.13';
 }
 # ABSTRACT: Watches for host availablity via pingig it. Currently only TCP-port ping.
 
@@ -84,7 +84,7 @@ App::PerlWatcher::Watcher::Ping - Watches for host availablity via pingig it. Cu
 
 =head1 VERSION
 
-version 0.12
+version 0.13
 
 =head1 ATTRIBUTES
 
