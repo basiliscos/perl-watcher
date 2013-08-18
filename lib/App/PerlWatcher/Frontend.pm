@@ -17,9 +17,6 @@ requires 'update';
 
 has 'engine'       => ( is => 'ro', required => 1 );
 
-
-has 'last_seen'    => ( is => 'rw', default => sub{ time; } );
-
 1;
 
 __END__
@@ -39,10 +36,6 @@ version 0.12
 =head2 Engine
 
 Holds reference to Engine
-
-=head2 last_seen
-
-The timestamp last seen of user-visible watcher statuses.
 
 =head1 METHODS
 

@@ -27,14 +27,12 @@ has 'frontend'          => ( is => 'rw');
 
 has 'config'            => ( is => 'ro', required => 0);
 
-
-has 'backend_id'        => ( is => 'ro', required => 1);
+has 'backend'           => ( is => 'ro', required => 1);
 
 
 has 'statuses_file'     => ( is => 'ro', default => sub {
         return file(File::Spec->catfile(get_home_dir(), "statuses-shelf.data"));
     });
-has 'backend'           => ( is => 'lazy');
 
 
 has 'watchers'          => ( is => 'lazy');
@@ -44,18 +42,6 @@ has 'watchers_order'    => ( is => 'lazy');
 
 
 has 'shelf'             => ( is => 'rw');
-
-sub _build_backend {
-    my $backend_id = shift->backend_id;
-    my $backend_class = 'App::PerlWatcher::UI::' . $backend_id . '::EngineBackend';
-    my $backend;
-    eval {
-        load_class($backend_class);
-        $backend = $backend_class -> new;
-    };
-    croak "Unable to construct backend : $@" if($@);
-    return $backend;
-}
 
 sub _build_watchers {
     my $self = shift;
@@ -191,8 +177,9 @@ version 0.12
 
  # initialization: bring all pieces together
  my $frontend = My::FrontEnd->new(engine => $engine);
+ my $backend  = My::BackEnd->new;
 
- $engine = Engine->new(config => $config, backend_id => 'AnyEvent')
+ $engine = Engine->new(config => $config, backend => $backend)
  $engine->frontend( $app );
 
  $engine->start;
@@ -211,10 +198,10 @@ version 0.12
 
 Required config, which defines watchers behaviour. See engine.conf.example
 
-=head2 backend_id
+=head2 backend
 
 AnyEvent supported backed (loop engine), generally defined by using frontend,
-i.e. for Gtk2-frontednt it should call Gtk2->main
+i.e. for Gtk2-frontend it should call Gtk2->main
 
 =head2 statuses_file
 

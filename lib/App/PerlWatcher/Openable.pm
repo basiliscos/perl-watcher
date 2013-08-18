@@ -49,7 +49,7 @@ version 0.12
 
 =head1 ATTRIBUTES
 
-=head2 last_seen
+=head2 url
 
 The url like https://duckduckgo.com/?q=perl
 

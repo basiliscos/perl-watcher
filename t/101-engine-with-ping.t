@@ -22,6 +22,7 @@ use FindBin;
 BEGIN { unshift @INC, "$FindBin::Bin/lib" }
 
 use Test::PerlWatcher::FrontEnd;
+use aliased qw/Test::PerlWatcher::AEBackend/;
 
 $ENV{'HOME'} = tempdir( CLEANUP => 1 );
 
@@ -46,33 +47,33 @@ my $engine;
 my $shelf = App::PerlWatcher::Shelf->new;
 
 my $scenario = [
-    #1 
+    #1
     {
         res =>  sub {
             my $status = shift;
             is $status->level, LEVEL_NOTICE;
-            ok $shelf -> status_changed($status); 
+            ok $shelf -> status_changed($status);
             ok !$shelf -> stash_status($status);
             ok !$shelf -> status_changed($status);
         },
     },
-    
-    #2 
+
+    #2
     {
         res =>  sub {
             my $status = shift;
             is $status->level, LEVEL_INFO;
-            ok $shelf -> status_changed($status); 
+            ok $shelf -> status_changed($status);
             $server = undef;
         },
     },
-    
-    #3 
+
+    #3
     {
         res =>  sub {
             my $status = shift;
             is $status->level, LEVEL_ALERT;
-            ok $shelf -> status_changed($status); 
+            ok $shelf -> status_changed($status);
         },
     },
 ];
@@ -88,9 +89,9 @@ my $config = {
     defaults    => {
         timeout     => 1,
         behaviour   => {
-            ok  => { 
-                1 => 'notice', 
-                2 => 'info' 
+            ok  => {
+                1 => 'notice',
+                2 => 'info'
             },
             fail => { 1 => 'alert' }
         },
@@ -107,8 +108,8 @@ my $config = {
     ],
 };
 $engine = Engine->new(
-    config      => $config, 
-    backend_id  => 'AnyEvent',
+    config      => $config,
+    backend     => AEBackend->new,
     frontend    => $frontend,
     );
 ok $engine;
@@ -125,4 +126,3 @@ $engine->start;
 is $callback_invocations, scalar @$scenario, "correct number of callback invocations";
 
 done_testing();
-
