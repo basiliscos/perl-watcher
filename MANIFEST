@@ -12,6 +12,7 @@ App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0
 App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/.travis.yml
 App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/.travis.yml
 App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/.travis.yml
+App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/App-PerlWatcher-Engine-0.12/.travis.yml
 Changes
 LICENSE
 MANIFEST
@@ -43,6 +44,7 @@ lib/App/PerlWatcher/WatcherMemory.pm
 share/examples/engine.conf.example
 t/001-01-levels.t
 t/001-02-shelf.t
+t/002-bootstrap.t
 t/005-watcher-01-config-merge.t
 t/005-watcher-02-memory.t
 t/005-watcher-03-id.t
