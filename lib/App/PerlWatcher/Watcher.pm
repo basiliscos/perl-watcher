@@ -161,7 +161,8 @@ sub _merge {
     return { map { $_->{value} => $_->{level} } @l_result };
 }
 
-sub _interpret_result {
+
+sub interpret_result {
     my ($self, $result, $callback, $items) = @_;
 
     my $level = $self->memory->interpret_result($result);
@@ -262,6 +263,15 @@ Turns on and off the wacher.
 Calculates the thresholds_map based on the left map and righ map
 The left map has precedence. Usualy the left map is the watchers
 config, while the righ map is the generic PerlWatcher/Engine config
+
+=head2 interpret_result
+
+This method interprets the result of poll (true or false)
+in accordance with thresholds_map and the callback will
+be called with the resulting status (and optionally provided
+items). Meant to be called from subclases, e.g.
+
+ $watcher->interpret_result(0, $callback);
 
 =head1 AUTHOR
 

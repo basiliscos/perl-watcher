@@ -44,7 +44,7 @@ sub process_http_response {
             $item;
         } @top_items;
     $self->last_items( sub { \@news_items; } );
-    $self->_interpret_result(1, $self->callback,$self->last_items );
+    $self->interpret_result(1, $self->callback,$self->last_items );
 }
 
 sub _invoke_callback {

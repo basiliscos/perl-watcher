@@ -57,13 +57,16 @@ sub _build_watcher_callback {
                     # bad thing has happend
                     # $reason
                     # $self
-                    $self->_interpret_result(0, sub {
+                    $self->interpret_result(
+                        0,
+                        sub {
                             my $status = shift;
                             $self->_invoke_callback(
                                 $self->callback,
                                 $status
                             );
-                    });
+                        }
+                    );
                 }
             }
         );

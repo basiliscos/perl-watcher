@@ -30,17 +30,17 @@ sub description {
 sub process_http_response {
     my ($self, $content, $headers) = @_;
     my ($result, $success) = (undef, 0);
-    
+
     eval {
         $result = $self->response_handler->(local $_ = $content);
         $success = 1;
     };
     $result = $@ if($@);
-    
+
     # $result
     # $success
     $self->processed_response($result);
-    $self->_interpret_result($success, $self->callback);
+    $self->interpret_result($success, $self->callback);
 }
 
 1;

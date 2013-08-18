@@ -10,7 +10,7 @@ use utf8;
 
 use App::PerlWatcher::EventItem;
 use Carp;
-use Devel::Comments;               
+use Devel::Comments;
 use HTTP::Date;
 use Moo;
 use XML::XPath;
@@ -42,9 +42,9 @@ sub _build_url {
 sub description {
     my $self = shift;
     my $desc = "Weather ";
-    my %data = %{ $self->data // {} }; 
+    my %data = %{ $self->data // {} };
     if ( %data ) {
-        $desc .= join(q{, } , 
+        $desc .= join(q{, } ,
             map { $_ . ": " . $data{$_} }
             sort keys (%data)
         );
@@ -62,7 +62,7 @@ sub process_http_response {
         my $unit = $t_item->find('string(./@unit)');
         $self->data->{t} = sprintf("%s%s", $value, $T_UNITS->{$unit});
     }
-    $self->_interpret_result(1, $self->callback);
+    $self->interpret_result(1, $self->callback);
 }
 
 sub _invoke_callback {
