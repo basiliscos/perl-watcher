@@ -2,6 +2,7 @@ package App::PerlWatcher::Watcher::HTTP;
 {
   $App::PerlWatcher::Watcher::HTTP::VERSION = '0.12';
 }
+# ABSTRACT: The base role for watching external events via HTTP
 
 use 5.12.0;
 use strict;
@@ -16,16 +17,26 @@ use List::MoreUtils qw/any/;
 use Moo::Role;
 use URI;
 
-
 requires 'url';
+
+
 requires 'process_http_response';
 
 with qw/App::PerlWatcher::Watcher/;
 
+
 has 'frequency'         => ( is => 'ro', default => sub { 60; } );
+
+# for internal use only. No docs.
 has 'uri'               => ( is => 'lazy');
+
+
 has 'timeout'           => ( is => 'lazy');
+
+
 has 'title'             => ( is => 'lazy');
+
+
 has 'watcher_callback'  => ( is => 'lazy');
 
 sub _build_uri {
@@ -77,7 +88,7 @@ sub _build_watcher_callback {
 sub start {
     my ($self, $callback) = @_;
     $self->callback($callback) if $callback;
-    
+
     $self->{_w} = AnyEvent->timer(
         after    => 0,
         interval => $self->frequency,
@@ -109,11 +120,40 @@ __END__
 
 =head1 NAME
 
-App::PerlWatcher::Watcher::HTTP
+App::PerlWatcher::Watcher::HTTP - The base role for watching external events via HTTP
 
 =head1 VERSION
 
 version 0.12
+
+=head1 ATTRIBUTES
+
+=head2 url
+
+The subclass should provide the watched URL
+
+=head2 frequency
+
+The frequency of poll in seconds
+
+=head2 timeout
+
+The http transaction timeout. Default value: 5 seconds
+
+=head2
+
+The watcher title
+
+=head2 watcher_callback
+
+The callback, which will be called with status object
+
+=head1 METHODS
+
+=head2 process_http_response
+
+The subclass should provide the process_http_response($body, $headers) method
+which is been called only on successfull responce (http code = 200)
 
 =head1 AUTHOR
 
