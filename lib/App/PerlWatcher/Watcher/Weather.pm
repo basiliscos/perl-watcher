@@ -2,6 +2,7 @@ package App::PerlWatcher::Watcher::Weather;
 {
   $App::PerlWatcher::Watcher::Weather::VERSION = '0.12';
 }
+# ABSTRACT: Weather watches based around api.yr.no. Currenlty monitors only temperature and does no any notifications / level alerts.
 
 use 5.12.0;
 use strict;
@@ -19,8 +20,14 @@ our $T_UNITS = {
     celcius => 'C°',
 };
 
+
 has 'latitude'          => ( is => 'ro', required => 1);
+
+
 has 'longitude'         => ( is => 'ro', required => 1);
+
+# for internal usage
+
 has 'data'              => ( is => 'rw', default => sub{ {}; } );
 has 'url_generator'     => ( is => 'lazy');
 has 'url'               => ( is => 'lazy');
@@ -79,11 +86,21 @@ __END__
 
 =head1 NAME
 
-App::PerlWatcher::Watcher::Weather
+App::PerlWatcher::Watcher::Weather - Weather watches based around api.yr.no. Currenlty monitors only temperature and does no any notifications / level alerts.
 
 =head1 VERSION
 
 version 0.12
+
+=head1 ATTRIBUTES
+
+=head2 latitude
+
+The location latitude
+
+=head2 longitude
+
+The location longitude
 
 =head1 AUTHOR
 
