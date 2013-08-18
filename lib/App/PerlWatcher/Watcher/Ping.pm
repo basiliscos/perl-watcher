@@ -31,7 +31,7 @@ sub _build_watcher_callback {
             # $! contains error
             # $host
             # $success
-            $self -> _interpret_result( $success, $self->callback);
+            $self->interpret_result( $success, $self->callback);
           }, sub {
 
             #connect timeout

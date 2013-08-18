@@ -213,7 +213,18 @@ sub _merge {
     return { map { $_->{value} => $_->{level} } @l_result };
 }
 
-sub _interpret_result {
+=method interpret_result
+
+This method interprets the result of poll (true or false)
+in accordance with thresholds_map and the callback will
+be called with the resulting status (and optionally provided
+items). Meant to be called from subclases, e.g.
+
+ $watcher->interpret_result(0, $callback);
+
+=cut
+
+sub interpret_result {
     my ($self, $result, $callback, $items) = @_;
 
     my $level = $self->memory->interpret_result($result);
