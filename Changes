@@ -1,6 +1,8 @@
 {{$NEXT}}
     Added POD documentation
-    [API change]The available leves are exported via App::PerlWatcher::Levels now
+    [API change] Engine does not takes an backend_id any more, provide the backend instance
+    	 	 for that. Added Backend role for that.
+    [API change] The available leves are exported via App::PerlWatcher::Levels now
 
 0.12      2013-07-30 17:26:47 Europe/Minsk
     Updated Sortable to 2.45

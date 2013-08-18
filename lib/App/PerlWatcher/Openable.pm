@@ -20,7 +20,7 @@ use Moo::Role;
 =cut
 
 
-=attr last_seen
+=attr url
 
 The url like https://duckduckgo.com/?q=perl
 

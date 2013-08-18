@@ -24,12 +24,4 @@ Holds reference to Engine
 
 has 'engine'       => ( is => 'ro', required => 1 );
 
-=attr last_seen
-
-The timestamp last seen of user-visible watcher statuses.
-
-=cut
-
-has 'last_seen'    => ( is => 'rw', default => sub{ time; } );
-
 1;
