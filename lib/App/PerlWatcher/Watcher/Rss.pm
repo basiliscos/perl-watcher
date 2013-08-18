@@ -1,4 +1,5 @@
 package App::PerlWatcher::Watcher::Rss;
+# ABSTRACT: Watches RSS feed and returns last news headers as clickable Eventitems.
 
 use 5.12.0;
 use strict;
@@ -12,8 +13,28 @@ use HTTP::Date;
 use Moo;
 use XML::Simple;
 
+=attr url
+
+The RSS feed URL
+
+=cut
+
 has 'url'               => ( is => 'ro', required => 1);
+
+=attr items_number
+
+The number of news items to be displayed
+
+=cut
+
 has 'items_number'      => ( is => 'ro', default => sub { 5; } );
+
+=attr last_items
+
+Last fetched rss items.
+
+=cut
+
 has 'last_items'        => ( is => 'rw');
 
 with qw/App::PerlWatcher::Watcher::HTTP/;

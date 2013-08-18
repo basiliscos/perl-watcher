@@ -1,4 +1,5 @@
 package App::PerlWatcher::Watcher::Ping;
+# ABSTRACT: Watches for host availablity via pingig it. Currently only TCP-port ping.
 
 use 5.12.0;
 use strict;
@@ -10,9 +11,36 @@ use Carp;
 use Devel::Comments;
 use Moo;
 
+=attr host
+
+The watched host
+
+=cut
+
 has 'host'              => ( is => 'ro', required => 1 );
+
+=attr port
+
+The watched port
+
+=cut
+
 has 'port'              => ( is => 'ro', required => 1 );
+
+=attr frequency
+
+The frequency of ping. By default it is 60 seconds.
+
+=cut
+
 has 'frequency'         => ( is => 'ro', default => sub{ 60; } );
+
+=attr timeout
+
+The ping timeout. Default value: 5 seconds
+
+=cut
+
 has 'timeout'           => ( is => 'lazy');
 has 'watcher_callback'  => ( is => 'lazy');
 

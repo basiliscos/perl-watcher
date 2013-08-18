@@ -1,4 +1,5 @@
 package App::PerlWatcher::Watcher::FileTail;
+# ABSTRACT: Watches for changes file and outputs new added lines (a-la 'tail -f')
 
 use 5.12.0;
 use strict;
@@ -15,10 +16,49 @@ use File::ReadBackwards;
 use Linux::Inotify2;
 use Moo;
 
+=attr file
+
+The file to be watched.
+
+=cut
+
 has 'file'          => ( is => 'ro', required => 1);
+
+=attr lines_number
+
+The number of at the file tail, which are to be displayed
+
+=cut
+
 has 'lines_number'  => ( is => 'ro', required => 1);
+
+=attr filter
+
+The function, which will filter file tail lines, which will not
+be displayed/taken into account, e.g.
+
+ sub { $_ !~ /\scron/ }
+
+- that omits all lines with 'cron' string
+
+=cut
+
 has 'filter'        => ( is => 'ro', default => sub { return sub {1; } } );
+
+=attr inotify
+
+The inotify object
+
+=cut
+
 has 'inotify'       => ( is => 'lazy' );
+
+=attr events
+
+All gathered lines
+
+=cut
+
 has 'events'        => ( is => 'lazy', default => sub { [] } );
 
 with qw/App::PerlWatcher::Watcher/;
@@ -26,7 +66,7 @@ with qw/App::PerlWatcher::Watcher/;
 sub _build_inotify {
     my $inotify = Linux::Inotify2->new
         or croak("unable to create new inotify object: $!");
-    return $inotify; 
+    return $inotify;
 }
 
 sub start {
@@ -113,15 +153,15 @@ sub _trigger_callback {
 sub _initial_read {
     my ($self)       = @_;
     my $frb          = File::ReadBackwards->new( $self->file );
-    my $end_position = $frb->tell;  
+    my $end_position = $frb->tell;
     my @last_lines;
     my $line;
     do {
         $line = $frb->readline;
-        unshift @last_lines, $line 
+        unshift @last_lines, $line
             if ( $line  && $self->filter->(local $_ = $line) );
     } while (defined($line) && @last_lines < $self->lines_number );
-    
+
     $self->_add_line($_) for (@last_lines);
 
     my $file_handle = $frb->get_handle;
