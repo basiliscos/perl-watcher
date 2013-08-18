@@ -1,5 +1,7 @@
 {{$NEXT}}
     Added POD documentation
+    Added Openable role to make RSS-news items openable in browser
+    Finalize Mooification 
     [API change] Engine does not takes an backend_id any more, provide the backend instance
     	 	 for that. Added Backend role for that.
     [API change] The available leves are exported via App::PerlWatcher::Levels now
