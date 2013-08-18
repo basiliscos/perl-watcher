@@ -1,5 +1,6 @@
-0.12      2013-08-18 14:57:45 Europe/Minsk
+0.12      2013-08-18 15:03:44 Europe/Minsk
     Added POD documentation
+    [API change]The available leves are exported via App::PerlWatcher::Levels now
 
 0.12      2013-07-30 17:26:47 Europe/Minsk
     Updated Sortable to 2.45
