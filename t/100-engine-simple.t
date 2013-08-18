@@ -16,10 +16,15 @@ use aliased qw/App::PerlWatcher::Engine/;
 use App::PerlWatcher::Levels;
 use App::PerlWatcher::Status;
 
+use FindBin;
+BEGIN { unshift @INC, "$FindBin::Bin/lib" }
+use aliased qw/Test::PerlWatcher::AEBackend/;
+
 $ENV{'HOME'} = tempdir( CLEANUP => 1 );
 
 my $config = {};
-my $engine = Engine->new(config => $config, backend_id => 'AnyEvent');
+my $backend = AEBackend->new;
+my $engine = Engine->new(config => $config, backend => $backend);
 ok $engine;
 
 # start/stop test
@@ -64,7 +69,7 @@ $config = {
         },
     ],
 };
-$engine = Engine->new(config => $config, backend_id => 'AnyEvent');
+$engine = Engine->new(config => $config, backend => $backend);
 my $watchers = $engine->watchers;
 my $statuses = [];
 my $callback = sub { push @$statuses, shift };

@@ -18,11 +18,16 @@ use App::PerlWatcher::Status;
 use App::PerlWatcher::Util::Bootstrap qw/config/;
 use App::PerlWatcher::Util::Storable qw/freeze thaw/;
 
+use FindBin;
+BEGIN { unshift @INC, "$FindBin::Bin/lib" }
+use aliased qw/Test::PerlWatcher::AEBackend/;
+
 $ENV{'HOME'} = tempdir( CLEANUP => 1 );
 
 my $config_path = dirname(__FILE__) . "/../share/examples/engine.conf.example";
 my $config = config($config_path);
-my $engine = Engine->new(config => $config, backend_id => 'AnyEvent');
+my $backend = AEBackend->new;
+my $engine = Engine->new(config => $config, backend => $backend);
 ok $engine;
 
 my $shelf = $engine->shelf;
@@ -40,7 +45,7 @@ for my $w ( @{ $engine->watchers } ) {
 
 my $serialized = freeze($engine);
 
-$engine = Engine->new(config => $config, backend_id => 'AnyEvent');
+$engine = Engine->new(config => $config, backend => $backend);
 ok thaw($engine, $serialized);
 my $thawed_shelf = $engine->shelf;
 

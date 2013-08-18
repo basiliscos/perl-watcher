@@ -15,6 +15,8 @@ use App::PerlWatcher::Util::Storable qw/freeze thaw/;
 
 use FindBin;
 BEGIN { unshift @INC, "$FindBin::Bin/lib" }
+use aliased qw/Test::PerlWatcher::AEBackend/;
+
 
 $ENV{'HOME'} = tempdir( CLEANUP => 1 );
 
@@ -22,9 +24,9 @@ my $config = {
     defaults    => {
         timeout     => 1,
         behaviour   => {
-            ok  => { 
-                1 => 'notice', 
-                2 => 'info' 
+            ok  => {
+                1 => 'notice',
+                2 => 'info'
             },
             fail => { 1 => 'alert' }
         },
@@ -39,14 +41,14 @@ my $config = {
         },
     ],
 };
-
-my $engine = Engine->new(config => $config, backend_id => 'AnyEvent');
+my $backend = AEBackend->new;
+my $engine = Engine->new(config => $config, backend => $backend);
 ok $engine;
 
 my $watcher = $engine->watchers->[0];
 ok $watcher;
 
-my $items = [ 
+my $items = [
     App::PerlWatcher::EventItem->new(content => "a"),
     App::PerlWatcher::EventItem->new(content => "b"),
 ];
@@ -58,7 +60,7 @@ my $create_status = sub {
         watcher         => $watcher,
         description     => sub { $watcher->description },
         items           => sub { $items },
-    );                               
+    );
 };
 
 my $shelf = $engine->shelf;
@@ -80,14 +82,14 @@ is_deeply $thawed_shelf->statuses->{$s1->watcher}->items()->(), $items;
 
 
 # check that watcher's memory is restored
-$engine = Engine->new(config => $config, backend_id => 'AnyEvent');
+$engine = Engine->new(config => $config, backend => $backend);
 $watcher = $engine->watchers->[0];
 my $memory = $watcher->memory;
 is $memory->interpret_result(1), LEVEL_NOTICE;
 is $memory->interpret_result(1), LEVEL_INFO;
 is $memory->last_level, LEVEL_INFO;
 $serialized = freeze($engine);
-$engine = Engine->new(config => $config, backend_id => 'AnyEvent');
+$engine = Engine->new(config => $config, backend => $backend);
 
 ok thaw($engine, $serialized);
 
@@ -96,9 +98,9 @@ $watcher = $engine->watchers->[0];
 ok $watcher;
 is $watcher->memory->last_level, LEVEL_INFO;
 
-# change the config -> no wather and event should be restored 
+# change the config -> no wather and event should be restored
 $config->{watchers}[0]{config}{frequency} = 2;
-$engine = Engine->new(config => $config, backend_id => 'AnyEvent');
+$engine = Engine->new(config => $config, backend => $backend);
 
 ok thaw($engine, $serialized);
 
@@ -108,8 +110,7 @@ ok $thawed_shelf -> status_changed($s2);
 
 # corrupt the data file
 $engine->statuses_file->spew(q/corrupted data/);
-$engine = Engine->new(config => $config, backend_id => 'AnyEvent');
+$engine = Engine->new(config => $config, backend => $backend);
 ok $engine;
 
 done_testing();
-
