@@ -1,4 +1,4 @@
-0.12      2013-08-18 15:03:44 Europe/Minsk
+0.12      2013-08-18 15:21:52 Europe/Minsk
     Added POD documentation
     [API change]The available leves are exported via App::PerlWatcher::Levels now
 
