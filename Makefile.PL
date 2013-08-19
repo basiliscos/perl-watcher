@@ -32,7 +32,7 @@ my %WriteMakefileArgs = (
     "Linux::Inotify2" => "1.22",
     "Moo" => "1.003000",
     "Storable" => "2.45",
-    "XML::Simple" => "2.20",
+    "XML::Simple" => "2.18",
     "XML::XPath" => "1.13",
     "aliased" => "0.31"
   },
