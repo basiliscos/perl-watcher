@@ -26,7 +26,7 @@ If the config file isn't found, than it is been copied from examples/engine.conf
 sub engine_config {
     my $config_file = $ARGV[0]
         // get_home_file('engine.conf',
-                '_App-PerlWatcher-Engine', 'examples/engine.conf.example');
+                'App-PerlWatcher-Engine', 'examples/engine.conf.example');
     return config($config_file);
 }
 
