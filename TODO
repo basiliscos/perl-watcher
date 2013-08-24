@@ -2,17 +2,11 @@ ROADMAP to public release
 # readme
 # documentation (pod)
 # persists summary level [engine?], collapse/expand states [gtk]
-# scrollable results [gtk]
-# travis-ci [gtk]
 
 ENGINE
 # watcher groups?
 # watcher actions: reset, mute, act (click), force check?
 # timestamps should include dates for sub-events?
-# research the possible usage of Module::Pluggable
-
-BUILD/ECOSYSTEM:
-# publish on CPAN via Dist::Zilla
 
 REFACTOR:
 # watcher/watcher_function/guard
@@ -27,8 +21,7 @@ WATCHERS:
 # rss: gather item titles or bodies
 # rss: display bodies as hints?
 # rss: get rid of XML::Simple
-# filetail: add beautifyer?
-# filetail: hanlde if file has been deleted and the created in watching process?
+# weather: add displayable label
 # weather: add other tracking parameters
 # weather: add dsl for warnings
 # json watcher: curl -b 'PHPSESSID=470c412bd1b60bd9d463771490b9e132' -H 'X-Requested-With: XMLHttpRequest' -g 'http://media.iptel.by/video/cs/csadmin.php?DATA[SubCategoryID]=0&DATA[GenreID]=0&DATA[CountryID]=0&DATA[SortID]=1&DATA[SortCheckBox]=1&DATA[StartPageNum]=1&DATA[SearchMode]=0&DATA[SearchStr]=&DATA[SearchRBSel]=0&DATA[action]=getMainPage'
