@@ -53,8 +53,7 @@ sub start {
             Status->new(
                 watcher     => $self,
                 level       => LEVEL_ANY,
-                description => sub { $self->description },
-                items       => sub { [$msg] },
+                description => sub { $self->description . " : $msg " },
             )
         );
     }
