@@ -7,7 +7,6 @@ ENGINE
 # watcher groups?
 # watcher actions: reset, mute, act (click), force check?
 # timestamps should include dates for sub-events?
-# research the possible usage of Module::Pluggable
 
 REFACTOR:
 # watcher/watcher_function/guard
@@ -22,8 +21,6 @@ WATCHERS:
 # rss: gather item titles or bodies
 # rss: display bodies as hints?
 # rss: get rid of XML::Simple
-# filetail: add beautifyer?
-# filetail: hanlde if file has been deleted and the created in watching process?
 # weather: add displayable label
 # weather: add other tracking parameters
 # weather: add dsl for warnings
