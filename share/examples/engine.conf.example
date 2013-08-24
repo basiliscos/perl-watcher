@@ -43,14 +43,14 @@ use utf8;
         },
         
         
-        # {
-        #     class => 'App::PerlWatcher::Watcher::Ping',
-        #     config => {
-        #         host    =>  'basiliscos',
-        #         port    =>  443,
-        #         frequency   =>  15,
-        #     },
-        # },
+        {
+            class => 'App::PerlWatcher::Watcher::Ping',
+            config => {
+                host    =>  'non-existen-host',
+                port    =>  443,
+                frequency   =>  15,
+            },
+        },
         
         {
             class => 'App::PerlWatcher::Watcher::Ping',
@@ -132,7 +132,22 @@ use utf8;
                 },
             },
         },
-        
+
+        {
+            class => 'App::PerlWatcher::Watcher::Rss',
+            config => {
+                url         =>  'http://www.anna-news.info/rss.xml',
+                title       =>  'anna-news',
+                frequency   => 600,
+                timeout     => 60,
+                items       => 5,
+                on          => { 
+                        ok      => { 1  => 'notice' },
+                        fail    => { 10 => 'info/max'   },
+                },
+            },
+        },
+
         
         # {
         #     class => 'App::PerlWatcher::Watcher::FileTail',
