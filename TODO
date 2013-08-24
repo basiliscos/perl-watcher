@@ -12,8 +12,7 @@ ENGINE
 # research the possible usage of Module::Pluggable
 
 BUILD/ECOSYSTEM:
-# Build via travis-ci.org
-# Document modules (with Pod::Weaver?)
+# publish on CPAN via Dist::Zilla
 
 REFACTOR:
 # watcher/watcher_function/guard
