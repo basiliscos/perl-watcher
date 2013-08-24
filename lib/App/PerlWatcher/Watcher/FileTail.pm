@@ -50,6 +50,7 @@ sub start {
 
     my $fail_start = sub {
         my $msg = shift;
+        ### $msg
         $self->callback->(
             Status->new(
                 watcher     => $self,
