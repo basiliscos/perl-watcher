@@ -1,4 +1,5 @@
-0.14      2013-08-24 17:31:08 Europe/Minsk
+0.14      2013-08-24 19:31:38 Europe/Minsk
+    FileTail watcher was seperated as Linux-specific into App::PerlWatcher::Watcher::FileTail
 
 0.14      2013-08-24 17:27:29 Europe/Minsk
     Relased to CPAN
