@@ -1,7 +1,4 @@
 .travis.yml
-App-PerlWatcher-Engine-0.13/.travis.yml
-App-PerlWatcher-Engine-0.13/App-PerlWatcher-Engine-0.13/.travis.yml
-App-PerlWatcher-Engine-0.13/App-PerlWatcher-Engine-0.13/App-PerlWatcher-Engine-0.13/.travis.yml
 Changes
 LICENSE
 MANIFEST
@@ -42,7 +39,8 @@ t/010-rss-watcher-02-perlpodcast-with-shelf.t
 t/011-http-simple.t
 t/012-weather-watcher.t
 t/015-ping-watcher.t
-t/020-filetail-watcher.t
+t/020-filetail.t
+t/021-filetail-no-file.t
 t/100-engine-simple.t
 t/101-engine-with-ping.t
 t/102-engine-shelf-simple-persistance.t

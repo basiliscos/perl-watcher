@@ -43,14 +43,14 @@ use utf8;
         },
         
         
-        {
-            class => 'App::PerlWatcher::Watcher::Ping',
-            config => {
-                host    =>  'basiliscos',
-                port    =>  443,
-                frequency   =>  15,
-            },
-        },
+        # {
+        #     class => 'App::PerlWatcher::Watcher::Ping',
+        #     config => {
+        #         host    =>  'basiliscos',
+        #         port    =>  443,
+        #         frequency   =>  15,
+        #     },
+        # },
         
         {
             class => 'App::PerlWatcher::Watcher::Ping',
@@ -62,15 +62,15 @@ use utf8;
             },
         },
         
-        {
-            class => 'App::PerlWatcher::Watcher::Ping',
-            config => {
-                host    =>  'media.iptel.by',
-                port    =>  80,
-                frequency   =>  25,
-                on => { fail => { 10 => 'info/max' } },
-            },
-        },
+        # {
+        #     class => 'App::PerlWatcher::Watcher::Ping',
+        #     config => {
+        #         host    =>  'media.iptel.by',
+        #         port    =>  80,
+        #         frequency   =>  25,
+        #         on => { fail => { 10 => 'info/max' } },
+        #     },
+        # },
         
         {
             class => 'App::PerlWatcher::Watcher::Ping',
@@ -82,25 +82,25 @@ use utf8;
             },
         },
         
-        {
-            class => 'App::PerlWatcher::Watcher::Ping',
-            config => {
-                host    =>  'anna-wan',
-                port    =>  22,
-                frequency   =>  30,
-                on => { fail => { 5 => 'info' } },
-            },
-        },
+        # {
+        #     class => 'App::PerlWatcher::Watcher::Ping',
+        #     config => {
+        #         host    =>  'anna-wan',
+        #         port    =>  22,
+        #         frequency   =>  30,
+        #         on => { fail => { 5 => 'info' } },
+        #     },
+        # },
         
-        {
-            class => 'App::PerlWatcher::Watcher::Ping',
-            config => {
-                host    =>  'helios',
-                port    =>  53,
-                frequency   =>  30,
-                on => { fail => { 10 => 'info/max' } },
-            },
-        },
+        # {
+        #     class => 'App::PerlWatcher::Watcher::Ping',
+        #     config => {
+        #         host    =>  'helios',
+        #         port    =>  53,
+        #         frequency   =>  30,
+        #         on => { fail => { 10 => 'info/max' } },
+        #     },
+        # },
         
         {
             class => 'App::PerlWatcher::Watcher::Rss',
@@ -134,14 +134,14 @@ use utf8;
         },
         
         
-        {
-            class => 'App::PerlWatcher::Watcher::FileTail',
-            config => {
-                file            =>  '/var/log/messages',
-                lines_number    =>  10,
-                filter          => sub { $_ !~ /\scron/ },
-            },
-        },
+        # {
+        #     class => 'App::PerlWatcher::Watcher::FileTail',
+        #     config => {
+        #         file            =>  '/var/log/messages',
+        #         lines_number    =>  10,
+        #         filter          => sub { $_ !~ /\scron/ },
+        #     },
+        # },
         
     ],
 

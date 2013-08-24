@@ -11,7 +11,7 @@ use warnings;
 use AnyEvent::Handle;
 use App::PerlWatcher::EventItem;
 use App::PerlWatcher::Levels;
-use App::PerlWatcher::Status;
+use aliased 'App::PerlWatcher::Status';
 use App::PerlWatcher::Watcher;
 use Carp;
 use Devel::Comments;
@@ -43,9 +43,25 @@ sub _build_inotify {
 }
 
 sub start {
-    # starting watch file
     my ($self, $callback) = @_;
     $self->callback($callback) if $callback;
+
+    eval { $self->_try_start; };
+    if($@) {
+        my $msg = $@;
+        $self->callback->(
+            Status->new(
+                watcher     => $self,
+                level       => LEVEL_ANY,
+                description => sub { $self->description },
+                items       => sub { [$msg] },
+            )
+        );
+    }
+}
+
+sub _try_start {
+    my $self = shift;
 
     my $file_handle = $self->_initial_read;
 
@@ -114,7 +130,7 @@ sub _add_line {
 sub _trigger_callback {
     my ($self) = @_;
     my @events = @{ $self->events };
-    my $status = App::PerlWatcher::Status->new(
+    my $status = Status->new(
         watcher     => $self,
         level       => LEVEL_NOTICE,
         description => sub { $self->description },
