@@ -48,7 +48,8 @@ use utf8;
             config => {
                 host    =>  'non-existen-host',
                 port    =>  443,
-                frequency   =>  15,
+                frequency   =>  5,
+                on => { fail => {  10 => 'info/max' } },
             },
         },
         
@@ -149,14 +150,14 @@ use utf8;
         },
 
         
-        # {
-        #     class => 'App::PerlWatcher::Watcher::FileTail',
-        #     config => {
-        #         file            =>  '/var/log/messages',
-        #         lines_number    =>  10,
-        #         filter          => sub { $_ !~ /\scron/ },
-        #     },
-        # },
+        {
+            class => 'App::PerlWatcher::Watcher::FileTail',
+            config => {
+                file            =>  '/var/log/messages',
+                lines_number    =>  10,
+                filter          => sub { $_ !~ /\scron/ },
+            },
+        },
         
     ],
 
