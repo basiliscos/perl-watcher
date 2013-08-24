@@ -46,9 +46,10 @@ use utf8;
         {
             class => 'App::PerlWatcher::Watcher::Ping',
             config => {
-                host    =>  'basiliscos',
+                host    =>  'non-existen-host',
                 port    =>  443,
-                frequency   =>  15,
+                frequency   =>  5,
+                on => { fail => {  10 => 'info/max' } },
             },
         },
         
@@ -62,15 +63,15 @@ use utf8;
             },
         },
         
-        {
-            class => 'App::PerlWatcher::Watcher::Ping',
-            config => {
-                host    =>  'media.iptel.by',
-                port    =>  80,
-                frequency   =>  25,
-                on => { fail => { 10 => 'info/max' } },
-            },
-        },
+        # {
+        #     class => 'App::PerlWatcher::Watcher::Ping',
+        #     config => {
+        #         host    =>  'media.iptel.by',
+        #         port    =>  80,
+        #         frequency   =>  25,
+        #         on => { fail => { 10 => 'info/max' } },
+        #     },
+        # },
         
         {
             class => 'App::PerlWatcher::Watcher::Ping',
@@ -82,25 +83,25 @@ use utf8;
             },
         },
         
-        {
-            class => 'App::PerlWatcher::Watcher::Ping',
-            config => {
-                host    =>  'anna-wan',
-                port    =>  22,
-                frequency   =>  30,
-                on => { fail => { 5 => 'info' } },
-            },
-        },
+        # {
+        #     class => 'App::PerlWatcher::Watcher::Ping',
+        #     config => {
+        #         host    =>  'anna-wan',
+        #         port    =>  22,
+        #         frequency   =>  30,
+        #         on => { fail => { 5 => 'info' } },
+        #     },
+        # },
         
-        {
-            class => 'App::PerlWatcher::Watcher::Ping',
-            config => {
-                host    =>  'helios',
-                port    =>  53,
-                frequency   =>  30,
-                on => { fail => { 10 => 'info/max' } },
-            },
-        },
+        # {
+        #     class => 'App::PerlWatcher::Watcher::Ping',
+        #     config => {
+        #         host    =>  'helios',
+        #         port    =>  53,
+        #         frequency   =>  30,
+        #         on => { fail => { 10 => 'info/max' } },
+        #     },
+        # },
         
         {
             class => 'App::PerlWatcher::Watcher::Rss',
@@ -132,7 +133,22 @@ use utf8;
                 },
             },
         },
-        
+
+        {
+            class => 'App::PerlWatcher::Watcher::Rss',
+            config => {
+                url         =>  'http://www.anna-news.info/rss.xml',
+                title       =>  'anna-news',
+                frequency   => 600,
+                timeout     => 60,
+                items       => 5,
+                on          => { 
+                        ok      => { 1  => 'notice' },
+                        fail    => { 10 => 'info/max'   },
+                },
+            },
+        },
+
         
         {
             class => 'App::PerlWatcher::Watcher::FileTail',
