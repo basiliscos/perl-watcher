@@ -1,6 +1,6 @@
 package App::PerlWatcher::Shelf;
 {
-  $App::PerlWatcher::Shelf::VERSION = '0.14'; # TRIAL
+  $App::PerlWatcher::Shelf::VERSION = '0.14';
 }
 # ABSTRACT: Used to stash (store) statuses for further detection weather they has been changed.
 

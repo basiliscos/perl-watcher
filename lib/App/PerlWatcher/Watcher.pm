@@ -1,6 +1,6 @@
 package App::PerlWatcher::Watcher;
 {
-  $App::PerlWatcher::Watcher::VERSION = '0.14'; # TRIAL
+  $App::PerlWatcher::Watcher::VERSION = '0.14';
 }
 # ABSTRACT: Observes some external source of events and emits the result of polling them
 

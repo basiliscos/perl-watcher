@@ -1,6 +1,6 @@
 package App::PerlWatcher::EventItem;
 {
-  $App::PerlWatcher::EventItem::VERSION = '0.14'; # TRIAL
+  $App::PerlWatcher::EventItem::VERSION = '0.14';
 }
 # ABSTRACT: Used to store event items (file lines, rss news headers and so on).
 
