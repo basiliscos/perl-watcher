@@ -8,16 +8,18 @@ use 5.12.0;
 use strict;
 use warnings;
 
-use AnyEvent::Handle;
-use App::PerlWatcher::EventItem;
-use App::PerlWatcher::Levels;
-use aliased 'App::PerlWatcher::Status';
-use App::PerlWatcher::Watcher;
 use Carp;
 use Devel::Comments;
 use File::ReadBackwards;
 use Linux::Inotify2;
 use Moo;
+use aliased 'Path::Class::File';
+
+use AnyEvent::Handle;
+use App::PerlWatcher::EventItem;
+use App::PerlWatcher::Levels;
+use aliased 'App::PerlWatcher::Status';
+use App::PerlWatcher::Watcher;
 
 
 has 'file'          => ( is => 'ro', required => 1);
@@ -46,9 +48,8 @@ sub start {
     my ($self, $callback) = @_;
     $self->callback($callback) if $callback;
 
-    eval { $self->_try_start; };
-    if($@) {
-        my $msg = $@;
+    my $fail_start = sub {
+        my $msg = shift;
         $self->callback->(
             Status->new(
                 watcher     => $self,
@@ -56,7 +57,14 @@ sub start {
                 description => sub { $self->description . " : $msg " },
             )
         );
-    }
+    };
+
+    eval {
+        my $path = File->new($self->file);
+        $path->open('r') or die("can't read $path: $!");
+        $self->_try_start;
+    };
+    $fail_start->($@) if($@);
 }
 
 sub _try_start {
