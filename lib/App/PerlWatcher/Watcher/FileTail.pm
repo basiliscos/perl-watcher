@@ -50,7 +50,6 @@ sub start {
 
     my $fail_start = sub {
         my $msg = shift;
-        ### $msg
         $self->callback->(
             Status->new(
                 watcher     => $self,
@@ -59,10 +58,10 @@ sub start {
             )
         );
     };
+    my $path = File->new($self->file);
+    return $fail_start->($!) unless $path->open('r');
 
     eval {
-        my $path = File->new($self->file);
-        $path->open('r') or die("can't read $path: $!");
         $self->_try_start;
     };
     $fail_start->($@) if($@);
