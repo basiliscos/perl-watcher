@@ -49,6 +49,7 @@ BUGS:
 OTHER:
 # error hanlding, e.g. user typos in config?
 # handle watcher's errors at startup
+# Add separate terminal application with spinners like Term::Spinner::Lite or Term::Twiddle
 
 FUTURE/POSTPONED:
 # rss: atom feeds?

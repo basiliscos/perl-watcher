@@ -1,6 +1,6 @@
 package App::PerlWatcher::Level;
 {
-  $App::PerlWatcher::Level::VERSION = '0.13';
+  $App::PerlWatcher::Level::VERSION = '0.14'; # TRIAL
 }
 # ABSTRACT: Represents severity with corresponding metrics e.g. level_info < level_alert
 
@@ -32,7 +32,7 @@ App::PerlWatcher::Level - Represents severity with corresponding metrics e.g. le
 
 =head1 VERSION
 
-version 0.13
+version 0.14
 
 =head1 ATTRIBUTES
 

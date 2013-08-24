@@ -1,6 +1,6 @@
 package App::PerlWatcher::Engine;
 {
-  $App::PerlWatcher::Engine::VERSION = '0.13';
+  $App::PerlWatcher::Engine::VERSION = '0.14'; # TRIAL
 }
 # ABSTRACT: Creates Watchers and lets them  notify Frontend with their's Statuses
 
@@ -134,7 +134,7 @@ App::PerlWatcher::Engine - Creates Watchers and lets them  notify Frontend with 
 
 =head1 VERSION
 
-version 0.13
+version 0.14
 
 =head1 SYNOPSIS
 

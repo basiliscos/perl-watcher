@@ -1,4 +1,8 @@
-0.13      2013-08-24 17:02:26 Europe/Minsk
+0.14      2013-08-24 17:27:29 Europe/Minsk
+    Relased to CPAN
+    Make the default/sample config more adequate for default installation
+    [fix] File watcher: don't die, if tracked file can't be found
+    [fix] Added missing dependencies
 
 0.13      2013-08-18 17:13:20 Europe/Minsk
     Added POD documentation

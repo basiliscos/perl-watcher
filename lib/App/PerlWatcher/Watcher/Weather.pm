@@ -1,6 +1,6 @@
 package App::PerlWatcher::Watcher::Weather;
 {
-  $App::PerlWatcher::Watcher::Weather::VERSION = '0.13';
+  $App::PerlWatcher::Watcher::Weather::VERSION = '0.14'; # TRIAL
 }
 # ABSTRACT: Weather watches based around api.yr.no. Currenlty monitors only temperature and does no any notifications / level alerts.
 
@@ -90,7 +90,7 @@ App::PerlWatcher::Watcher::Weather - Weather watches based around api.yr.no. Cur
 
 =head1 VERSION
 
-version 0.13
+version 0.14
 
 =head1 ATTRIBUTES
 
