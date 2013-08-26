@@ -7,7 +7,7 @@ build_requires:
   Test::More: 0.98
   Test::TCP: 1.26
 configure_requires:
-  ExtUtils::MakeMaker: 6.30
+  ExtUtils::MakeMaker: 6.72
   File::ShareDir::Install: 0.03
 dynamic_config: 0
 generated_by: 'Dist::Zilla version 4.300036, CPAN::Meta::Converter version 2.131560'
