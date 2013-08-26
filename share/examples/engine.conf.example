@@ -17,6 +17,7 @@ use utf8;
         {
             class => 'App::PerlWatcher::Watcher::Weather',
             config => {
+                describer   => sub{ "Minsk " . lcfirst($_[0])},
                 latitude    => 53.54,
                 longitude   => 27.34,
                 frequency   => 1800,

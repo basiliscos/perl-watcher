@@ -1,6 +1,6 @@
 package App::PerlWatcher::Levels;
 {
-  $App::PerlWatcher::Levels::VERSION = '0.14_01';
+  $App::PerlWatcher::Levels::VERSION = '0.15';
 }
 # ABSTRACT: Creates constants pool for all available levels for application
 
@@ -83,7 +83,7 @@ App::PerlWatcher::Levels - Creates constants pool for all available levels for a
 
 =head1 VERSION
 
-version 0.14_01
+version 0.15
 
 =head1 SYNOPSIS
  use App::PerlWatcher::Levels;

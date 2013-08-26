@@ -1,6 +1,6 @@
 package App::PerlWatcher::Util::Bootstrap;
 {
-  $App::PerlWatcher::Util::Bootstrap::VERSION = '0.14_01';
+  $App::PerlWatcher::Util::Bootstrap::VERSION = '0.15';
 }
 # ABSTRACT: Collection of various helper-methods to boostrap PerlWatcher
 
@@ -68,7 +68,7 @@ App::PerlWatcher::Util::Bootstrap - Collection of various helper-methods to boos
 
 =head1 VERSION
 
-version 0.14_01
+version 0.15
 
 =head1 METHODS
 

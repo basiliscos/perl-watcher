@@ -1,6 +1,6 @@
 package App::PerlWatcher::Watcher;
 {
-  $App::PerlWatcher::Watcher::VERSION = '0.14_01';
+  $App::PerlWatcher::Watcher::VERSION = '0.15';
 }
 # ABSTRACT: Observes some external source of events and emits the result of polling them
 
@@ -19,8 +19,7 @@ use Storable qw/freeze/;
 
 use Moo::Role;
 
-
-requires 'description';
+with qw/App::PerlWatcher::Describable/;
 
 
 has 'engine_config'     => ( is => 'ro', required => 1);
@@ -212,7 +211,7 @@ App::PerlWatcher::Watcher - Observes some external source of events and emits th
 
 =head1 VERSION
 
-version 0.14_01
+version 0.15
 
 =head1 ATTRIBUTES
 
@@ -249,10 +248,6 @@ The subroutine reference, which is been called on every poll of watcher external
 It's argument is the State.
 
 =head1 METHODS
-
-=head2 description
-
-The string description of the watcher
 
 =head2 active
 
