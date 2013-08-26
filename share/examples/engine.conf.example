@@ -4,7 +4,7 @@ use utf8;
     defaults    => {
         timeout     => 1,
         behaviour   => {
-            fail => { 
+            fail => {
                 3   =>  'info',
                 5   =>  'warn',
                 8   =>  'alert',
@@ -12,19 +12,19 @@ use utf8;
             ok  => { 3 => 'notice' },
         },
     },
-    
+
     watchers => [
         {
             class => 'App::PerlWatcher::Watcher::Weather',
             config => {
-                describer   => sub{ "Minsk " . lcfirst($_[0])},
+                describer   => sub { "Weather in Minsk: " . $_[0] },
                 latitude    => 53.54,
                 longitude   => 27.34,
                 frequency   => 1800,
                 timeout     => 15,
             },
         },
-        
+
         {
             class => 'App::PerlWatcher::Watcher::HTTPSimple',
             config => {
@@ -36,14 +36,14 @@ use utf8;
                 response_handler    => sub {
                     (split(',', $_))[1];
                 },
-                on                  => { 
+                on                  => {
                     ok      => { 1  => 'notice' },
                     fail    => { 10 => 'info'   },
                 },
             },
         },
-        
-        
+
+
         {
             class => 'App::PerlWatcher::Watcher::Ping',
             config => {
@@ -53,7 +53,7 @@ use utf8;
                 on => { fail => {  10 => 'info/max' } },
             },
         },
-        
+
         {
             class => 'App::PerlWatcher::Watcher::Ping',
             config => {
@@ -63,7 +63,7 @@ use utf8;
                 on => { fail => { 5 => 'alert' } },
             },
         },
-        
+
         # {
         #     class => 'App::PerlWatcher::Watcher::Ping',
         #     config => {
@@ -73,7 +73,7 @@ use utf8;
         #         on => { fail => { 10 => 'info/max' } },
         #     },
         # },
-        
+
         {
             class => 'App::PerlWatcher::Watcher::Ping',
             config => {
@@ -83,7 +83,7 @@ use utf8;
                 on => { fail => { 5 => 'alert' } },
             },
         },
-        
+
         # {
         #     class => 'App::PerlWatcher::Watcher::Ping',
         #     config => {
@@ -93,7 +93,7 @@ use utf8;
         #         on => { fail => { 5 => 'info' } },
         #     },
         # },
-        
+
         # {
         #     class => 'App::PerlWatcher::Watcher::Ping',
         #     config => {
@@ -103,7 +103,7 @@ use utf8;
         #         on => { fail => { 10 => 'info/max' } },
         #     },
         # },
-        
+
         {
             class => 'App::PerlWatcher::Watcher::Rss',
             config => {
@@ -112,14 +112,14 @@ use utf8;
                 frequency   => 60,
                 timeout     => 10,
                 items       =>  5,
-                on          => { 
+                on          => {
                         ok      => { 1  => 'notice' },
                         fail    => { 10 => 'info/max'   },
                 },
             },
         },
-        
-        
+
+
         {
             class => 'App::PerlWatcher::Watcher::Rss',
             config => {
@@ -128,7 +128,7 @@ use utf8;
                 frequency   => 120,
                 timeout     => 10,
                 items       =>  5,
-                on          => { 
+                on          => {
                         ok      => { 1  => 'notice' },
                         fail    => { 10 => 'info/max'   },
                 },
@@ -143,14 +143,14 @@ use utf8;
                 frequency   => 600,
                 timeout     => 60,
                 items       => 5,
-                on          => { 
+                on          => {
                         ok      => { 1  => 'notice' },
                         fail    => { 10 => 'info/max'   },
                 },
             },
         },
 
-        
+
         {
             class => 'App::PerlWatcher::Watcher::FileTail',
             config => {
@@ -159,7 +159,7 @@ use utf8;
                 filter          => sub { $_ !~ /\scron/ },
             },
         },
-        
+
     ],
 
 };

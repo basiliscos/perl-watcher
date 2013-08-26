@@ -48,7 +48,7 @@ sub _build_url {
 
 sub description {
     my $self = shift;
-    my $desc = "Weather ";
+    my $desc = "";
     my %data = %{ $self->data // {} };
     if ( %data ) {
         $desc .= join(q{, } ,

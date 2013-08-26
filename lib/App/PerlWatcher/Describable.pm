@@ -45,7 +45,7 @@ The subroutine, which takes description as an string, and allows
 to do with it something funny, e.g. add "location" in label for
 weather-watcher:
 
-   describer   => sub{ "Minsk " . lcfirst($_[0])}
+   describer   => sub { "Weather in Minsk: " . $_[0] },
 
 Default value: sub, which just returns it's value. The describer
 means to be provided by user configs.
