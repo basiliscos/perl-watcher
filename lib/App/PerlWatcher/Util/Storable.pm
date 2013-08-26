@@ -1,6 +1,6 @@
 package App::PerlWatcher::Util::Storable;
 {
-  $App::PerlWatcher::Util::Storable::VERSION = '0.14';
+  $App::PerlWatcher::Util::Storable::VERSION = '0.14_01'; # TRIAL
 }
 # ABSTRACT: Used to freeze/thaw PerlWatcher status (watcher memories and shelf of statuses)
 
@@ -77,7 +77,7 @@ App::PerlWatcher::Util::Storable - Used to freeze/thaw PerlWatcher status (watch
 
 =head1 VERSION
 
-version 0.14
+version 0.14_01
 
 =head1 AUTHOR
 
