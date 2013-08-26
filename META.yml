@@ -4,11 +4,11 @@ author:
   - 'Ivan Baidakou <dmol@gmx.com>'
 build_requires:
   AnyEvent::HTTPD: 0.93
-  Module::Build: 0.3601
   Test::More: 0.98
   Test::TCP: 1.26
 configure_requires:
-  Module::Build: 0.3601
+  ExtUtils::MakeMaker: 6.30
+  File::ShareDir::Install: 0.03
 dynamic_config: 0
 generated_by: 'Dist::Zilla version 4.300036, CPAN::Meta::Converter version 2.131560'
 license: perl

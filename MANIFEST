@@ -1,9 +1,9 @@
 .travis.yml
-Build.PL
 Changes
 LICENSE
 MANIFEST
 META.yml
+Makefile.PL
 README
 README.md
 TODO
