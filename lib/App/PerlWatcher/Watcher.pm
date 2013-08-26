@@ -174,7 +174,7 @@ sub _emit_event {
     my $status = App::PerlWatcher::Status->new(
         watcher     => $self,
         level       => $level,
-        description => sub {  $self->description  },
+        description => sub { $self->describe },
         items       => $items,
     );
     $callback->($status);
