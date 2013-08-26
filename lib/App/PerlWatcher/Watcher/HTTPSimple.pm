@@ -1,6 +1,6 @@
 package App::PerlWatcher::Watcher::HTTPSimple;
 {
-  $App::PerlWatcher::Watcher::HTTPSimple::VERSION = '0.14_01'; # TRIAL
+  $App::PerlWatcher::Watcher::HTTPSimple::VERSION = '0.14_01';
 }
 # ABSTRACT: The simple HTTP watcher, where actual http responce body is been processed by closure
 
