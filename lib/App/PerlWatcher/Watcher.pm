@@ -16,13 +16,7 @@ use Storable qw/freeze/;
 
 use Moo::Role;
 
-=method description
-
-The string description of the watcher
-
-=cut
-
-requires 'description';
+with qw/App::PerlWatcher::Describable/;
 
 =attr engine_config
 
@@ -237,7 +231,7 @@ sub _emit_event {
     my $status = App::PerlWatcher::Status->new(
         watcher     => $self,
         level       => $level,
-        description => sub {  $self->description  },
+        description => sub { $self->describe },
         items       => $items,
     );
     $callback->($status);

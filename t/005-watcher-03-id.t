@@ -23,5 +23,11 @@ $watcher_init{c} = 2;
 my $w2 = Test::PerlWatcher::TestWatcher->new(%watcher_init);
 ok !($w1->unique_id eq $w2->unique_id), "different watcher instances have the different configs don't have the same ids";
 
-done_testing();
+$watcher_init{describer} = sub {
+    "Beautified " . $_[0];
+};
+my $w3 = Test::PerlWatcher::TestWatcher->new(%watcher_init);
+like $w3->describe, qr/Beautified.{2,}/, "has beautified description";
+
+done_testing;
 
