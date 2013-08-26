@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-
+use 5.012;
 
 use ExtUtils::MakeMaker 6.30;
 
