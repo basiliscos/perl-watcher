@@ -22,6 +22,8 @@ use App::PerlWatcher::Util::Bootstrap qw/get_home_dir/;
 use App::PerlWatcher::Util::Storable qw/freeze thaw/;
 
 
+
+
 has 'frontend'          => ( is => 'rw');
 
 
@@ -191,6 +193,11 @@ version 0.15
  # info
  # warn
  # ...
+
+=head1 DESCRIPTION
+
+The more detailed description of PerlWatcher application can be found here:
+L<https://github.com/basiliscos/perl-watcher>
 
 =head1 ATTRIBUTES
 
