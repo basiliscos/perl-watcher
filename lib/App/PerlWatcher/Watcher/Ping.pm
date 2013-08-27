@@ -2,23 +2,26 @@ package App::PerlWatcher::Watcher::Ping;
 {
   $App::PerlWatcher::Watcher::Ping::VERSION = '0.15';
 }
-# ABSTRACT: Watches for host availablity via pingig it. Currently only TCP-port ping.
+# ABSTRACT: Watches for host availablity via pingig it (ICMP) or knoking to it's port (TCP)
 
 use 5.12.0;
 use strict;
 use warnings;
 
 use AnyEvent::Socket;
+use AnyEvent::Util;
 use App::PerlWatcher::Watcher;
 use Carp;
 use Devel::Comments;
 use Moo;
+use Net::Ping::External qw(ping);
+
 
 
 has 'host'              => ( is => 'ro', required => 1 );
 
 
-has 'port'              => ( is => 'ro', required => 1 );
+has 'port'              => ( is => 'ro', required => 0 );
 
 
 has 'frequency'         => ( is => 'ro', default => sub{ 60; } );
@@ -35,8 +38,31 @@ sub _build_timeout {
 
 sub _build_watcher_callback {
     my $self = shift;
+    $self -> {_watcher} = $self->port
+        ? $self->_tcp_watcher_callback
+        : $self->_icmp_watcher_callback;
+}
+
+sub _icmp_watcher_callback {
+    my $self = shift;
+    my $host = $self->host;
+    my $timeout = $self->timeout;
+    return sub {
+        fork_call {
+#            my $alive = ping(host => $host, timeout => $timeout);
+#            $alive;
+            1;
+        } sub {
+            my $success = shift;
+            $self->interpret_result( $success, $self->callback);
+        };
+    }
+}
+
+sub _tcp_watcher_callback {
+    my $self = shift;
     my ($host, $port ) = ( $self->host, $self->port ); 
-    $self -> {_watcher} = sub {
+    return sub {
         tcp_connect $host, $port, sub {
             my $success = @_ != 0;
             # $! contains error
@@ -80,11 +106,27 @@ __END__
 
 =head1 NAME
 
-App::PerlWatcher::Watcher::Ping - Watches for host availablity via pingig it. Currently only TCP-port ping.
+App::PerlWatcher::Watcher::Ping - Watches for host availablity via pingig it (ICMP) or knoking to it's port (TCP)
 
 =head1 VERSION
 
 version 0.15
+
+=head1 SYNOPSIS
+
+ # use the following config for Engine:
+
+        {
+            class => 'App::PerlWatcher::Watcher::Ping',
+            config => {
+                host    =>  'google.com',
+                frequency   =>  10,
+                on => { fail => { 5 => 'alert' } },
+            },
+        },
+ # if the port was defined it does TCP-knock to that port.
+ # TCP-knock is required for some hosts, that don't answer to
+ # ICMP echo requests, e.g. notorious microsoft.com :)
 
 =head1 ATTRIBUTES
 
@@ -94,7 +136,8 @@ The watched host
 
 =head2 port
 
-The watched port
+The watched port. If the port was specified, then the watcher does
+tcp knock to the port; otherwise it does icmp ping of the host
 
 =head2 frequency
 
