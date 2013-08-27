@@ -34,7 +34,7 @@ my $end_var = AnyEvent->condvar;
 my ($s1, $s2);
 
 my $scenario = [
-    #1 
+    #1
     {
         res =>  sub {
             my $status = shift;
@@ -42,8 +42,8 @@ my $scenario = [
             $s1 = $status;
         },
     },
-    
-    #2 
+
+    #2
     {
         res =>  sub {
             my $status = shift;
@@ -52,7 +52,7 @@ my $scenario = [
             $end_var->send;
         },
     },
-    
+
 ];
 
 my $callback_invocations = 0;
@@ -64,7 +64,7 @@ my $engine_config = {
     defaults    => {
         timeout     => 1,
         behaviour   => {
-            fail => { 
+            fail => {
                 3   =>  'info',
                 5   =>  'alert',
             },
@@ -74,9 +74,9 @@ my $engine_config = {
 };
 
 my $watcher = App::PerlWatcher::Watcher::Ping->new(
-    host            => "localhost", 
-    port            => $server->port, 
-    frequency       => 0.1, 
+    host            => "localhost",
+    port            => $server->port,
+    frequency       => 0.1,
     timeout         => 1,
     engine_config   => $engine_config,
 );
@@ -91,6 +91,27 @@ ok !$s1->updated_from($s1);
 ok !$s1->updated_from($s2);
 ok !$s2->updated_from($s1);
 ok !$s2->updated_from($s2);
+$watcher->active(0);
 
+# testing icmp ping of localhost
+{
+    my $icmp_watcher = App::PerlWatcher::Watcher::Ping->new(
+        host            => "localhost",
+        frequency       => 1,
+        timeout         => 2,
+        engine_config   => $engine_config,
+    );
 
-done_testing();
+    my $succesful_icmp_ping = 0;
+    my $end_var =  AnyEvent->condvar;
+    $icmp_watcher->start(
+        sub {
+            $succesful_icmp_ping = shift;
+            $end_var->send;
+        }
+    );
+    $end_var->recv;
+    ok $succesful_icmp_ping, "localhost is pinged via icmp successfully";
+}
+
+done_testing;

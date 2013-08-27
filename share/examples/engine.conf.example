@@ -58,7 +58,6 @@ use utf8;
             class => 'App::PerlWatcher::Watcher::Ping',
             config => {
                 host    =>  'iptel.by',
-                port    =>  80,
                 frequency   =>  15,
                 on => { fail => { 5 => 'alert' } },
             },
@@ -78,11 +77,21 @@ use utf8;
             class => 'App::PerlWatcher::Watcher::Ping',
             config => {
                 host    =>  'google.com',
-                port    =>  80,
                 frequency   =>  10,
                 on => { fail => { 5 => 'alert' } },
             },
         },
+
+        # {
+        #     class => 'App::PerlWatcher::Watcher::Ping',
+        #     config => {
+        #         host    =>  'microsoft.com',
+        #         port    =>  80,
+        #         frequency   =>  10,
+        #         on => { fail => { 5 => 'alert' } },
+        #     },
+        # },
+
 
         # {
         #     class => 'App::PerlWatcher::Watcher::Ping',
