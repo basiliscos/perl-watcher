@@ -49,9 +49,8 @@ sub _icmp_watcher_callback {
     my $timeout = $self->timeout;
     return sub {
         fork_call {
-#            my $alive = ping(host => $host, timeout => $timeout);
-#            $alive;
-            1;
+            my $alive = ping(host => $host, timeout => $timeout);
+            $alive;
         } sub {
             my $success = shift;
             $self->interpret_result( $success, $self->callback);
