@@ -76,6 +76,14 @@ use App::PerlWatcher::Util::Storable qw/freeze thaw/;
 
 =cut
 
+=head1 DESCRIPTION
+
+The more detailed description of PerlWatcher application can be found here:
+L<https://github.com/basiliscos/perl-watcher>
+
+=cut
+
+
 has 'frontend'          => ( is => 'rw');
 
 =attr config
