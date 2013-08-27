@@ -94,7 +94,9 @@ sub start {
 
 sub description {
     my $self = shift;
-    return "Ping " . $self->host . ":" . $self->port;
+    my $description = $self->port
+        ? "Knocking at " . $self->host . ":" . $self->port
+        : "Ping " . $self->host;
 }
 
 
