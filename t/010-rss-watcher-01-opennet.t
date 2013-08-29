@@ -25,9 +25,9 @@ my $server;
 my ($s1, $s2);
 
 my $end_var = AnyEvent->condvar;
-
+my $watcher;
 my $scenario = [
-    #1 
+    #1
     {
         req =>  sub { return getRss(); },
         res =>  sub {
@@ -38,10 +38,12 @@ my $scenario = [
             ok $_->does('App::PerlWatcher::Openable') && $_->url, "EventItem is openable"
                 for (@{ $items });
             $s1 = $status;
+            $watcher->force_poll;
+
         },
     },
-    
-    #2 
+
+    #2
     {
         req =>  sub { return getRss(); },
         res =>  sub {
@@ -53,10 +55,11 @@ my $scenario = [
                 for (@{ $items });
             $s2 = $status;
             $server = undef;
+            $watcher->force_poll;
         },
     },
-    
-    #3 
+
+    #3
     {
         res =>  sub {
             my $status = shift;
@@ -65,18 +68,20 @@ my $scenario = [
             ok $_->does('App::PerlWatcher::Openable') && $_->url, "EventItem is openable"
                 for (@{ $items });
             is @{ $items }, 5, "got 5 items (#2)";
+            $watcher->force_poll;
         },
     },
-    
-    #4 
+
+    #4
     {
         res =>  sub {
             my $status = shift;
             is $status->level, LEVEL_INFO;
+            $watcher->active(0);
             $end_var->send;
         },
     },
-    
+
 ];
 
 my ($server_invocations, $callback_invocations) = (0, 0);
@@ -92,7 +97,7 @@ $server->reg_cb (
     '/rss1' => sub {
         my ($httpd, $req) = @_;
         $req->respond (
-            { content => 
+            { content =>
                 [
                     'text/html',
                     $server_handler->()
@@ -108,7 +113,7 @@ my $rss_url1 = "http://" . $server->host . ":" . $server->port . "/rss1";
 my $engine_config = {
     defaults    => {
         behaviour   => {
-            fail => { 
+            fail => {
                 3   =>  'info',
                 5   =>  'alert',
             },
@@ -117,11 +122,11 @@ my $engine_config = {
     },
 };
 
-my $watcher = App::PerlWatcher::Watcher::Rss->new(
-    url         => $rss_url1, 
-    items       => 5, 
-    frequency   => 1, 
-    timeout     => 1, 
+$watcher = App::PerlWatcher::Watcher::Rss->new(
+    url         => $rss_url1,
+    items       => 5,
+    frequency   => 10, # does not matter, managed manually
+    timeout     => 1,
     title       => 'la-la-title',
     on          => { fail => { 2 => 'info' } },
     engine_config => $engine_config

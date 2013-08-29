@@ -34,6 +34,7 @@ use App::PerlWatcher::Watcher::Ping;
 my $end_var = AnyEvent->condvar;
 my ($s1, $s2);
 
+my $watcher;
 my $scenario = [
     #1
     {
@@ -41,6 +42,7 @@ my $scenario = [
             my $status = shift;
             ok $status;
             $s1 = $status;
+            $watcher->force_poll;
         },
     },
 
@@ -51,6 +53,7 @@ my $scenario = [
             ok $status;
             $s2 = $status;
             $end_var->send;
+            $watcher->active(0);
         },
     },
 
@@ -73,11 +76,11 @@ my $engine_config = {
     },
 };
 
-my $watcher = App::PerlWatcher::Watcher::Ping->new(
+$watcher = App::PerlWatcher::Watcher::Ping->new(
     host            => "localhost",
     port            => $server->port,
-    frequency       => 0.1,
-    timeout         => 1,
+    frequency       => 9,
+    timeout         => 10,
     engine_config   => $engine_config,
 );
 
@@ -97,7 +100,7 @@ $watcher->active(0);
 {
     my $icmp_watcher = App::PerlWatcher::Watcher::Ping->new(
         host            => "localhost",
-        frequency       => 1,
+        frequency       => 9,
         timeout         => 2,
         engine_config   => $engine_config,
     );
@@ -119,7 +122,7 @@ $watcher->active(0);
 {
     my $icmp_watcher = App::PerlWatcher::Watcher::Ping->new(
         host            => "invalid",
-        frequency       => 1,
+        frequency       => 9,
         timeout         => 2,
         engine_config   => $engine_config,
     );
