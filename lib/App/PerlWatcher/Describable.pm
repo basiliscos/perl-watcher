@@ -16,6 +16,16 @@ developer
 
 requires 'description';
 
+=method start
+
+Starts watcher. The parameter is callback, wich is been invoked with Status
+on watched event occurence
+
+=cut
+
+requires 'start';
+
+
 =attr describer
 
 The subroutine, which takes description as an string, and allows

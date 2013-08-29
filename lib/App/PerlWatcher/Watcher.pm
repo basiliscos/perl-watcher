@@ -115,11 +115,23 @@ sub _build_unique_id {
     ## $id
 }
 
+=method force_poll
+
+Immediatly polls the watched object.
+
+=cut
+
+sub force_poll {
+    my $self = shift;
+    $self->active(0);
+    $self->active(1);
+}
+
 =method active
 
 Turns on and off the wacher.
 
-=cut 
+=cut
 
 sub active {
     my ( $self, $value ) = @_;

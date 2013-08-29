@@ -1,5 +1,7 @@
 {{$NEXT}}
     Ping Watcher now supports ICMP ping (via Net::Ping::External) as well as TCP knock 
+    [API] Watcher role now has 'Describable' role
+    [API] Watcher role now has 'force_poll' and 'start' methods
     [API] Describable role now has 'describe', 'describer' and 'description' methods
 
 0.14_01   2013-08-26 20:23:25 Europe/Minsk
