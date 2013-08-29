@@ -81,6 +81,13 @@ sub _build_unique_id {
 }
 
 
+sub force_poll {
+    my $self = shift;
+    $self->active(0);
+    $self->active(1);
+}
+
+
 sub active {
     my ( $self, $value ) = @_;
     if ( defined($value) ) {
@@ -248,6 +255,10 @@ The subroutine reference, which is been called on every poll of watcher external
 It's argument is the State.
 
 =head1 METHODS
+
+=head2 force_poll
+
+Immediatly polls the watched object.
 
 =head2 active
 

@@ -8,7 +8,7 @@ use AnyEvent;
 use AnyEvent::HTTPD;
 use Devel::Comments;
 use File::Basename;
-use Path::Class qw(file); 
+use Path::Class qw(file);
 use Test::More;
 
 use App::PerlWatcher::Levels;
@@ -25,22 +25,22 @@ sub getWeather {
 
 
 my $end_var = AnyEvent->condvar;
-
+my $watcher;
 my $scenario = [
-    #1 
+    #1
     {
         req =>  \&getWeather,
         res =>  sub {
             my $status = shift;
             # $status
-            
+
             is $status->level, LEVEL_NOTICE;
             like $status->description->(), qr/15.7/;
-            
+            $watcher->active(0);
             $end_var->send;
         },
     },
-    
+
 ];
 
 my ($server_invocations, $callback_invocations) = (0, 0);
@@ -50,7 +50,7 @@ my $result_handler = sub {
     die("error");
 };
 
-my $server_handler = sub {       
+my $server_handler = sub {
     return  $scenario->[$server_invocations++]->{req}->();
 };
 my $callback_handler = sub {
@@ -64,7 +64,7 @@ $server->reg_cb (
     '/weather' => sub {
         my ($httpd, $req) = @_;
         $req->respond (
-            { content => 
+            { content =>
                 [
                     'text/html',
                     $server_handler->()
@@ -79,7 +79,7 @@ my $url = "http://" . $server->host . ":" . $server->port . "/weather";
 my $engine_config = {
     defaults    => {
         behaviour   => {
-            fail => { 
+            fail => {
                 1   =>  'alert',
             },
             ok  => { 3 => 'notice' },
@@ -87,12 +87,12 @@ my $engine_config = {
     },
 };
 
-my $watcher = App::PerlWatcher::Watcher::Weather->new(
+$watcher = App::PerlWatcher::Watcher::Weather->new(
     latitude            => 53.54,
     longitude           => 27.34,
     url_generator       => sub { return $url},
     frequency           => 10,
-    on                  => { 
+    on                  => {
         ok      => { 1  => 'notice' },
         fail    => { 2 => 'info'   },
     },
@@ -107,4 +107,3 @@ $end_var->recv;
 is $callback_invocations, scalar @$scenario, "correct number of callback invocations";
 
 done_testing();
-

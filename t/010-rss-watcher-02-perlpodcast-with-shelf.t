@@ -25,9 +25,9 @@ my $server;
 my $shelf = Shelf->new;
 
 my $end_var = AnyEvent->condvar;
-
+my $watcher;
 my $scenario = [
-    #1 
+    #1
     {
         req =>  sub { return getRss(); },
         res =>  sub {
@@ -38,10 +38,11 @@ my $scenario = [
             ok $_->does('App::PerlWatcher::Openable') && $_->url, "EventItem is openable"
                 for (@{ $items });
             $shelf->stash_status($status);
+            $watcher->force_poll;
         },
     },
-    
-    #2 
+
+    #2
     {
         req =>  sub { return getRss(); },
         res =>  sub {
@@ -53,11 +54,12 @@ my $scenario = [
                 for (@{ $items });
             ok !$shelf -> status_changed($status);
             $server = undef;
+            $watcher->active(0);
             $end_var->send;
         },
     },
-    
-    
+
+
 ];
 
 my ($server_invocations, $callback_invocations) = (0, 0);
@@ -73,7 +75,7 @@ $server->reg_cb (
     '/rss1' => sub {
         my ($httpd, $req) = @_;
         $req->respond (
-            { content => 
+            { content =>
                 [
                     'text/html',
                     $server_handler->()
@@ -82,14 +84,14 @@ $server->reg_cb (
         );
     },
 );
-                               
+
 ok defined($server), "served defined";
 my $rss_url1 = "http://" . $server->host . ":" . $server->port . "/rss1";
 
 my $engine_config = {
     defaults    => {
         behaviour   => {
-            fail => { 
+            fail => {
                 3   =>  'info',
                 5   =>  'alert',
             },
@@ -98,11 +100,11 @@ my $engine_config = {
     },
 };
 
-my $watcher = App::PerlWatcher::Watcher::Rss->new(
-    url         => $rss_url1, 
-    items_number=> 2, 
-    frequency   => 1, 
-    timeout     => 1, 
+$watcher = App::PerlWatcher::Watcher::Rss->new(
+    url         => $rss_url1,
+    items_number=> 2,
+    frequency   => 10,
+    timeout     => 1,
     title       => 'la-la-title',
     on          => { fail => { 2 => 'info' } },
     engine_config => $engine_config
@@ -117,4 +119,4 @@ $end_var->recv;
 is $server_invocations, scalar (grep { $_->{req} } @$scenario), "correct number of server invocations";
 is $callback_invocations, scalar (grep { $_->{res} } @$scenario), "correct number of callback invocations";
 
-done_testing();
+done_testing;

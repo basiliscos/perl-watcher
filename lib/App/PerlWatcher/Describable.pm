@@ -14,6 +14,10 @@ use Moo::Role;
 requires 'description';
 
 
+requires 'start';
+
+
+
 has 'describer' => ( is => 'ro', default => sub { return sub { $_[0]; }; }, );
 
 
@@ -56,6 +60,11 @@ means to be provided by user configs.
 
 The string description, it means to be provided by developer, e.g. watcher
 developer
+
+=head2 start
+
+Starts watcher. The parameter is callback, wich is been invoked with Status
+on watched event occurence
 
 =head2 describe
 
