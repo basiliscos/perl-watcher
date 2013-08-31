@@ -1,5 +1,7 @@
 {{$NEXT}}
     Ping Watcher now supports ICMP ping (via Net::Ping::External) as well as TCP knock 
+    [API] Watcher has 'build_watcher_guard' method, which is responsible for constructing 
+          AnyEvent-based guard (AnyEvent->timer etc.) 
     [API] Watcher role now has 'Describable' role
     [API] Watcher role now has 'force_poll' and 'start' methods
     [API] Describable role now has 'describe', 'describer' and 'description' methods

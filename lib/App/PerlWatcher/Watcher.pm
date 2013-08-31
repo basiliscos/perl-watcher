@@ -74,6 +74,23 @@ It's argument is the State.
 
 has 'callback'          => ( is => 'rw');
 
+=attr watcher_guard
+
+The watcher guard returned by AnyEvent->io, AnyEvent->timer etc, with is an core
+under wich the Watcher is been build.
+
+=cut
+
+has 'watcher_guard'     => ( is => 'rw');
+
+=method build_watcher_guard
+
+The method is responsible for building watcher_guard
+
+=cut
+
+requires 'build_watcher_guard';
+
 use overload fallback => 1, q/""/ => sub { $_[0]->unique_id; };
 
 sub BUILD {
@@ -136,11 +153,25 @@ Turns on and off the wacher.
 sub active {
     my ( $self, $value ) = @_;
     if ( defined($value) ) {
-        delete $self->{_w} unless $value;
+        $self->watcher_guard(undef)
+            unless $value;
         $self->start if $value;
     }
-    return defined( $self->{_w} );
+    return defined( $self->watcher_guard );
 }
+
+=method start
+
+Starts the watcher, which will emit it's statuses.
+
+=cut
+
+sub start {
+    my ($self, $callback) = @_;
+    $self->callback($callback) if $callback;
+    $self->watcher_guard( $self->build_watcher_guard );
+}
+
 
 =method calculate_threshods
 
