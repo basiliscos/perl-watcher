@@ -97,12 +97,6 @@ sub build_watcher_guard {
     );
 }
 
-sub start {
-    my ($self, $callback) = @_;
-    $self->callback($callback) if $callback;
-    $self->watcher_guard( $self->build_watcher_guard );
-}
-
 sub description {
     my $self = shift;
     return "HTTP [" . $self->title . "]";

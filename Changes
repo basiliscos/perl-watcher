@@ -1,4 +1,4 @@
-0.15      2013-08-31 22:27:27 Europe/Minsk
+0.15      2013-08-31 23:01:57 Europe/Minsk
     Ping Watcher now supports ICMP ping (via Net::Ping::External) as well as TCP knock 
     [API] Watcher has 'build_watcher_guard' method, which is responsible for constructing 
           AnyEvent-based guard (AnyEvent->timer etc.) 
