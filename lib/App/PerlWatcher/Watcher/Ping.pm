@@ -78,15 +78,14 @@ sub _tcp_watcher_callback {
     };
 }
 
-sub start {
-    my ($self, $callback) = @_;
-    $self->callback($callback) if $callback;
-    $self->{_w} = AnyEvent->timer(
+sub build_watcher_guard {
+    my $self = shift;
+    return AnyEvent->timer(
         after    => 0,
         interval => $self->frequency,
         cb       => sub {
             $self->watcher_callback->()
-              if defined( $self->{_w} );
+              if $self->active;
         }
     );
 }

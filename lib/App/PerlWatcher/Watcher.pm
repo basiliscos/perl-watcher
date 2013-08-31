@@ -39,6 +39,12 @@ has 'memory'            => ( is => 'rw');
 
 has 'callback'          => ( is => 'rw');
 
+
+has 'watcher_guard'     => ( is => 'rw');
+
+
+requires 'build_watcher_guard';
+
 use overload fallback => 1, q/""/ => sub { $_[0]->unique_id; };
 
 sub BUILD {
@@ -91,11 +97,20 @@ sub force_poll {
 sub active {
     my ( $self, $value ) = @_;
     if ( defined($value) ) {
-        delete $self->{_w} unless $value;
+        $self->watcher_guard(undef)
+            unless $value;
         $self->start if $value;
     }
-    return defined( $self->{_w} );
+    return defined( $self->watcher_guard );
 }
+
+
+sub start {
+    my ($self, $callback) = @_;
+    $self->callback($callback) if $callback;
+    $self->watcher_guard( $self->build_watcher_guard );
+}
+
 
 
 sub calculate_threshods {
@@ -254,7 +269,16 @@ and unique_id are stored.
 The subroutine reference, which is been called on every poll of watcher external source.
 It's argument is the State.
 
+=head2 watcher_guard
+
+The watcher guard returned by AnyEvent->io, AnyEvent->timer etc, with is an core
+under wich the Watcher is been build.
+
 =head1 METHODS
+
+=head2 build_watcher_guard
+
+The method is responsible for building watcher_guard
 
 =head2 force_poll
 
@@ -263,6 +287,10 @@ Immediatly polls the watched object.
 =head2 active
 
 Turns on and off the wacher.
+
+=head2 start
+
+Starts the watcher, which will emit it's statuses.
 
 =head2 calculate_threshods
 

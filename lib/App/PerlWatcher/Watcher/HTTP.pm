@@ -85,18 +85,22 @@ sub _build_watcher_callback {
     return $watcher;
 }
 
-sub start {
-    my ($self, $callback) = @_;
-    $self->callback($callback) if $callback;
-
-    $self->{_w} = AnyEvent->timer(
+sub build_watcher_guard {
+    my $self = shift;
+    return AnyEvent->timer(
         after    => 0,
         interval => $self->frequency,
         cb       => sub {
-            my $watcher_cb = $self->watcher_callback;
-            $watcher_cb->() if defined( $self -> {_w} );
+            $self->watcher_callback->()
+              if $self->active;
         }
     );
+}
+
+sub start {
+    my ($self, $callback) = @_;
+    $self->callback($callback) if $callback;
+    $self->watcher_guard( $self->build_watcher_guard );
 }
 
 sub description {

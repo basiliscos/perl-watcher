@@ -4,6 +4,6 @@ use Moo;
 
 with qw/App::PerlWatcher::Watcher/;
 sub description { shift;  }
-sub start { ... }
+sub build_watcher_guard { ... }
 
 1;
