@@ -30,7 +30,7 @@ my %WriteMakefileArgs = (
     "File::ReadBackwards" => "1.05",
     "File::ShareDir::ProjectDistDir" => "v0.4.4",
     "HTTP::Date" => "6.02",
-    "IPC::Run" => "0.92",
+    "IPC::Run3" => "0.046",
     "Linux::Inotify2" => "1.22",
     "List::MoreUtils" => "0.33",
     "Moo" => "1.003000",
@@ -47,7 +47,7 @@ my %WriteMakefileArgs = (
     "Test::More" => "0.98",
     "Test::TCP" => "1.26"
   },
-  "VERSION" => "0.15",
+  "VERSION" => "0.16",
   "test" => {
     "TESTS" => "t/*.t"
   }

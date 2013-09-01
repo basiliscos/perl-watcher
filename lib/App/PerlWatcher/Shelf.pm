@@ -1,6 +1,6 @@
 package App::PerlWatcher::Shelf;
 {
-  $App::PerlWatcher::Shelf::VERSION = '0.15';
+  $App::PerlWatcher::Shelf::VERSION = '0.16';
 }
 # ABSTRACT: Used to stash (store) statuses for further detection weather they has been changed.
 
@@ -50,7 +50,7 @@ App::PerlWatcher::Shelf - Used to stash (store) statuses for further detection w
 
 =head1 VERSION
 
-version 0.15
+version 0.16
 
 =head1 ATTRIBUTES
 

@@ -1,6 +1,6 @@
 package App::PerlWatcher::Openable;
 {
-  $App::PerlWatcher::Openable::VERSION = '0.15';
+  $App::PerlWatcher::Openable::VERSION = '0.16';
 }
 # ABSTRACT: The base role to to allow item to be openable in system browser
 
@@ -9,7 +9,7 @@ use strict;
 use warnings;
 
 use Carp;
-use IPC::Run qw(run);
+use IPC::Run3;
 use Moo::Role;
 
 
@@ -21,7 +21,7 @@ has 'url'    => ( is => 'rw');
 sub open_url {
     my $self = shift;
     my $url = $self->url;
-    run [ "xdg-open", $url ] 
+    run3 [ "xdg-open", $url ] 
         or carp("executing 'xdg-open $url' error: $?");
 }
 
@@ -37,7 +37,7 @@ App::PerlWatcher::Openable - The base role to to allow item to be openable in sy
 
 =head1 VERSION
 
-version 0.15
+version 0.16
 
 =head1 SYNOPSIS
 

@@ -24,7 +24,7 @@ requires:
   File::ReadBackwards: 1.05
   File::ShareDir::ProjectDistDir: v0.4.4
   HTTP::Date: 6.02
-  IPC::Run: 0.92
+  IPC::Run3: 0.046
   Linux::Inotify2: 1.22
   List::MoreUtils: 0.33
   Moo: 1.003000
@@ -36,4 +36,4 @@ requires:
   XML::XPath: 1.13
   aliased: 0.31
   perl: 5.012
-version: 0.15
+version: 0.16

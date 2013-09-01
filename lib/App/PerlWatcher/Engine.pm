@@ -1,6 +1,6 @@
 package App::PerlWatcher::Engine;
 {
-  $App::PerlWatcher::Engine::VERSION = '0.15';
+  $App::PerlWatcher::Engine::VERSION = '0.16';
 }
 # ABSTRACT: Creates Watchers and lets them  notify Frontend with their's Statuses
 
@@ -136,7 +136,7 @@ App::PerlWatcher::Engine - Creates Watchers and lets them  notify Frontend with 
 
 =head1 VERSION
 
-version 0.15
+version 0.16
 
 =head1 SYNOPSIS
 
@@ -197,7 +197,7 @@ version 0.15
 =head1 DESCRIPTION
 
 The more detailed description of PerlWatcher application can be found here:
-L<https://github.com/basiliscos/perl-watcher>
+L<https://github.com/basiliscos/perl-watcher>.
 
 =head1 ATTRIBUTES
 
