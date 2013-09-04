@@ -21,6 +21,9 @@ has 'thresholds_map'    => ( is => 'ro', required => 1);
 has 'last_level'        => ( is => 'rw', default => sub { LEVEL_NOTICE; } );
 
 
+has 'active' => (is => 'rw', default => sub { 1 } );
+
+
 sub interpret_result {
     my ($self, $result) = @_;
     my $threshold_map = $self -> thresholds_map;
@@ -85,6 +88,10 @@ which level of severity it is. It looks like:
 =head2 last_level
 
 Represents last emitted watcher level. 
+
+=head2 active
+
+Represents whether the watcher is active or not
 
 =head1 METHODS
 

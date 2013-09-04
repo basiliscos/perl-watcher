@@ -1,4 +1,5 @@
-0.16      2013-09-04 20:49:22 Europe/Minsk
+0.16      2013-09-04 21:07:01 Europe/Minsk
+    [API] Watcher Memory now stores 'active' state of Watcher
     [API] Watcher role now requires 'callback' parameter in instance construction,
     	  'start' method does not takes the callback as 2nd parameter any more
 

@@ -10,7 +10,6 @@ ENGINE
 
 REFACTOR:
 # watcher: watcher_function?
-# save watcher's state in the watcher's memory
 
 WATCHERS:
 # ping: async dns query?
