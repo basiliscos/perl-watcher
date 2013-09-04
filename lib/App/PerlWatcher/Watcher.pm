@@ -153,22 +153,25 @@ Turns on and off the wacher.
 sub active {
     my ( $self, $value ) = @_;
     if ( defined($value) ) {
+        $self->memory->active($value);
         $self->watcher_guard(undef)
             unless $value;
         $self->start if $value;
     }
-    return defined( $self->watcher_guard );
+    return $self->memory->active;
 }
 
 =method start
 
-Starts the watcher, which will emit it's statuses.
+Starts the watcher, which will emit it's statuses. The watcher will
+start only it is active.
 
 =cut
 
 sub start {
     my $self = shift;
-    $self->watcher_guard( $self->build_watcher_guard );
+    $self->watcher_guard( $self->build_watcher_guard )
+        if $self->memory->active;
 }
 
 

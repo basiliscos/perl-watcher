@@ -36,6 +36,14 @@ Represents last emitted watcher level.
 
 has 'last_level'        => ( is => 'rw', default => sub { LEVEL_NOTICE; } );
 
+=attr active
+
+Represents whether the watcher is active or not
+
+=cut
+
+has 'active' => (is => 'rw', default => sub { 1 } );
+
 =method interpret_result
 
 Does result interpretation in accordanse with thresholds_map. The result is boolean: true
