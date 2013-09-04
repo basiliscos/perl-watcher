@@ -49,13 +49,24 @@ sub _build_watchers {
     my $self = shift;
     my $config = $self->config;
     my @r;
+    my $engine_callback = sub {
+        my $status = shift;
+        AnyEvent::postpone {
+            $self->frontend->update($status);
+        };
+    };
     for my $watcher_definition ( @{ $config -> {watchers} } ) {
         my ($class, $watcher_config )
             = @{ $watcher_definition }{ qw/class config/ };
         my $watcher;
         eval {
             load_class($class);
-            $watcher = $class->new( engine_config => $config, %$watcher_config );
+            $watcher = $class->new(
+                engine_config => $config,
+                callback      => $engine_callback,
+                %$watcher_config
+            );
+            $watcher->callback($engine_callback);
             push @r, $watcher;
         };
         carp "Error creating watcher $class : $@" if $@;
@@ -90,16 +101,7 @@ sub BUILD {
 
 sub start {
     my $self = shift;
-    for my $w ( @{ $self->watchers } ) {
-        $w->start(
-            sub {
-                my $status = shift;
-                AnyEvent::postpone {
-                    $self->frontend->update($status);
-                };
-            }
-        );
-    }
+    $_->start for ( @{ $self->watchers } );
     # actually trigger watchers
     $self->backend->start_loop;
 }

@@ -81,12 +81,12 @@ $watcher = App::PerlWatcher::Watcher::Ping->new(
     port            => $server->port,
     frequency       => 9,
     timeout         => 10,
+    callback        => $callback_handler,
     engine_config   => $engine_config,
 );
 
 ok defined($watcher), "watcher was created";
-
-$watcher->start($callback_handler);
+$watcher->start;
 $end_var->recv;
 
 is $callback_invocations, scalar @$scenario, "correct number of callback invocations";
@@ -98,44 +98,42 @@ $watcher->active(0);
 
 # testing icmp ping of localhost
 {
+    my $succesful_icmp_ping = 0;
+    my $end_var =  AnyEvent->condvar;
+    my $cb = sub {
+        my $status = shift;
+        $succesful_icmp_ping = $status->level == LEVEL_NOTICE;
+        $end_var->send;
+    };
     my $icmp_watcher = App::PerlWatcher::Watcher::Ping->new(
+        callback        => $cb,
         host            => "localhost",
         frequency       => 9,
         timeout         => 2,
         engine_config   => $engine_config,
     );
-
-    my $succesful_icmp_ping = 0;
-    my $end_var =  AnyEvent->condvar;
-    $icmp_watcher->start(
-        sub {
-            my $status = shift;
-            $succesful_icmp_ping = $status->level == LEVEL_NOTICE;
-            $end_var->send;
-        }
-    );
+    $icmp_watcher->start;
     $end_var->recv;
     ok $succesful_icmp_ping, "localhost is pinged via icmp successfully";
 }
 
 # testing icmp ping of non-existent host
 {
+    my $succesful_icmp_ping = 0;
+    my $end_var =  AnyEvent->condvar;
+    my $cb = sub {
+        my $status = shift;
+        $succesful_icmp_ping = $status->level == LEVEL_NOTICE;
+        $end_var->send;
+    };
     my $icmp_watcher = App::PerlWatcher::Watcher::Ping->new(
+        callback        => $cb,
         host            => "invalid",
         frequency       => 9,
         timeout         => 2,
         engine_config   => $engine_config,
     );
-
-    my $succesful_icmp_ping = 0;
-    my $end_var =  AnyEvent->condvar;
-    $icmp_watcher->start(
-        sub {
-            my $status = shift;
-            $succesful_icmp_ping = $status->level != LEVEL_ALERT;
-            $end_var->send;
-        }
-    );
+    $icmp_watcher->start;
     $end_var->recv;
     ok !$succesful_icmp_ping, "invalid isn't pinged via icmp";
 }

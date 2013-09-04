@@ -107,13 +107,14 @@ $watcher = App::PerlWatcher::Watcher::Rss->new(
     timeout     => 1,
     title       => 'la-la-title',
     on          => { fail => { 2 => 'info' } },
-    engine_config => $engine_config
+    engine_config => $engine_config,
+    callback    => $callback_handler,
 );
 
 ok defined($watcher), "watcher was created";
 like $watcher->description, qr/la-la-title/, "check watcher title";
 
-$watcher->start($callback_handler);
+$watcher->start;
 $end_var->recv;
 
 is $server_invocations, scalar (grep { $_->{req} } @$scenario), "correct number of server invocations";

@@ -1,4 +1,6 @@
-0.16      2013-09-01 14:16:39 Europe/Minsk
+0.16      2013-09-04 20:49:22 Europe/Minsk
+    [API] Watcher role now requires 'callback' parameter in instance construction,
+    	  'start' method does not takes the callback as 2nd parameter any more
 
 0.15      2013-08-31 23:01:57 Europe/Minsk
     Ping Watcher now supports ICMP ping (via Net::Ping::External) as well as TCP knock 

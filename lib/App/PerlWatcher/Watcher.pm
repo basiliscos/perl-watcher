@@ -37,7 +37,7 @@ has 'unique_id'         => ( is => 'lazy');
 has 'memory'            => ( is => 'rw');
 
 
-has 'callback'          => ( is => 'rw');
+has 'callback'          => ( is => 'rw', required => 1);
 
 
 has 'watcher_guard'     => ( is => 'rw');
@@ -106,8 +106,7 @@ sub active {
 
 
 sub start {
-    my ($self, $callback) = @_;
-    $self->callback($callback) if $callback;
+    my $self = shift;
     $self->watcher_guard( $self->build_watcher_guard );
 }
 
