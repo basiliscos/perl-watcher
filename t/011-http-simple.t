@@ -131,12 +131,13 @@ $watcher = App::PerlWatcher::Watcher::HTTPSimple->new(
         ok      => { 1  => 'notice' },
         fail    => { 2 => 'info'   },
     },
-    engine_config => $engine_config
+    engine_config => $engine_config,
+    callback      => $callback_handler,
 );
 
 ok defined($watcher), "watcher was created";
 
-$watcher->start($callback_handler);
+$watcher->start;
 $end_var->recv;
 
 is $callback_invocations, scalar @$scenario, "correct number of callback invocations";

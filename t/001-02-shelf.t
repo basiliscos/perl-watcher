@@ -15,7 +15,10 @@ BEGIN { unshift @INC, "$FindBin::Bin/lib" }
 
 use Test::PerlWatcher::TestWatcher;
 
-my $watcher = Test::PerlWatcher::TestWatcher->new(engine_config=>{});
+my $watcher = Test::PerlWatcher::TestWatcher->new(
+    engine_config => {},
+    callback      => {},
+);
 
 my $create_status = sub {
     my $level = shift;

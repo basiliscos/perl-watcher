@@ -12,7 +12,11 @@ BEGIN { unshift @INC, "$FindBin::Bin/lib" }
 use Test::PerlWatcher::TestWatcher;
 
 my %engine_config;
-my %watcher_init = (a=>'b', c=>1, e=>{d=>5}, engine_config => \%engine_config);
+my %watcher_init = (
+    a=>'b', c=>1, e=>{d=>5},
+    engine_config => \%engine_config,
+    callback      => sub { },
+);
 my $w1 = Test::PerlWatcher::TestWatcher->new(%watcher_init); 
 my $w1_1 = Test::PerlWatcher::TestWatcher->new(%watcher_init);
 

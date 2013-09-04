@@ -72,7 +72,7 @@ It's argument is the State.
 
 =cut
 
-has 'callback'          => ( is => 'rw');
+has 'callback'          => ( is => 'rw', required => 1);
 
 =attr watcher_guard
 
@@ -167,8 +167,7 @@ Starts the watcher, which will emit it's statuses.
 =cut
 
 sub start {
-    my ($self, $callback) = @_;
-    $self->callback($callback) if $callback;
+    my $self = shift;
     $self->watcher_guard( $self->build_watcher_guard );
 }
 
