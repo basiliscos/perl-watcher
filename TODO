@@ -9,7 +9,8 @@ ENGINE
 # timestamps should include dates for sub-events?
 
 REFACTOR:
-# watcher: watcher_function
+# watcher: watcher_function?
+# save watcher's state in the watcher's memory
 
 WATCHERS:
 # ping: async dns query?
