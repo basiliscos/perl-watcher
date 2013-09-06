@@ -3,6 +3,10 @@ ROADMAP to public release
 # documentation: add use cases for all watchers, links to github on main projects
 # persists summary level [engine?], collapse/expand states [gtk]
 
+ECOSYSTEM
+# add packages for various linux distributions
+# add an gentoo ebuild
+
 ENGINE
 # watcher groups?
 # watcher actions: reset, mute, act (click), force check?
@@ -12,6 +16,8 @@ REFACTOR:
 # watcher: watcher_function?
 
 WATCHERS:
+# generic command executor
+# metacpan rest-api ? 
 # ping: async dns query?
 # rss: handle errors: non-200
 # rss: record timestamp
