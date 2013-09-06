@@ -43,13 +43,22 @@ full version.
 is enough for that, while showing the HTML with images isn't so.
 
 ## Installation
+
+Install perl and cpan-minus https://metacpan.org/module/App::cpanminus#INSTALLATION .
+The most easy way to do that is just do
 ```
-git clone
-dzil build
-cpanm ./App-PerlWatcher-UI-Gtk2-0.04
+curl -L http://cpanmin.us | perl - --sudo App::cpanminus
 ```
 
-### Running
+Now it is time to intall PerlWatcher itself
+
+```
+cpanm App::PerlWatcher::Engine
+cpanm App::PerlWatcher::UI::Gtk2
+cpanm App::PerlWatcher::Watcher::FileTail
+```
+
+### Running (GTK2-frontend)
 ```
 perl-watcher-gtk
 ```
