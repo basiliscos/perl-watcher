@@ -83,11 +83,9 @@ sub _build_unique_id {
     };
     my $dumped_config = dump_filtered($self->config, $filter);
     my $config = eval $dumped_config;
-    my @values = sort values %$config;
+    my @values = map { $config->{$_} } sort keys %$config;
     my $hash = md5_base64(freeze(\@values));
     my $id = "$class/$hash";
-    ## @values
-    ## $id
 }
 
 

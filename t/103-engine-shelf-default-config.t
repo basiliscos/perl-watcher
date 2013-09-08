@@ -9,6 +9,7 @@ use Devel::Comments;
 use IO::Socket::INET;
 use File::Basename;
 use File::Temp qw/ tempdir /;
+use List::Util qw/first/;
 use Test::More;
 use Test::TCP;
 
@@ -23,10 +24,19 @@ BEGIN { unshift @INC, "$FindBin::Bin/lib" }
 use aliased qw/Test::PerlWatcher::AEBackend/;
 
 $ENV{'HOME'} = tempdir( CLEANUP => 1 );
+my $tmp_dir  = tempdir( CLEANUP => 1 );
 
 my $config_path = dirname(__FILE__) . "/../share/examples/engine.conf.example";
 my $config = config($config_path);
 my $backend = AEBackend->new;
+
+# hack for generic executor: there is no warranty that
+# nothing changed for watching /tmp
+my $ge_config = first { $_->{class} =~ /GenericExecutor/  }
+    @{ $config->{watchers} };
+ok $ge_config, "configuration for generic executor has been found";
+$ge_config->{config}->{arguments} = ["-1a", "$tmp_dir"];
+
 my $engine = Engine->new(config => $config, backend => $backend);
 ok $engine;
 
@@ -52,6 +62,5 @@ my $thawed_shelf = $engine->shelf;
 for ( @$statuses ) {
     ok !$thawed_shelf->status_changed($_), "status hasn't changes for " . $_->watcher ;
 }
-
 
 done_testing();

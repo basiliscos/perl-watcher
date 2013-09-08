@@ -12,7 +12,7 @@ use Path::Class qw/file/;
 use Test::More;
 
 use App::PerlWatcher::Levels;
-use App::PerlWatcher::Watcher::GenericExecutor;
+use aliased qw/App::PerlWatcher::Watcher::GenericExecutor/;
 
 my $tmp_dir = tempdir( CLEANUP => 1 );
 
@@ -89,7 +89,7 @@ my $engine_config = {
     },
 };
 
-$watcher = App::PerlWatcher::Watcher::GenericExecutor->new(
+my %watcher_config = (
     command       => "/bin/ls",
     arguments     => ["-1a", "$tmp_dir/a", "$tmp_dir/b"],
     timeout       => 1,
@@ -101,6 +101,9 @@ $watcher = App::PerlWatcher::Watcher::GenericExecutor->new(
     engine_config => $engine_config,
     callback      => $callback_handler,
 );
+$watcher = GenericExecutor->new(%watcher_config);
+my $w2 = GenericExecutor->new(%watcher_config);
+is "$watcher", "$w2", "watchers have the same id";
 
 $watcher->start;
 
