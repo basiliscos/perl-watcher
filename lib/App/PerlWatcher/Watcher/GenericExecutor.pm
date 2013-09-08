@@ -81,7 +81,7 @@ sub _build_callback_proxy {
                     watcher     => $self,
                     level       => LEVEL_NOTICE,
                     description => sub { $self->description . " : $reason" },
-                    items       => [],
+                    items       => sub { [] },
                 )
             );
         }
@@ -99,7 +99,7 @@ sub _build_callback_proxy {
                 watcher     => $self,
                 level       => $level,
                 description => sub { $self->description; },
-                items       => \@items,
+                items       => sub { \@items, },
             )
         );
     };
