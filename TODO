@@ -3,6 +3,10 @@ ROADMAP to public release
 # documentation: add use cases for all watchers, links to github on main projects
 # persists summary level [engine?], collapse/expand states [gtk]
 
+ECOSYSTEM
+# add packages for various linux distributions. Try openSUSE Build ServiceServer
+# add an gentoo ebuild
+
 ENGINE
 # watcher groups?
 # watcher actions: reset, mute, act (click), force check?
@@ -10,8 +14,11 @@ ENGINE
 
 REFACTOR:
 # watcher: watcher_function?
+# make EvenItems stashable and distinct the "new" items in status from the old ones.
 
 WATCHERS:
+# generic command executor
+# metacpan rest-api ? 
 # ping: async dns query?
 # rss: handle errors: non-200
 # rss: record timestamp
@@ -19,6 +26,7 @@ WATCHERS:
 # rss: gather item titles or bodies
 # rss: display bodies as hints?
 # rss: get rid of XML::Simple
+# weather: bug: empty title on startup. 
 # weather: add other tracking parameters
 # weather: add dsl for warnings
 # json watcher: curl -b 'PHPSESSID=470c412bd1b60bd9d463771490b9e132' -H 'X-Requested-With: XMLHttpRequest' -g 'http://media.iptel.by/video/cs/csadmin.php?DATA[SubCategoryID]=0&DATA[GenreID]=0&DATA[CountryID]=0&DATA[SortID]=1&DATA[SortCheckBox]=1&DATA[StartPageNum]=1&DATA[SearchMode]=0&DATA[SearchStr]=&DATA[SearchRBSel]=0&DATA[action]=getMainPage'

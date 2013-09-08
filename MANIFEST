@@ -1,6 +1,7 @@
 .travis.yml
 App-PerlWatcher-Engine-0.16/.travis.yml
 App-PerlWatcher-Engine-0.16/App-PerlWatcher-Engine-0.16/.travis.yml
+App-PerlWatcher-Engine-0.16/App-PerlWatcher-Engine-0.16/App-PerlWatcher-Engine-0.16/.travis.yml
 Changes
 LICENSE
 MANIFEST
@@ -23,6 +24,7 @@ lib/App/PerlWatcher/Status.pm
 lib/App/PerlWatcher/Util/Bootstrap.pm
 lib/App/PerlWatcher/Util/Storable.pm
 lib/App/PerlWatcher/Watcher.pm
+lib/App/PerlWatcher/Watcher/GenericExecutor.pm
 lib/App/PerlWatcher/Watcher/HTTP.pm
 lib/App/PerlWatcher/Watcher/HTTPSimple.pm
 lib/App/PerlWatcher/Watcher/Ping.pm
@@ -41,6 +43,7 @@ t/010-rss-watcher-02-perlpodcast-with-shelf.t
 t/011-http-simple.t
 t/012-weather-watcher.t
 t/015-ping-watcher.t
+t/020-generic-executor.t
 t/100-engine-simple.t
 t/101-engine-with-ping.t
 t/102-engine-shelf-simple-persistance.t

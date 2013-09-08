@@ -20,6 +20,7 @@ requires:
   AnyEvent: 7.04
   AnyEvent::HTTP: 2.15
   Class::Load: 0.20
+  Data::Dump: 1.22
   Devel::Comments: v1.1.4
   File::ReadBackwards: 1.05
   File::ShareDir::ProjectDistDir: v0.4.4

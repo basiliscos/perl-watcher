@@ -12,6 +12,7 @@ use App::PerlWatcher::Levels;
 use App::PerlWatcher::Status;
 use aliased 'App::PerlWatcher::WatcherMemory';
 use Carp;
+use Data::Dump::Filtered qw/dump_filtered/;
 use Devel::Comments;
 use Digest::MD5 qw(md5_base64);
 use List::Util qw( max );
@@ -76,10 +77,13 @@ sub _build_memory {
 sub _build_unique_id {
     my $self = shift;
     my $class = ref($self);
-    my $config = $self->config;
-    my @clean_keys = grep { (ref($config->{$_}) // '?') ne 'CODE' }
-        keys %$config;
-    my @values = sort @{ $config }{ @clean_keys };
+    my $filter = sub {
+        my($ctx, $object_ref) = @_;
+        return (ref($object_ref) eq 'CODE') ? { object => 'FILTERED' } : undef;
+    };
+    my $dumped_config = dump_filtered($self->config, $filter);
+    my $config = eval $dumped_config;
+    my @values = sort values %$config;
     my $hash = md5_base64(freeze(\@values));
     my $id = "$class/$hash";
     ## @values

@@ -33,5 +33,9 @@ $watcher_init{describer} = sub {
 my $w3 = Test::PerlWatcher::TestWatcher->new(%watcher_init);
 like $w3->describe, qr/Beautified.{2,}/, "has beautified description";
 
+$watcher_init{inner_sub} = [ sub{;} ];
+my $w4 = Test::PerlWatcher::TestWatcher->new(%watcher_init);
+ok $w4->unique_id, "watcher with inner sub has an unique id";
+
 done_testing;
 
