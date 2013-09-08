@@ -9,6 +9,7 @@ use AnyEvent;
 use AnyEvent::Util;
 use Devel::Comments;
 use Moo;
+use POSIX qw(SIGKILL);
 
 use App::PerlWatcher::Levels qw/get_by_description LEVEL_NOTICE/;
 use aliased qw/App::PerlWatcher::EventItem/;
@@ -56,6 +57,15 @@ Default value is an empty array
 =cut
 
 has 'arguments' => (is => 'ro', default => sub{ []; } );
+
+=attr frequency
+
+How often the external command will be executed (in seconds).
+Default value is 600 seconds (10 mins).
+
+=cut
+
+has 'frequency' => (is => 'ro', defalut => sub{ 600; } );
 
 =attr timeout
 
@@ -134,7 +144,19 @@ has 'callback_proxy' => (is => 'lazy');
 sub _build_callback_proxy {
     my $self = shift;
     return sub {
-        my ($success, $output) = @_;
+        my $success = shift;
+        unless ($success) {
+            my $reason = shift;
+            return $self->callback->(
+                Status->new(
+                    watcher     => $self,
+                    level       => LEVEL_NOTICE,
+                    description => sub { $self->description . " : $reason" },
+                    items       => [],
+                )
+            );
+        }
+        my $output = shift;
         my @lines = split("\n", $output);
         @lines = grep { $self->filter->($_) } @lines;
         my $level = $self->_get_level(@lines);
@@ -157,17 +179,35 @@ sub _build_callback_proxy {
 
 sub build_watcher_guard {
     my $self = shift;
-    my $output;
-    my $cv = run_cmd
-            [$self->command, @{ $self->arguments }],
-            ">" => \$output;
-    $cv->cb(
-        sub {
-            my $success = !shift->recv;
-            $self->callback_proxy->($success, $output);
-        }
-    );
-    return $cv;
+    my $guard = AnyEvent->timer(
+        after    => 0,
+        interval => $self->frequency,
+        cb       => sub {
+            my $output;
+            my $pid;
+            my $timeout = $self->timeout;
+            my $cv_cmd = run_cmd
+                [$self->command, @{ $self->arguments }],
+                ">"  => \$output,
+                '$$' => \$pid;
+            my $timer; $timer = AnyEvent->timer(
+                after => $timeout,
+                cb    => sub {
+                    $output = "timeout($timeout)";
+                    $cv_cmd->send(1);
+                    undef $cv_cmd;
+                    kill SIGKILL, $pid;
+                },
+            );
+            $cv_cmd->cb(
+                sub {
+                    my $success = !shift->recv;
+                    undef $timer;
+                    $self->callback_proxy->($success, $output);
+                }
+            );
+        });
+    return $guard;
 };
 
 1;

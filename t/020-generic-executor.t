@@ -110,4 +110,34 @@ $watcher->start;
 $end_cv->recv;
 is $invocations, @$scenario, "all screnario items has been executed";
 
+# testing timeout
+{
+    my $tmp_dir = tempdir( CLEANUP => 1 );
+    my $sleep_boody = <<SLEEP_END;
+#!/usr/bin/env perl
+sleep(5);
+SLEEP_END
+    my $sleep_binary = file("$tmp_dir/sleep.pl");
+    $sleep_binary->spew($sleep_boody);
+    chmod 0755, "$sleep_binary";
+    $watcher_config{command} = "$sleep_binary";
+    $watcher_config{timeout} = 1;
+
+    my $wait_cv = AnyEvent->condvar;
+    my $handled_timeout = 0;
+    $watcher_config{callback} = sub {
+        my $status = shift;
+        $handled_timeout = 1;
+        $wait_cv->send;
+    };
+    my $w = AnyEvent->timer(
+        after => 2,
+        cb    => sub { $wait_cv->send },
+    );
+    my $w3 = GenericExecutor->new(%watcher_config);
+    $w3->start;
+    $wait_cv->recv;
+    ok $handled_timeout, "timeout has been handled correctly";
+}
+
 done_testing;
