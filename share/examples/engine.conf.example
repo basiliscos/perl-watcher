@@ -159,6 +159,25 @@ use utf8;
             },
         },
 
+
+        {
+            class => 'App::PerlWatcher::Watcher::GenericExecutor',
+            config => {
+	        command       => "/bin/ls",
+	        arguments     => ["-1a", "/tmp/"],
+		frequency     => 60,
+	        timeout       => 5,
+		# filtering "." and ".." files
+	        filter        => sub { ($_ !~ /^\.{1,2}$/) && (/\S+/) },
+	        rules         => [
+	  	    # rise warning if strange_file if found among files
+		    # don't forget to use List::MoreUtils qw/any/;
+		    # in the beggining of the config
+            	    warn  => sub { any { /strange_file.txt/ } @_ },
+	        ],
+	    }
+        },
+
 	# install App::PerlWatcher::Watcher::FileTail separatly
         # {
         #     class => 'App::PerlWatcher::Watcher::FileTail',
