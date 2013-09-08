@@ -38,7 +38,7 @@ sub has_filename {
 my $scenario = [
     sub {
         my $status = shift;
-        my $items = $status->items;
+        my $items = $status->items->();
         is @$items, 4, "has 4 items";
 
         ok has_filename($file_database->basename, $items), "has database among items";
@@ -50,7 +50,7 @@ my $scenario = [
     },
     sub {
         my $status = shift;
-        my $items = $status->items;
+        my $items = $status->items->();
         is @$items, 5, "has 5 items";
 
         ok has_filename($file_strage->basename, $items), "has strange file among items";
@@ -62,7 +62,7 @@ my $scenario = [
     },
     sub {
         my $status = shift;
-        my $items = $status->items;
+        my $items = $status->items->();
         is @$items, 4, "has 4 items";
 
         ok !has_filename($file_database->basename, $items), "hasn't database file among items";
