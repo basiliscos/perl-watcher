@@ -1,4 +1,6 @@
 {{$NEXT}}
+
+0.16      2013-09-10 00:04:16 Europe/Minsk
     Added GenericExecutor Watcher to periodically execute arbitrary command
     	  and watch/view it's output
     The watcher's unique_id generation algorithm changed to handle correctly
