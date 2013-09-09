@@ -11,6 +11,28 @@ use Devel::Comments;
 use Moo;
 use URI;
 
+=head1 SYNOPSIS
+
+ # use the following config for Engine:
+
+ {
+   class => 'App::PerlWatcher::Watcher::HTTPSimple',
+   config => {
+     url                 =>  'http://download.finance.yahoo.com/d/quotes.csv?s=EURUSD=X&f=sl1d1t1c1ohgv&e=.csv',
+     title               =>  '€/$',
+     frequency           => 600,
+     timeout             => 10,
+     response_handler    => sub {
+        (split(',', $_))[1];
+     },
+     on                  => {
+        ok      => { 1  => 'notice' },
+        fail    => { 10 => 'info'   },
+     },
+    },
+ },
+=cut
+
 =attr url
 
 The url been wached

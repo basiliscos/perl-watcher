@@ -13,6 +13,27 @@ use HTTP::Date;
 use Moo;
 use XML::Simple;
 
+=head1 SYNOPSIS
+
+ # use the following config for Engine:
+
+        {
+            class => 'App::PerlWatcher::Watcher::Rss',
+            config => {
+                url         =>  'http://www.opennet.ru/opennews/opennews_all.rss',
+                title       =>  'opennet',
+                frequency   => 60,
+                timeout     => 10,
+                items       =>  5,
+                on          => {
+                        ok      => { 1  => 'notice' },
+                        fail    => { 10 => 'info/max'   },
+                },
+            },
+        },
+
+=cut
+
 =attr url
 
 The RSS feed URL

@@ -54,6 +54,21 @@ use App::PerlWatcher::Util::Storable qw/freeze thaw/;
                 },
             },
         },
+        {
+            class => 'App::PerlWatcher::Watcher::GenericExecutor',
+            config => {
+                command       => "/bin/ls",
+                arguments     => ["-1a", "/tmp/"],
+                frequency     => 60,
+                timeout       => 5,
+                # filtering "." and ".." files
+                filter        => sub { ($_ !~ /^\.{1,2}$/) && (/\S+/) },
+                rules         => [
+            	    warn  => sub { any { /strange_file.txt/ } @_ },
+                ],
+            }
+        },
+
     ],
  };
 
@@ -73,6 +88,8 @@ use App::PerlWatcher::Util::Storable qw/freeze thaw/;
  # info
  # warn
  # ...
+ # or you'll get warn if strange_file.txt suddendly appears
+ # in /tmp
 
 =cut
 

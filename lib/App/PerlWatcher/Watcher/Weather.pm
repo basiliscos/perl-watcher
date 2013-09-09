@@ -17,6 +17,22 @@ our $T_UNITS = {
     celcius => 'C°',
 };
 
+=head1 SYNOPSIS
+
+ # use the following config for Engine:
+        {
+            class => 'App::PerlWatcher::Watcher::Weather',
+            config => {
+                describer   => sub { "Weather in Minsk: " . $_[0] },
+                latitude    => 53.54,
+                longitude   => 27.34,
+                frequency   => 1800,
+                timeout     => 15,
+            },
+        },
+
+=cut
+
 =attr latitude
 
 The location latitude
