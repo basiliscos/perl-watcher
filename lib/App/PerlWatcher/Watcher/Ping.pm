@@ -1,6 +1,6 @@
 package App::PerlWatcher::Watcher::Ping;
 {
-  $App::PerlWatcher::Watcher::Ping::VERSION = '0.16';
+  $App::PerlWatcher::Watcher::Ping::VERSION = '0.16_1'; # TRIAL
 }
 # ABSTRACT: Watches for host availablity via pingig it (ICMP) or knoking to it's port (TCP)
 
@@ -110,7 +110,7 @@ App::PerlWatcher::Watcher::Ping - Watches for host availablity via pingig it (IC
 
 =head1 VERSION
 
-version 0.16
+version 0.16_1
 
 =head1 SYNOPSIS
 
