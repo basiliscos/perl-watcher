@@ -29,7 +29,7 @@ level to 'alert' to be disturbed only by blackout on remote servers :)
 
 It looks like (Gtk2 UI):
 
-![PerlWatcher GTK2 screenshot](https://raw.github.com/basiliscos/images/master/PerlWatcher-0.12.png "PerlWatcher GTK2 screenshot")
+![PerlWatcher GTK2 screenshot](https://raw.github.com/basiliscos/images/master/PerlWatcher-0.16.png "PerlWatcher GTK2 screenshot")
 
 
 ## PerlWatcher and RSS-Aggregator

@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+0.16_1    2013-09-10 00:16:59 Europe/Minsk
+    [Fix] Do not include POSIX in dependencies.
+
 0.16      2013-09-10 00:04:16 Europe/Minsk
     Added GenericExecutor Watcher to periodically execute arbitrary command
     	  and watch/view it's output
