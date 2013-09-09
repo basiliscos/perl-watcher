@@ -15,6 +15,7 @@ use Moo;
 use URI;
 
 
+
 has 'url'                   => ( is => 'ro', required => 1);
 
 
@@ -62,6 +63,27 @@ App::PerlWatcher::Watcher::HTTPSimple - The simple HTTP watcher, where actual ht
 =head1 VERSION
 
 version 0.16
+
+=head1 SYNOPSIS
+
+ # use the following config for Engine:
+
+ {
+   class => 'App::PerlWatcher::Watcher::HTTPSimple',
+   config => {
+     url                 =>  'http://download.finance.yahoo.com/d/quotes.csv?s=EURUSD=X&f=sl1d1t1c1ohgv&e=.csv',
+     title               =>  '€/$',
+     frequency           => 600,
+     timeout             => 10,
+     response_handler    => sub {
+        (split(',', $_))[1];
+     },
+     on                  => {
+        ok      => { 1  => 'notice' },
+        fail    => { 10 => 'info'   },
+     },
+    },
+ },
 
 =head1 ATTRIBUTES
 

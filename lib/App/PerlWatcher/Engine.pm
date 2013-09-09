@@ -176,6 +176,21 @@ version 0.16
                 },
             },
         },
+        {
+            class => 'App::PerlWatcher::Watcher::GenericExecutor',
+            config => {
+                command       => "/bin/ls",
+                arguments     => ["-1a", "/tmp/"],
+                frequency     => 60,
+                timeout       => 5,
+                # filtering "." and ".." files
+                filter        => sub { ($_ !~ /^\.{1,2}$/) && (/\S+/) },
+                rules         => [
+            	    warn  => sub { any { /strange_file.txt/ } @_ },
+                ],
+            }
+        },
+
     ],
  };
 
@@ -195,6 +210,8 @@ version 0.16
  # info
  # warn
  # ...
+ # or you'll get warn if strange_file.txt suddendly appears
+ # in /tmp
 
 =head1 DESCRIPTION
 
