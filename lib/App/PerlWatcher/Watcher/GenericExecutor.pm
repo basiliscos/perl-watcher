@@ -1,6 +1,6 @@
 package App::PerlWatcher::Watcher::GenericExecutor;
 {
-  $App::PerlWatcher::Watcher::GenericExecutor::VERSION = '0.16_1'; # TRIAL
+  $App::PerlWatcher::Watcher::GenericExecutor::VERSION = '0.17';
 }
 # ABSTRACT: Watches for the output of execution of arbitrary command.
 
@@ -36,15 +36,8 @@ has 'timeout' => (is => 'ro', defalut => sub{ []; } );
 
 has 'filter' => (is => 'ro', default => sub{ sub{ 1; };  } );
 
-# =attr new_content
 
-# The Level of Status, which will be emitted after filtering the
-# output. Default value: 'notice'
-
-# =cut
-
-# has 'new_content' => (is => 'ro', default => sub{ 'notice';} );
-
+has 'beautifyer' => (is => 'ro', default => sub{ sub{ shift;}; });
 
 
 has 'rules' => (is => 'ro', default => sub { []; });
@@ -87,7 +80,10 @@ sub _build_callback_proxy {
         }
         my $output = shift;
         my @lines = split("\n", $output);
-        @lines = grep { $self->filter->($_) } @lines;
+        @lines =
+            map  {$self->beautifyer->($_)}
+            grep { $self->filter->($_) }
+            @lines;
         my $level = $self->_get_level(@lines);
         my @items = map {
             EventItem->new(
@@ -151,7 +147,7 @@ App::PerlWatcher::Watcher::GenericExecutor - Watches for the output of execution
 
 =head1 VERSION
 
-version 0.16_1
+version 0.17
 
 =head1 SYNOPSIS
 
@@ -202,6 +198,12 @@ The closure, which returns true if the current line of command
 output should be displayed. Default value: always return true,
 which means to dispay all command's output. The current line
 is localized to $_ variable.
+
+=head2 beautifyer
+
+The closure which is been applied to each line of filtered
+output to add/strip something. Defaut value: just return
+the unchanged line
 
 =head2 rules
 
