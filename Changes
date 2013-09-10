@@ -1,4 +1,6 @@
 {{$NEXT}}
+    [API] GenericExecutor Watcher now has 'beautifyer' closure, which is been
+    applied for every line of filtered output
 
 0.16_1    2013-09-10 00:16:59 Europe/Minsk
     [Fix] Do not include POSIX in dependencies.

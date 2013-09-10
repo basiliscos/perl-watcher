@@ -87,15 +87,15 @@ is localized to $_ variable.
 
 has 'filter' => (is => 'ro', default => sub{ sub{ 1; };  } );
 
-# =attr new_content
+=attr beautifyer
 
-# The Level of Status, which will be emitted after filtering the
-# output. Default value: 'notice'
+The closure which is been applied to each line of filtered
+output to add/strip something. Defaut value: just return
+the unchanged line
 
-# =cut
+=cut
 
-# has 'new_content' => (is => 'ro', default => sub{ 'notice';} );
-
+has 'beautifyer' => (is => 'ro', default => sub{ sub{ shift;}; });
 
 =attr rules
 
@@ -158,7 +158,10 @@ sub _build_callback_proxy {
         }
         my $output = shift;
         my @lines = split("\n", $output);
-        @lines = grep { $self->filter->($_) } @lines;
+        @lines =
+            map  {$self->beautifyer->($_)}
+            grep { $self->filter->($_) }
+            @lines;
         my $level = $self->_get_level(@lines);
         my @items = map {
             EventItem->new(
