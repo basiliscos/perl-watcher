@@ -123,14 +123,26 @@ sub _build_memory {
 sub _build_unique_id {
     my $self = shift;
     my $class = ref($self);
-    my $filter = sub {
+    # Filter strips down the subroutine references
+    # and transforms hashes to arrays sorted by keys.
+    # this is needed to always have the same string
+    # for the same config, any change will lead
+    # to change of md5, and the id will be different.
+    my $filter; $filter = sub {
         my($ctx, $object_ref) = @_;
-        return (ref($object_ref) eq 'CODE') ? { object => 'FILTERED' } : undef;
+        my $ref_type = ref($object_ref);
+        return { object => 'FILTERED' } if ($ref_type eq 'CODE');
+        return undef                    if ($ref_type ne 'HASH');
+        my @determined_array =
+            map {
+                my $stringized_value = dump_filtered($object_ref->{$_}, $filter);
+                my $value = eval $stringized_value;
+                ($_ => $value);
+            } sort keys %$object_ref;
+        return { dump => dump_filtered(\@determined_array, $filter) };
     };
     my $dumped_config = dump_filtered($self->config, $filter);
-    my $config = eval $dumped_config;
-    my @values = map { $config->{$_} } sort keys %$config;
-    my $hash = md5_base64(freeze(\@values));
+    my $hash = md5_base64($dumped_config);
     my $id = "$class/$hash";
 }
 
