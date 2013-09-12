@@ -60,6 +60,7 @@ ok thaw($engine, $serialized);
 my $thawed_shelf = $engine->shelf;
 
 for ( @$statuses ) {
+    ok $thawed_shelf->statuses->{$_->watcher}, "has status for watcher " . $_->watcher;
     ok !$thawed_shelf->status_changed($_), "status hasn't changes for " . $_->watcher ;
 }
 
