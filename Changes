@@ -1,4 +1,5 @@
 {{$NEXT}}
+    [Fix] Once again fix watcher's unique_id generation algorithm.
     [API] GenericExecutor Watcher now has 'beautifyer' closure, which is been
     applied for every line of filtered output
 
