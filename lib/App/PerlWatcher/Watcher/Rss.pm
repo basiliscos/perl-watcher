@@ -1,6 +1,6 @@
 package App::PerlWatcher::Watcher::Rss;
 {
-  $App::PerlWatcher::Watcher::Rss::VERSION = '0.17';
+  $App::PerlWatcher::Watcher::Rss::VERSION = '0.16_2'; # TRIAL
 }
 # ABSTRACT: Watches RSS feed and returns last news headers as clickable Eventitems.
 
@@ -73,7 +73,7 @@ App::PerlWatcher::Watcher::Rss - Watches RSS feed and returns last news headers 
 
 =head1 VERSION
 
-version 0.17
+version 0.16_2
 
 =head1 SYNOPSIS
 
