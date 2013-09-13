@@ -37,4 +37,4 @@ requires:
   XML::XPath: 1.13
   aliased: 0.31
   perl: 5.012
-version: 0.16_2
+version: 0.17

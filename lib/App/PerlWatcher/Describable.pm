@@ -1,6 +1,6 @@
 package App::PerlWatcher::Describable;
 {
-  $App::PerlWatcher::Describable::VERSION = '0.16_2'; # TRIAL
+  $App::PerlWatcher::Describable::VERSION = '0.17';
 }
 # ABSTRACT: The base role for providing description for UI
 
@@ -39,7 +39,7 @@ App::PerlWatcher::Describable - The base role for providing description for UI
 
 =head1 VERSION
 
-version 0.16_2
+version 0.17
 
 =head1 ATTRIBUTES
 
