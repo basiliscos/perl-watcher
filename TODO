@@ -43,6 +43,7 @@ BUGS:
 ***   AnyEvent::Handle uncaught error: Broken pipe at /home/dmol/development/perl/lib/lib/perl5/x86_64-linux-thread-multi/AnyEvent/Impl/Glib.pm line 57.
 ***  ignoring at /home/dmol/development/perl/lib/lib/perl5/App/PerlWatcher/ui/Gtk2/EngineBackend.pm line 16.
 # redraw window on moving 
+# warning: Too late to run CHECK block at /home/dmol/development/perl/dev-env/perlbrew/perls/perl-5.16.3/lib/site_perl/5.16.3/x86_64-linux/EV.pm line 123.
 
 OTHER:
 # error hanlding, e.g. user typos in config?
