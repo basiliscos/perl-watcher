@@ -29,6 +29,7 @@ lib/App/PerlWatcher/Watcher/Rss.pm
 lib/App/PerlWatcher/Watcher/Weather.pm
 lib/App/PerlWatcher/WatcherMemory.pm
 share/examples/engine.conf.example
+t/000-pod.t
 t/001-01-levels.t
 t/001-02-shelf.t
 t/002-bootstrap.t
