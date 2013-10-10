@@ -8,7 +8,6 @@ use warnings;
 use AnyEvent;
 use Carp;
 use Class::Load ':all';
-use Data::Dumper;
 use Devel::Comments;
 use File::Spec;
 use Moo;

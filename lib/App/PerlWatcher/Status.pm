@@ -6,7 +6,6 @@ use strict;
 use warnings;
 
 use Carp;
-use Data::Dumper;
 use Devel::Comments;
 use Moo;
 
