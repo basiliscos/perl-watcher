@@ -1,4 +1,4 @@
-0.17      2013-10-10 21:35:01 Europe/Minsk
+0.17      2013-10-10 21:36:32 Europe/Minsk
 
 0.16_2    2013-09-13 00:24:15 Europe/Minsk
     [Fix] Once again fix watcher's unique_id generation algorithm.
