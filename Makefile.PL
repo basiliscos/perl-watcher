@@ -45,8 +45,10 @@ my %WriteMakefileArgs = (
   },
   "TEST_REQUIRES" => {
     "AnyEvent::HTTPD" => "0.93",
-    "Test::More" => "0.98",
-    "Test::Pod" => "1.48",
+    "File::Spec" => 0,
+    "IO::Handle" => 0,
+    "IPC::Open3" => 0,
+    "Test::More" => 0,
     "Test::TCP" => "1.26"
   },
   "VERSION" => "0.17",

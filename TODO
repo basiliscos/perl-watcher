@@ -4,6 +4,7 @@ ROADMAP to public release
 # persists summary level [engine?], collapse/expand states [gtk]
 
 ECOSYSTEM
+# Devel::Comments -> Smart::Comments
 # add packages for various linux distributions. Try openSUSE Build ServiceServer
 # add an gentoo ebuild
 
@@ -11,6 +12,7 @@ ENGINE
 # watcher groups?
 # watcher actions: reset, mute, act (click), force check?
 # timestamps should include dates for sub-events?
+# all watchers into "poll" function, to allow it blinc on UI
 
 REFACTOR:
 # watcher: watcher_function?
