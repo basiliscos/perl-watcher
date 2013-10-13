@@ -32,7 +32,10 @@ my @module_files = (
 
 
 
-# no fake home requested
+# fake home for cpan-testers
+use File::Temp;
+local $ENV{HOME} = File::Temp::tempdir( CLEANUP => 1 );
+
 
 my $inc_switch = q[-Mblib];
 
