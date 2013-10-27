@@ -41,4 +41,6 @@ requires:
   XML::XPath: 1.13
   aliased: 0.31
   perl: 5.012
-version: 0.17
+resources:
+  repository: https://github.com/basiliscos/perl-watcher.git
+version: 0.16_3

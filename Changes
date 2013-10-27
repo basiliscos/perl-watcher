@@ -1,4 +1,5 @@
-0.17      2013-10-13 21:59:19 Europe/Minsk
+0.16_3    2013-10-27 12:51:40 Europe/Minsk
+    [Fix] Minor fixes in distribution, e.g. add git repository url
 
 0.16_2    2013-09-13 00:24:15 Europe/Minsk
     [Fix] Once again fix watcher's unique_id generation algorithm.
