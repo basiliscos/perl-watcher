@@ -52,7 +52,7 @@ my %WriteMakefileArgs = (
     "Test::More" => 0,
     "Test::TCP" => "1.26"
   },
-  "VERSION" => "0.16_3",
+  "VERSION" => "0.16_4",
   "test" => {
     "TESTS" => "t/*.t"
   }
