@@ -11,7 +11,7 @@ use warnings;
 use App::PerlWatcher::EventItem;
 use aliased 'App::PerlWatcher::Openable';
 use Carp;
-use Devel::Comments;
+use Smart::Comments;
 use HTTP::Date;
 use Moo;
 use XML::Simple;

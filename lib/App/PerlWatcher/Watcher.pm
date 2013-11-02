@@ -13,7 +13,7 @@ use App::PerlWatcher::Status;
 use aliased 'App::PerlWatcher::WatcherMemory';
 use Carp;
 use Data::Dump::Filtered qw/dump_filtered/;
-use Devel::Comments;
+use Smart::Comments;
 use Digest::MD5 qw(md5_base64);
 use List::Util qw( max );
 use Storable qw/freeze/;

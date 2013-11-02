@@ -11,7 +11,7 @@ use warnings;
 use AnyEvent;
 use Carp;
 use Class::Load ':all';
-use Devel::Comments;
+use Smart::Comments;
 use File::Spec;
 use Moo;
 use Path::Class qw(file);

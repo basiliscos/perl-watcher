@@ -8,7 +8,7 @@ use 5.12.0;
 use strict;
 use warnings;
 
-use Devel::Comments;
+use Smart::Comments;
 use Moo;
 use Scalar::Util qw/refaddr/;
 use Storable;

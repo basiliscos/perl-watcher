@@ -10,7 +10,7 @@ use warnings;
 
 use App::PerlWatcher::EventItem;
 use Carp;
-use Devel::Comments;
+use Smart::Comments;
 use Moo;
 use URI;
 
