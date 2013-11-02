@@ -1,6 +1,6 @@
 package App::PerlWatcher::Status;
 {
-  $App::PerlWatcher::Status::VERSION = '0.16_4';
+  $App::PerlWatcher::Status::VERSION = '0.16_5';
 }
 # ABSTRACT: Represents the result of single watcher poll
 
@@ -9,7 +9,7 @@ use strict;
 use warnings;
 
 use Carp;
-use Smart::Comments;
+use Smart::Comments -ENV;
 use Moo;
 
 use App::PerlWatcher::Level;
@@ -101,7 +101,7 @@ App::PerlWatcher::Status - Represents the result of single watcher poll
 
 =head1 VERSION
 
-version 0.16_4
+version 0.16_5
 
 =head1 ATTRIBUTES
 

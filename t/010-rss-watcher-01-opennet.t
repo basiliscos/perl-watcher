@@ -147,4 +147,6 @@ ok !$s1->updated_from($s2);
 ok !$s2->updated_from($s2);
 ok !$s2->updated_from($s1);
 
+### OK
+
 done_testing();

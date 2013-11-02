@@ -1,6 +1,6 @@
 package App::PerlWatcher::Watcher;
 {
-  $App::PerlWatcher::Watcher::VERSION = '0.16_4';
+  $App::PerlWatcher::Watcher::VERSION = '0.16_5';
 }
 # ABSTRACT: Observes some external source of events and emits the result of polling them
 
@@ -13,7 +13,7 @@ use App::PerlWatcher::Status;
 use aliased 'App::PerlWatcher::WatcherMemory';
 use Carp;
 use Data::Dump::Filtered qw/dump_filtered/;
-use Smart::Comments;
+use Smart::Comments -ENV;
 use Digest::MD5 qw(md5_base64);
 use List::Util qw( max );
 use Storable qw/freeze/;
@@ -248,7 +248,7 @@ App::PerlWatcher::Watcher - Observes some external source of events and emits th
 
 =head1 VERSION
 
-version 0.16_4
+version 0.16_5
 
 =head1 ATTRIBUTES
 

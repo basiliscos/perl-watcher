@@ -1,4 +1,5 @@
-0.16_4    2013-11-02 18:26:52 Europe/Minsk
+0.16_5    2013-11-02 18:31:29 Europe/Minsk
+    Migrate from Devel::Comments to Smart::Comments
 
 0.16_4    2013-11-02 13:45:19 Europe/Minsk
     [Fix] Remove Test::Pod from tests to fix building

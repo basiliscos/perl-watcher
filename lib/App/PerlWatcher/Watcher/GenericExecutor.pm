@@ -1,6 +1,6 @@
 package App::PerlWatcher::Watcher::GenericExecutor;
 {
-  $App::PerlWatcher::Watcher::GenericExecutor::VERSION = '0.16_4';
+  $App::PerlWatcher::Watcher::GenericExecutor::VERSION = '0.16_5';
 }
 # ABSTRACT: Watches for the output of execution of arbitrary command.
 
@@ -10,7 +10,7 @@ use warnings;
 
 use AnyEvent;
 use AnyEvent::Util;
-use Smart::Comments;
+use Smart::Comments -ENV;
 use Moo;
 use POSIX qw(SIGKILL);
 
@@ -147,7 +147,7 @@ App::PerlWatcher::Watcher::GenericExecutor - Watches for the output of execution
 
 =head1 VERSION
 
-version 0.16_4
+version 0.16_5
 
 =head1 SYNOPSIS
 
