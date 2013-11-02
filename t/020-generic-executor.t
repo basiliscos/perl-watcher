@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use AnyEvent;
-use Devel::Comments;
+use Smart::Comments;
 use File::Temp qw/ tempdir /;
 use List::MoreUtils qw/any none/;
 use Path::Class qw/file/;

@@ -7,7 +7,7 @@ use warnings;
 
 use AnyEvent;
 use AnyEvent::Util;
-use Devel::Comments;
+use Smart::Comments -ENV;
 use Moo;
 use POSIX qw(SIGKILL);
 

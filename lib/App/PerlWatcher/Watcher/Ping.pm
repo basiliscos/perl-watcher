@@ -9,7 +9,7 @@ use AnyEvent::Socket;
 use AnyEvent::Util;
 use App::PerlWatcher::Watcher;
 use Carp;
-use Devel::Comments;
+use Smart::Comments -ENV;
 use Moo;
 use Net::Ping::External qw(ping);
 

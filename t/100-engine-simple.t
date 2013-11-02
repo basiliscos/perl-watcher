@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use AnyEvent;
-use Devel::Comments;
+use Smart::Comments;
 use IO::Socket::INET;
 use File::Basename;
 use File::Temp qw/ tempdir /;

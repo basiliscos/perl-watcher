@@ -4,7 +4,6 @@ ROADMAP to public release
 # persists summary level [engine?], collapse/expand states [gtk]
 
 ECOSYSTEM
-# Devel::Comments -> Smart::Comments
 # add packages for various linux distributions. Try openSUSE Build ServiceServer
 # add an gentoo ebuild
 

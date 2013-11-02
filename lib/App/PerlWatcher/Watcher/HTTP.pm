@@ -8,7 +8,7 @@ use warnings;
 use App::PerlWatcher::EventItem;
 use AnyEvent::HTTP;
 use Carp;
-use Devel::Comments;
+use Smart::Comments -ENV;
 use HTTP::Date;
 use List::MoreUtils qw/any/;
 use Moo::Role;

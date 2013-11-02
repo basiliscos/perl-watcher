@@ -6,7 +6,7 @@ use warnings;
 
 use AnyEvent;
 use AnyEvent::HTTPD;
-use Devel::Comments;
+use Smart::Comments;
 use File::Basename;
 use Path::Class qw(file);
 use Test::More;

@@ -6,7 +6,7 @@ use warnings;
 
 use AnyEvent;
 use AnyEvent::HTTPD;
-use Devel::Comments;
+use Smart::Comments;
 use File::Basename;
 use Path::Class;
 use Test::More;
@@ -146,5 +146,7 @@ ok !$s1->updated_from($s1);
 ok !$s1->updated_from($s2);
 ok !$s2->updated_from($s2);
 ok !$s2->updated_from($s1);
+
+### OK
 
 done_testing();

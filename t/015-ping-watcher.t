@@ -6,7 +6,7 @@ use warnings;
 
 use AnyEvent;
 use Carp;
-use Devel::Comments;
+use Smart::Comments;
 use IO::Socket::INET;
 use File::Basename;
 use Test::More;

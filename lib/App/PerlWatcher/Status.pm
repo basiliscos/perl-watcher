@@ -6,7 +6,7 @@ use strict;
 use warnings;
 
 use Carp;
-use Devel::Comments;
+use Smart::Comments -ENV;
 use Moo;
 
 use App::PerlWatcher::Level;

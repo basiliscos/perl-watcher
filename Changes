@@ -1,4 +1,7 @@
 {{$NEXT}}
+    Migrate from Devel::Comments to Smart::Comments
+
+0.16_4    2013-11-02 13:45:19 Europe/Minsk
     [Fix] Remove Test::Pod from tests to fix building
 
 0.16_3    2013-10-27 12:52:59 Europe/Minsk
