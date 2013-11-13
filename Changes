@@ -1,4 +1,5 @@
 {{$NEXT}}
+    No changes since 0.16_5
 
 0.16_5    2013-11-02 18:34:51 Europe/Minsk
     Migrate from Devel::Comments to Smart::Comments
