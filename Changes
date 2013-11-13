@@ -1,4 +1,6 @@
-0.17      2013-11-13 23:58:15 Europe/Minsk
+0.17_1    2013-11-14 00:02:30 Europe/Minsk
+    Minor changes passing tests on Windows
+    (Thanks to Alexandr Ciornii!)
 
 0.17      2013-11-13 03:24:44 Europe/Minsk
     No changes since 0.16_5
