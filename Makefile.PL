@@ -30,13 +30,13 @@ my %WriteMakefileArgs = (
     "File::ReadBackwards" => "1.05",
     "File::ShareDir::ProjectDistDir" => "v0.4.4",
     "HTTP::Date" => "6.02",
-    "IPC::Run3" => "0.046",
+    "IPC::Run3" => "0.045",
     "Linux::Inotify2" => "1.22",
     "List::MoreUtils" => "0.33",
     "Moo" => "1.003000",
     "Net::Ping::External" => "0.13",
-    "Path::Class" => "0.32",
-    "Smart::Comments" => "1.000005",
+    "Path::Class" => "0.31",
+    "Smart::Comments" => "1.000004",
     "Storable" => "2.45",
     "URI" => "1.60",
     "XML::Simple" => "2.18",
@@ -52,7 +52,7 @@ my %WriteMakefileArgs = (
     "Test::More" => 0,
     "Test::TCP" => "1.26"
   },
-  "VERSION" => "0.16_5",
+  "VERSION" => "0.17",
   "test" => {
     "TESTS" => "t/*.t"
   }
