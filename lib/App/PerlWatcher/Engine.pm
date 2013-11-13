@@ -254,4 +254,14 @@ sub sort_statuses {
     ];
 }
 
+=head1 CREDITS
+
+=over 2
+
+Alexandr Ciornii
+
+=back
+
+=cut
+
 1;
