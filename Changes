@@ -1,3 +1,5 @@
+0.17      2013-11-13 23:56:29 Europe/Minsk
+
 0.17      2013-11-13 03:24:44 Europe/Minsk
     No changes since 0.16_5
 
@@ -37,7 +39,7 @@
 
 0.14_01   2013-08-26 20:23:25 Europe/Minsk
     [fix] Build on older ExtUtils::MakeMaker (RT #88080)
-    FileTail watcher was seperated as Linux-specific into App::PerlWatcher::Watcher::FileTail
+    FileTail watcher was separated as Linux-specific into App::PerlWatcher::Watcher::FileTail
 
 0.14      2013-08-24 17:27:29 Europe/Minsk
     Relased to CPAN

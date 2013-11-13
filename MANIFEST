@@ -1,7 +1,4 @@
 .travis.yml
-App-PerlWatcher-Engine-0.16_5/.travis.yml
-App-PerlWatcher-Engine-0.17/.travis.yml
-App-PerlWatcher-Engine-0.17/App-PerlWatcher-Engine-0.16_5/.travis.yml
 Changes
 LICENSE
 MANIFEST

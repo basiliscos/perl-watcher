@@ -125,8 +125,6 @@ sub sort_statuses {
     ];
 }
 
-1;
-
 __END__
 
 =pod
@@ -263,6 +261,16 @@ and shelf)
 
 Helper method which sorts statuses in accordance with theirs watchers
 order
+
+=head1 CREDITS
+
+=over 2
+
+Alexandr Ciornii
+
+=back
+
+1;
 
 =head1 AUTHOR
 
