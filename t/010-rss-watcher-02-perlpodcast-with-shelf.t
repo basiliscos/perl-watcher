@@ -67,6 +67,7 @@ my $server_handler = sub {
     return $scenario->[$server_invocations++]->{req}->();
 };
 my $callback_handler = sub {
+    die "\$scenario->[$callback_invocations] is not defined" unless $scenario->[$callback_invocations];
     return $scenario->[$callback_invocations++]->{res}->(@_);
 };
 
