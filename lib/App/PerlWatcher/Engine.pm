@@ -125,6 +125,9 @@ sub sort_statuses {
     ];
 }
 
+
+1;
+
 __END__
 
 =pod
@@ -269,8 +272,6 @@ order
 Alexandr Ciornii
 
 =back
-
-1;
 
 =head1 AUTHOR
 
