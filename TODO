@@ -34,6 +34,7 @@ WATCHERS:
 # reminder watcher
 
 BUGS:
+# rss not works with http://jobs.perl.org/rss/telecommute.rss
 # handle errors in rss thread (silently ignore?)
 *** unhandled exception in callback:
 ***   File does not exist: Thread not found.
