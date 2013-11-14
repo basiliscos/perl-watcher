@@ -119,6 +119,10 @@ $watcher->active(0);
 
 # testing icmp ping of non-existent host
 {
+    my $host_name = "invalid" . rand;
+    skip "There is an DNS record for $host_name", 1
+        if(gethostbyname($host_name));
+
     my $succesful_icmp_ping = 0;
     my $end_var =  AnyEvent->condvar;
     my $cb = sub {
@@ -128,14 +132,14 @@ $watcher->active(0);
     };
     my $icmp_watcher = App::PerlWatcher::Watcher::Ping->new(
         callback        => $cb,
-        host            => "invalid",
+        host            => $host_name,
         frequency       => 9,
         timeout         => 2,
         engine_config   => $engine_config,
     );
     $icmp_watcher->start;
     $end_var->recv;
-    ok !$succesful_icmp_ping, "invalid isn't pinged via icmp";
+    ok !$succesful_icmp_ping, "$host_name isn't pinged via icmp";
 }
 
 done_testing;
