@@ -88,6 +88,7 @@ my $memory = $watcher->memory;
 is $memory->interpret_result(1), LEVEL_NOTICE;
 is $memory->interpret_result(1), LEVEL_INFO;
 is $memory->last_level, LEVEL_INFO;
+$memory->data->{some_key} = { a => "some data"};
 $serialized = freeze($engine);
 $engine = Engine->new(config => $config, backend => $backend);
 
@@ -97,6 +98,7 @@ $thawed_shelf = $engine->shelf;
 $watcher = $engine->watchers->[0];
 ok $watcher;
 is $watcher->memory->last_level, LEVEL_INFO;
+is $watcher->memory->data->{some_key}->{a}, "some data", "data in memory has been restored";
 
 # change the config -> no wather and event should be restored
 $config->{watchers}[0]{config}{frequency} = 2;

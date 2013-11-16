@@ -44,6 +44,17 @@ Represents whether the watcher is active or not
 
 has 'active' => (is => 'rw', default => sub { 1 } );
 
+=attr 'data'
+
+An hashref of arbitrary to be stored within memory from front-end application, e.g.:
+collapsed/expanded state, viewed time etc.
+
+Storing of coderef's isn't supported.
+
+=cut
+
+has 'data' => (is => 'rw', default => sub { {}; });
+
 =method interpret_result
 
 Does result interpretation in accordanse with thresholds_map. The result is boolean: true
