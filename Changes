@@ -1,3 +1,5 @@
+0.18_1    2013-11-17 01:04:49 Europe/Minsk
+
 0.18      2013-11-16 19:43:18 Europe/Minsk
     Extract Rss watcher into separate package 
        (Now, different RSS and ATOM formats are supported)

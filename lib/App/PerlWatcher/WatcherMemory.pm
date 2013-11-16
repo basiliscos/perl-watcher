@@ -1,6 +1,6 @@
 package App::PerlWatcher::WatcherMemory;
 {
-  $App::PerlWatcher::WatcherMemory::VERSION = '0.18';
+  $App::PerlWatcher::WatcherMemory::VERSION = '0.18_1';
 }
 # ABSTRACT: Represents watcher memory, which can be persisted (detached) from Watcher
 
@@ -22,6 +22,9 @@ has 'last_level'        => ( is => 'rw', default => sub { LEVEL_NOTICE; } );
 
 
 has 'active' => (is => 'rw', default => sub { 1 } );
+
+
+has 'data' => (is => 'rw', default => sub { {}; });
 
 
 sub interpret_result {
@@ -68,7 +71,7 @@ App::PerlWatcher::WatcherMemory - Represents watcher memory, which can be persis
 
 =head1 VERSION
 
-version 0.18
+version 0.18_1
 
 =head1 ATTRIBUTES
 
@@ -92,6 +95,13 @@ Represents last emitted watcher level.
 =head2 active
 
 Represents whether the watcher is active or not
+
+=head2 'data'
+
+An hashref of arbitrary to be stored within memory from front-end application, e.g.:
+collapsed/expanded state, viewed time etc.
+
+Storing of coderef's isn't supported.
 
 =head1 METHODS
 
