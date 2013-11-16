@@ -57,7 +57,7 @@ my $callback_handler = sub {
     return $scenario->[$callback_invocations++]->{res}->(@_);
 };
 
-$server = AnyEvent::HTTPD->new;
+$server = AnyEvent::HTTPD->new(host => '127.0.0.1');
 ok defined($server), "served defined";
 
 $server->reg_cb (

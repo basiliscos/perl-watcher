@@ -113,51 +113,53 @@ use utf8;
         #     },
         # },
 
-        {
-            class => 'App::PerlWatcher::Watcher::Rss',
-            config => {
-                url         =>  'http://www.opennet.ru/opennews/opennews_all.rss',
-                title       =>  'opennet',
-                frequency   => 60,
-                timeout     => 10,
-                items       =>  5,
-                on          => {
-                        ok      => { 1  => 'notice' },
-                        fail    => { 10 => 'info/max'   },
-                },
-            },
-        },
+        # please, install App::PerlWatcher::Watcher::Rss, which is been shipped
+        # via separate distribution now
+        # {
+        #     class => 'App::PerlWatcher::Watcher::Rss',
+        #     config => {
+        #         url         =>  'http://www.opennet.ru/opennews/opennews_all.rss',
+        #         title       =>  'opennet',
+        #         frequency   => 60,
+        #         timeout     => 10,
+        #         items       =>  5,
+        #         on          => {
+        #                 ok      => { 1  => 'notice' },
+        #                 fail    => { 10 => 'info/max'   },
+        #         },
+        #     },
+        # },
 
 
-        {
-            class => 'App::PerlWatcher::Watcher::Rss',
-            config => {
-                url         =>  'http://www.linux.org.ru/section-rss.jsp?section=1',
-                title       =>  'lor',
-                frequency   => 120,
-                timeout     => 10,
-                items       =>  5,
-                on          => {
-                        ok      => { 1  => 'notice' },
-                        fail    => { 10 => 'info/max'   },
-                },
-            },
-        },
+        # {
+        #     class => 'App::PerlWatcher::Watcher::Rss',
+        #     config => {
+        #         url         =>  'http://www.linux.org.ru/section-rss.jsp?section=1',
+        #         title       =>  'lor',
+        #         frequency   => 120,
+        #         timeout     => 10,
+        #         items       =>  5,
+        #         on          => {
+        #                 ok      => { 1  => 'notice' },
+        #                 fail    => { 10 => 'info/max'   },
+        #         },
+        #     },
+        # },
 
-        {
-            class => 'App::PerlWatcher::Watcher::Rss',
-            config => {
-                url         =>  'http://www.anna-news.info/rss.xml',
-                title       =>  'anna-news',
-                frequency   => 600,
-                timeout     => 60,
-                items       => 5,
-                on          => {
-                        ok      => { 1  => 'notice' },
-                        fail    => { 10 => 'info/max'   },
-                },
-            },
-        },
+        # {
+        #     class => 'App::PerlWatcher::Watcher::Rss',
+        #     config => {
+        #         url         =>  'http://www.anna-news.info/rss.xml',
+        #         title       =>  'anna-news',
+        #         frequency   => 600,
+        #         timeout     => 60,
+        #         items       => 5,
+        #         on          => {
+        #                 ok      => { 1  => 'notice' },
+        #                 fail    => { 10 => 'info/max'   },
+        #         },
+        #     },
+        # },
 
 
         {
