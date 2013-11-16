@@ -29,7 +29,6 @@ my %WriteMakefileArgs = (
     "Data::Dump" => "1.22",
     "File::ReadBackwards" => "1.05",
     "File::ShareDir::ProjectDistDir" => "v0.4.4",
-    "HTTP::Date" => "6.02",
     "IPC::Run3" => "0.045",
     "List::MoreUtils" => "0.33",
     "Moo" => "1.003000",
@@ -38,7 +37,6 @@ my %WriteMakefileArgs = (
     "Smart::Comments" => "1.000004",
     "Storable" => "2.45",
     "URI" => "1.60",
-    "XML::Simple" => "2.18",
     "XML::XPath" => "1.13",
     "aliased" => "0.31"
   },

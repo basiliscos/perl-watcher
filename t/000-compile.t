@@ -3,7 +3,7 @@ use warnings;
 
 # this test was generated with Dist::Zilla::Plugin::Test::Compile 2.036
 
-use Test::More  tests => 20 + ($ENV{AUTHOR_TESTING} ? 1 : 0);
+use Test::More  tests => 19 + ($ENV{AUTHOR_TESTING} ? 1 : 0);
 
 
 
@@ -25,7 +25,6 @@ my @module_files = (
     'App/PerlWatcher/Watcher/HTTP.pm',
     'App/PerlWatcher/Watcher/HTTPSimple.pm',
     'App/PerlWatcher/Watcher/Ping.pm',
-    'App/PerlWatcher/Watcher/Rss.pm',
     'App/PerlWatcher/Watcher/Weather.pm',
     'App/PerlWatcher/WatcherMemory.pm'
 );

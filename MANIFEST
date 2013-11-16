@@ -25,7 +25,6 @@ lib/App/PerlWatcher/Watcher/GenericExecutor.pm
 lib/App/PerlWatcher/Watcher/HTTP.pm
 lib/App/PerlWatcher/Watcher/HTTPSimple.pm
 lib/App/PerlWatcher/Watcher/Ping.pm
-lib/App/PerlWatcher/Watcher/Rss.pm
 lib/App/PerlWatcher/Watcher/Weather.pm
 lib/App/PerlWatcher/WatcherMemory.pm
 share/examples/engine.conf.example
@@ -36,8 +35,6 @@ t/002-bootstrap.t
 t/005-watcher-01-config-merge.t
 t/005-watcher-02-memory.t
 t/005-watcher-03-id.t
-t/010-rss-watcher-01-opennet.t
-t/010-rss-watcher-02-perlpodcast-with-shelf.t
 t/011-http-simple.t
 t/012-weather-watcher.t
 t/015-ping-watcher.t
@@ -47,8 +44,6 @@ t/101-engine-with-ping.t
 t/102-engine-shelf-simple-persistance.t
 t/103-engine-shelf-default-config.t
 t/data/eur-usd.csv
-t/data/opennet.ru.rss
-t/data/perlpodcast.ru.rss
 t/data/yr.no-locationforecast.xml
 t/lib/Test/PerlWatcher/AEBackend.pm
 t/lib/Test/PerlWatcher/FrontEnd.pm
