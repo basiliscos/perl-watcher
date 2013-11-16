@@ -116,7 +116,7 @@ ok $engine;
 
 my $end_var = AnyEvent->condvar;
 my $w = AnyEvent->timer (
-    after => 2.1,
+    after => 2.9,
     cb => sub {
         $engine->stop;
     }
