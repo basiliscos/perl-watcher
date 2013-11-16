@@ -1,6 +1,6 @@
 package App::PerlWatcher::Watcher;
 {
-  $App::PerlWatcher::Watcher::VERSION = '0.17_1';
+  $App::PerlWatcher::Watcher::VERSION = '0.18';
 }
 # ABSTRACT: Observes some external source of events and emits the result of polling them
 
@@ -248,7 +248,7 @@ App::PerlWatcher::Watcher - Observes some external source of events and emits th
 
 =head1 VERSION
 
-version 0.17_1
+version 0.18
 
 =head1 ATTRIBUTES
 

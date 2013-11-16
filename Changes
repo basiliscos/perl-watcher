@@ -1,4 +1,7 @@
-0.17_1    2013-11-16 19:32:27 Europe/Minsk
+0.18      2013-11-16 19:43:18 Europe/Minsk
+    Extract Rss watcher into separate package 
+       (Now, different RSS and ATOM formats are supported)
+    Make tests more tolerant on non-linux systems
 
 0.17_1    2013-11-14 00:02:30 Europe/Minsk
     Minor changes passing tests on Windows
