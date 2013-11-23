@@ -29,6 +29,7 @@ my %WriteMakefileArgs = (
     "Data::Dump" => "1.22",
     "File::ReadBackwards" => "1.05",
     "File::ShareDir::ProjectDistDir" => "v0.4.4",
+    "IPC::Cmd" => "0.90",
     "IPC::Run3" => "0.045",
     "List::MoreUtils" => "0.33",
     "Moo" => "1.003000",
