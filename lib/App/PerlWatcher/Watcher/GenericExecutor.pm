@@ -8,6 +8,7 @@ use warnings;
 use AnyEvent;
 use AnyEvent::Util;
 use Smart::Comments -ENV;
+use IPC::Cmd qw/run/;
 use Moo;
 use POSIX qw(SIGKILL);
 
@@ -38,6 +39,17 @@ with qw/App::PerlWatcher::Watcher/;
 	        ],
 	    }
      }
+
+=cut
+
+=head1 Win32 NOTES
+
+Currently, to execute the external program and capture it's output
+the IPC::Cmd::run is used. Unfortunatly, due to limitations of
+alarm function implementation on Windows.
+
+May be there would be some Windows guy, who will implement that
+via Win32::Job?
 
 =cut
 
@@ -187,28 +199,21 @@ sub build_watcher_guard {
         interval => $self->frequency,
         cb       => sub {
             my $output;
-            my $pid;
             my $timeout = $self->timeout;
-            my $cv_cmd = run_cmd
-                [$self->command, @{ $self->arguments }],
-                ">"  => \$output,
-                '$$' => \$pid;
-            my $timer; $timer = AnyEvent->timer(
-                after => $timeout,
-                cb    => sub {
-                    $output = "timeout($timeout)";
-                    $cv_cmd->send(1);
-                    undef $cv_cmd;
-                    kill SIGKILL, $pid;
-                },
-            );
-            $cv_cmd->cb(
-                sub {
-                    my $success = !shift->recv;
-                    undef $timer;
-                    $self->callback_proxy->($success, $output);
-                }
-            );
+            my $cv_cmd; $cv_cmd = fork_call {
+				my ($success, $buffer);
+				eval {
+					$success = run(
+						command => [$self->command, @{ $self->arguments }], 
+						timeout => $timeout,
+						buffer  => \$buffer);
+				};
+				($success, $success ? $buffer : $@);
+			} sub {
+				my ($success, $output) = @_;
+				undef $cv_cmd;
+				$self->callback_proxy->($success, $output);
+			};
         });
     return $guard;
 };
