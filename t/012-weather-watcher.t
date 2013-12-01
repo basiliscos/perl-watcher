@@ -53,8 +53,16 @@ my $result_handler = sub {
 my $server_handler = sub {
     return  $scenario->[$server_invocations++]->{req}->();
 };
+my $poll_started = 0;
+my $poll_callback = sub {
+    my $w = shift;
+    is "$w", "$watcher",  "watcher arg is passed to poll_callback";
+    $poll_started = 1;
+};
 my $callback_handler = sub {
-    return $scenario->[$callback_invocations++]->{res}->(@_);
+    ok $poll_started, "poll callback has been invokeed before main callback";
+    $scenario->[$callback_invocations++]->{res}->(@_);
+    $poll_started = 0;
 };
 
 $server = AnyEvent::HTTPD->new(host => '127.0.0.1');
@@ -98,6 +106,7 @@ $watcher = App::PerlWatcher::Watcher::Weather->new(
     },
     engine_config       => $engine_config,
     callback            => $callback_handler,
+    poll_callback 		=> $poll_callback,
 );
 
 ok defined($watcher), "watcher was created";

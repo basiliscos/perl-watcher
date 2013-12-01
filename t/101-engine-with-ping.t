@@ -79,11 +79,26 @@ my $scenario = [
 ];
 
 my $callback_invocations = 0;
+my $poll_started = 0;
+my $poll_callback = sub {
+    my $w = shift;
+    is "$w", $engine->watchers->[0]->unique_id,
+        "ping watcher arg is passed to poll_callback";
+    $poll_started = 1;
+    is @{ $engine->polling_watchers }, 1, "engine has polling_watchers";
+};
 my $callback_handler = sub {
-    return $scenario->[$callback_invocations++]->{res}->(@_);
+    ok $poll_started, "poll callback has been invokeed before main callback";
+    $scenario->[$callback_invocations++]->{res}->(@_);
+    $poll_started = 0;
+    is @{ $engine->polling_watchers }, 0, "engine hasn't polling_watchers";
 };
 
-my $frontend = Test::PerlWatcher::FrontEnd->new(engine => $engine, cb => $callback_handler);
+my $frontend = Test::PerlWatcher::FrontEnd->new(
+    engine    => $engine,
+    update_cb => $callback_handler,
+    poll_cb   => $poll_callback,
+);
 
 my $config = {
     defaults    => {

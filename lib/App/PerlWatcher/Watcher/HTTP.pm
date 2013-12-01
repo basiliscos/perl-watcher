@@ -54,6 +54,7 @@ sub _build_watcher_callback {
     my $self = shift;
     my $uri = $self->uri;
     my $watcher = sub {
+        $self->poll_callback->($self);
         $self -> {_guard} = http_get (scalar $uri,
             timeout => $self->timeout,
             sub {

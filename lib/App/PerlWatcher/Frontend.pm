@@ -15,6 +15,9 @@ use Moo::Role;
 requires 'update';
 
 
+requires 'poll';
+
+
 has 'engine'       => ( is => 'ro', required => 1 );
 
 1;
@@ -39,9 +42,17 @@ Holds reference to Engine
 
 =head1 METHODS
 
-=head2 start
+=head2 update
 
 The update method will be called with Status, which has been updated.
+
+ $frontend->update($status);
+
+=head2 poll
+
+The poll method will be called when watcher is polling external source
+
+ $frontend->poll($watcher);
 
 =head1 AUTHOR
 

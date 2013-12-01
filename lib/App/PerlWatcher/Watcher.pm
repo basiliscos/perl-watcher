@@ -38,6 +38,9 @@ has 'unique_id'         => ( is => 'lazy');
 has 'memory'            => ( is => 'rw');
 
 
+has 'poll_callback' => (is => 'rw', default => sub { sub{};  } );
+
+
 has 'callback'          => ( is => 'rw', required => 1);
 
 
@@ -279,10 +282,18 @@ PerlWatcher invokations (that's why the perl internal hash funciton isn't used)
 Stores current wacher state (memory). When the watcher is persisted, only it's memory
 and unique_id are stored.
 
+=head2 poll_callback
+
+The subroutine reference, which is been called before every poll of watcher external source.
+
+ $watcher->poll_callback($watcher);
+
 =head2 callback
 
-The subroutine reference, which is been called on every poll of watcher external source.
-It's argument is the State.
+The subroutine reference, which is been called after every poll of watcher external source.
+It's argument is the State, i.e.
+
+ $watcher->callback($state)
 
 =head2 watcher_guard
 

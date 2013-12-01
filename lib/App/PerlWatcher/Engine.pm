@@ -13,6 +13,7 @@ use Carp;
 use Class::Load ':all';
 use Smart::Comments -ENV;
 use File::Spec;
+use List::MoreUtils qw/first_index/;
 use Moo;
 use Path::Class qw(file);
 
@@ -39,6 +40,9 @@ has 'statuses_file'     => ( is => 'ro', default => sub {
 has 'watchers'          => ( is => 'lazy');
 
 
+has 'polling_watchers' => ( is => 'ro', default => sub{ [] });
+
+
 has 'watchers_order'    => ( is => 'lazy');
 
 
@@ -48,8 +52,16 @@ sub _build_watchers {
     my $self = shift;
     my $config = $self->config;
     my @r;
+    my $poll_callback = sub {
+        my $w = shift;
+        push @{ $self->polling_watchers }, $w;
+        $self->frontend->poll($w);
+    };
     my $engine_callback = sub {
         my $status = shift;
+        my $w_idx = first_index { $_->unique_id eq $status->watcher->unique_id }
+            @{ $self->polling_watchers };
+        splice( @{ $self->polling_watchers }, $w_idx, 1);
         AnyEvent::postpone {
             $self->frontend->update($status);
         };
@@ -63,6 +75,7 @@ sub _build_watchers {
             $watcher = $class->new(
                 engine_config => $config,
                 callback      => $engine_callback,
+                poll_callback => $poll_callback,
                 %$watcher_config
             );
             $watcher->callback($engine_callback);
@@ -238,6 +251,10 @@ $HOME/.perl-watcher/statuses-shelf.data
 
 An array_ref of Watcher instances. Watchers order is the same as it was
 defined in config
+
+=head2 polling_watchers
+
+An array_ref of Watcher instances, which currently do poll of external resource
 
 =head2 watchers_order
 
