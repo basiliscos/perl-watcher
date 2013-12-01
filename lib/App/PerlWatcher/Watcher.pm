@@ -66,10 +66,22 @@ and unique_id are stored.
 
 has 'memory'            => ( is => 'rw');
 
+=attr poll_callback
+
+The subroutine reference, which is been called before every poll of watcher external source.
+
+ $watcher->poll_callback($watcher);
+
+=cut
+
+has 'poll_callback' => (is => 'rw', default => sub { sub{};  } );
+
 =attr callback
 
-The subroutine reference, which is been called on every poll of watcher external source.
-It's argument is the State.
+The subroutine reference, which is been called after every poll of watcher external source.
+It's argument is the State, i.e.
+
+ $watcher->callback($state)
 
 =cut
 

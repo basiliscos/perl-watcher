@@ -8,13 +8,25 @@ use warnings;
 use Carp;
 use Moo::Role;
 
-=method start
+=method update
 
 The update method will be called with Status, which has been updated.
+
+ $frontend->update($status);
 
 =cut
 
 requires 'update';
+
+=method poll
+
+The poll method will be called when watcher is polling external source
+
+ $frontend->poll($watcher);
+
+=cut
+
+requires 'poll';
 
 =attr Engine
 

@@ -88,8 +88,16 @@ my $engine_config = {
         },
     ];
     my $invocations = 0;
+    my $poll_started = 0;
+    my $poll_callback = sub {
+        my $w = shift;
+        is "$w", "$watcher",  "watcher arg is passed to poll_callback";
+        $poll_started = 1;
+    };
     my $callback_handler = sub {
-        return  $scenario->[$invocations++]->(@_);
+        ok $poll_started, "poll callback has been invokeed before main callback";
+        $scenario->[$invocations++]->(@_);
+        $poll_started = 0;
     };
 
     my $ls_command = $^O eq 'MSWin32' ? "cmd" : "ls";
@@ -97,15 +105,22 @@ my $engine_config = {
 
     my %watcher_config = (
         command       => $ls_command,
-        arguments     => [@ls_command_args, catfile($tmp_dir, "a"), catfile($tmp_dir, "b")],
+        arguments     => [
+            @ls_command_args,
+            catfile($tmp_dir, "a"),
+            catfile($tmp_dir, "b")
+        ],
         timeout       => 1,
-        filter        => sub { ($_ !~ /^\.{1,2}$/) && (/\S+/) && ($_ !~ /\Q$tmp_dir\E/) },
+        filter        => sub {
+            ($_ !~ /^\.{1,2}$/) && (/\S+/) && ($_ !~ /\Q$tmp_dir\E/)
+        },
         rules         => [
             alert => sub { none { /my-database.txt/ } @_ },
             warn  => sub { any { /strange_file.txt/ } @_ },
         ],
         engine_config => $engine_config,
         callback      => $callback_handler,
+        poll_callback => $poll_callback,
     );
     $watcher = GenericExecutor->new(%watcher_config);
     my $w2 = GenericExecutor->new(%watcher_config);

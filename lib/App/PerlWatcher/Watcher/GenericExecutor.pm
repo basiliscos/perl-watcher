@@ -198,6 +198,7 @@ sub build_watcher_guard {
         after    => 0,
         interval => $self->frequency,
         cb       => sub {
+            $self->poll_callback->($self);
             my $output;
             my $timeout = $self->timeout;
             my $cv_cmd; $cv_cmd = fork_call {

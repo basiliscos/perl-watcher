@@ -10,6 +10,7 @@ use Carp;
 use Class::Load ':all';
 use Smart::Comments -ENV;
 use File::Spec;
+use List::MoreUtils qw/first_index/;
 use Moo;
 use Path::Class qw(file);
 
@@ -138,6 +139,14 @@ defined in config
 
 has 'watchers'          => ( is => 'lazy');
 
+=attr polling_watchers
+
+An array_ref of Watcher instances, which currently do poll of external resource
+
+=cut
+
+has 'polling_watchers' => ( is => 'ro', default => sub{ [] });
+
 =attr watchers_order
 
 Return an map "watcher to watcher order".
@@ -160,8 +169,16 @@ sub _build_watchers {
     my $self = shift;
     my $config = $self->config;
     my @r;
+    my $poll_callback = sub {
+        my $w = shift;
+        push @{ $self->polling_watchers }, $w;
+        $self->frontend->poll($w);
+    };
     my $engine_callback = sub {
         my $status = shift;
+        my $w_idx = first_index { $_->unique_id eq $status->watcher->unique_id }
+            @{ $self->polling_watchers };
+        splice( @{ $self->polling_watchers }, $w_idx, 1);
         AnyEvent::postpone {
             $self->frontend->update($status);
         };
@@ -175,6 +192,7 @@ sub _build_watchers {
             $watcher = $class->new(
                 engine_config => $config,
                 callback      => $engine_callback,
+                poll_callback => $poll_callback,
                 %$watcher_config
             );
             $watcher->callback($engine_callback);

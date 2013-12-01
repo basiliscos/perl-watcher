@@ -60,8 +60,16 @@ my $scenario = [
 ];
 
 my $callback_invocations = 0;
+my $poll_started = 0;
+my $poll_callback = sub {
+    my $w = shift;
+    is "$w", "$watcher",  "watcher arg is passed to poll_callback";
+    $poll_started = 1;
+};
 my $callback_handler = sub {
-    return $scenario->[$callback_invocations++]->{res}->(@_);
+    ok $poll_started, "poll callback has been invokeed before main callback";
+    $scenario->[$callback_invocations++]->{res}->(@_);
+    $poll_started = 0;
 };
 
 my $engine_config = {
@@ -83,6 +91,7 @@ $watcher = App::PerlWatcher::Watcher::Ping->new(
     timeout         => 10,
     callback        => $callback_handler,
     engine_config   => $engine_config,
+    poll_callback   => $poll_callback,
 );
 
 ok defined($watcher), "watcher was created";

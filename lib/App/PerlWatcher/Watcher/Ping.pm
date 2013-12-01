@@ -83,6 +83,7 @@ sub _icmp_watcher_callback {
     my $host = $self->host;
     my $timeout = $self->timeout;
     return sub {
+        $self->poll_callback->($self);
         fork_call {
             my $alive = ping(host => $host, timeout => $timeout);
             $alive;
@@ -97,6 +98,7 @@ sub _tcp_watcher_callback {
     my $self = shift;
     my ($host, $port ) = ( $self->host, $self->port ); 
     return sub {
+        $self->poll_callback->($self);
         tcp_connect $host, $port, sub {
             my $success = @_ != 0;
             # $! contains error
