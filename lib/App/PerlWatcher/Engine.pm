@@ -12,7 +12,7 @@ use Smart::Comments -ENV;
 use File::Spec;
 use List::MoreUtils qw/first_index/;
 use Moo;
-use Path::Class qw(file);
+use Path::Tiny;
 
 use App::PerlWatcher::Shelf;
 use App::PerlWatcher::Util::Bootstrap qw/get_home_dir/;
@@ -127,7 +127,7 @@ $HOME/.perl-watcher/statuses-shelf.data
 =cut
 
 has 'statuses_file'     => ( is => 'ro', default => sub {
-        return file(File::Spec->catfile(get_home_dir(), "statuses-shelf.data"));
+        return path(File::Spec->catfile(get_home_dir(), "statuses-shelf.data"));
     });
 
 =attr watchers

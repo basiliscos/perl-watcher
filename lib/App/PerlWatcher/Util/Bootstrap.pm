@@ -10,7 +10,7 @@ use Class::Load ':all';
 use File::Copy;
 use File::ShareDir::ProjectDistDir ':all';
 use File::Spec;
-use Path::Class qw(file dir);
+use Path::Tiny;
 
 use parent qw/Exporter/;
 
@@ -40,7 +40,7 @@ Parses perlish config file and returns an hash reference to it.
 
 sub config {
     my ($file) = @_;
-    my $content_config = file($file)->slurp(iomode => '<:encoding(UTF-8)');
+    my $content_config = path($file)->slurp_utf8;
     my $config = eval "no warnings; $content_config ";
     croak("error in config: $@") if $@ ;
     return $config;
@@ -76,7 +76,7 @@ Returns the path to PerlWatcher home directory (~/.perl-watcher).
 =cut
 
 sub get_home_dir {
-    my $home = dir(File::Spec->catfile($ENV{'HOME'}, '.perl-watcher'));
+    my $home = path(File::Spec->catfile($ENV{'HOME'}, '.perl-watcher'));
     if ( not-X $home ) {
         mkdir $home or croak("can't create $home : $!");
     }
