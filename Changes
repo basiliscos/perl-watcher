@@ -1,3 +1,5 @@
+0.18_2    2013-12-14 16:46:10 Europe/Minsk
+
 0.18_2    2013-12-01 18:59:38 Europe/Minsk
     [API] Add 'poll_callback' for watcher to notify UI that some resource is been 
     polled

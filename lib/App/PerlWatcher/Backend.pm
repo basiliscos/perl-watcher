@@ -1,6 +1,6 @@
 package App::PerlWatcher::Backend;
 {
-  $App::PerlWatcher::Backend::VERSION = '0.18_2'; # TRIAL
+  $App::PerlWatcher::Backend::VERSION = '0.18_2';
 }
 # ABSTRACT: The base role to which provides event loop (AnyEvent, PE, Gtk, KDE etc.)
 

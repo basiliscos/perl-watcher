@@ -1,6 +1,6 @@
 package App::PerlWatcher::Status;
 {
-  $App::PerlWatcher::Status::VERSION = '0.18_2'; # TRIAL
+  $App::PerlWatcher::Status::VERSION = '0.18_2';
 }
 # ABSTRACT: Represents the result of single watcher poll
 

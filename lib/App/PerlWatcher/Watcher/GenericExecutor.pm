@@ -1,6 +1,6 @@
 package App::PerlWatcher::Watcher::GenericExecutor;
 {
-  $App::PerlWatcher::Watcher::GenericExecutor::VERSION = '0.18_2'; # TRIAL
+  $App::PerlWatcher::Watcher::GenericExecutor::VERSION = '0.18_2';
 }
 # ABSTRACT: Watches for the output of execution of arbitrary command.
 

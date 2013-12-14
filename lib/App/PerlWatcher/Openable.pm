@@ -1,6 +1,6 @@
 package App::PerlWatcher::Openable;
 {
-  $App::PerlWatcher::Openable::VERSION = '0.18_2'; # TRIAL
+  $App::PerlWatcher::Openable::VERSION = '0.18_2';
 }
 # ABSTRACT: The base role to to allow item to be openable in system browser
 

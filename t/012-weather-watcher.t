@@ -8,7 +8,7 @@ use AnyEvent;
 use AnyEvent::HTTPD;
 use Smart::Comments;
 use File::Basename;
-use Path::Class qw(file);
+use Path::Tiny;
 use Test::More;
 
 use App::PerlWatcher::Levels;
@@ -19,8 +19,8 @@ my $b = 0;
 my $server;
 
 sub getWeather {
-    my $file = file(dirname(__FILE__) . "/data/yr.no-locationforecast.xml");
-    return scalar $file->slurp(iomode => '<:encoding(UTF-8)');
+    my $file = path(dirname(__FILE__) . "/data/yr.no-locationforecast.xml");
+    return scalar $file->slurp_utf8;
 }
 
 

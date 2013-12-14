@@ -1,6 +1,6 @@
 package App::PerlWatcher::Engine;
 {
-  $App::PerlWatcher::Engine::VERSION = '0.18_2'; # TRIAL
+  $App::PerlWatcher::Engine::VERSION = '0.18_2';
 }
 # ABSTRACT: Creates Watchers and lets them  notify Frontend with their's Statuses
 
@@ -15,7 +15,7 @@ use Smart::Comments -ENV;
 use File::Spec;
 use List::MoreUtils qw/first_index/;
 use Moo;
-use Path::Class qw(file);
+use Path::Tiny;
 
 use App::PerlWatcher::Shelf;
 use App::PerlWatcher::Util::Bootstrap qw/get_home_dir/;
@@ -33,7 +33,7 @@ has 'backend'           => ( is => 'ro', required => 1);
 
 
 has 'statuses_file'     => ( is => 'ro', default => sub {
-        return file(File::Spec->catfile(get_home_dir(), "statuses-shelf.data"));
+        return path(File::Spec->catfile(get_home_dir(), "statuses-shelf.data"));
     });
 
 

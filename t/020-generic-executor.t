@@ -9,7 +9,7 @@ use Smart::Comments -ENV;
 use File::Spec::Functions;
 use File::Temp qw/ tempdir /;
 use List::MoreUtils qw/any none/;
-use Path::Class qw/file/;
+use Path::Tiny;
 use Test::More;
 
 use App::PerlWatcher::Levels;
@@ -32,9 +32,9 @@ my $engine_config = {
 
     mkdir catfile($tmp_dir, "a") or die($@);
     mkdir catfile($tmp_dir, "b") or die($@);
-    my $file_database = file(catfile($tmp_dir, "a", "my-database.txt"));
-    my $file_X        = file(catfile($tmp_dir, "b", "X.txt"));
-    my $file_strage   = file(catfile($tmp_dir, "b", "strange_file.txt"));
+    my $file_database = path(catfile($tmp_dir, "a", "my-database.txt"));
+    my $file_X        = path(catfile($tmp_dir, "b", "X.txt"));
+    my $file_strage   = path(catfile($tmp_dir, "b", "strange_file.txt"));
 
     $_->spew("data")
         for ($file_database, $file_X);
