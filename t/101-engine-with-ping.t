@@ -36,10 +36,11 @@ my $server = Test::TCP->new(
         Proto => 'tcp',
         Listen => 1,
     ) or croak ("ERROR in Socket Creation : $!");
-    while(1) {
+    for(1..2) {
         my $client_socket = $socket->accept();
         $client_socket->close();
     }
+	AE::cv->recv;
   },
 );
 
@@ -117,7 +118,7 @@ my $config = {
             config => {
                 host    =>  '127.0.0.1',
                 port    =>  $server->port,
-                frequency   =>  1,
+                frequency   =>  2,
             },
         },
     ],
@@ -131,7 +132,7 @@ ok $engine;
 
 my $end_var = AnyEvent->condvar;
 my $w = AnyEvent->timer (
-    after => 2.9,
+    after => 5.9,
     cb => sub {
         $engine->stop;
     }
