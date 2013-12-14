@@ -1,4 +1,7 @@
-0.18_2    2013-12-14 16:46:10 Europe/Minsk
+0.18_3    2013-12-14 16:54:27 Europe/Minsk
+    [API] Migrate from Path::Class to Path::Tiny usage
+    [Fix] Let t/101-engine-with-ping.t pass tests on Windows by using the recent
+    Path::Tiny version
 
 0.18_2    2013-12-01 18:59:38 Europe/Minsk
     [API] Add 'poll_callback' for watcher to notify UI that some resource is been 

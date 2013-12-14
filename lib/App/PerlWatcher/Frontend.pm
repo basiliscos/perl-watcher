@@ -1,6 +1,6 @@
 package App::PerlWatcher::Frontend;
 {
-  $App::PerlWatcher::Frontend::VERSION = '0.18_2';
+  $App::PerlWatcher::Frontend::VERSION = '0.18_3'; # TRIAL
 }
 # ABSTRACT: The base role to which will be notified of updated watcher statuses. 
 
@@ -32,7 +32,7 @@ App::PerlWatcher::Frontend - The base role to which will be notified of updated 
 
 =head1 VERSION
 
-version 0.18_2
+version 0.18_3
 
 =head1 ATTRIBUTES
 
