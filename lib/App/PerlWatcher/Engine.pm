@@ -1,6 +1,6 @@
 package App::PerlWatcher::Engine;
 {
-  $App::PerlWatcher::Engine::VERSION = '0.18_3'; # TRIAL
+  $App::PerlWatcher::Engine::VERSION = '0.19';
 }
 # ABSTRACT: Creates Watchers and lets them  notify Frontend with their's Statuses
 
@@ -20,6 +20,7 @@ use Path::Tiny;
 use App::PerlWatcher::Shelf;
 use App::PerlWatcher::Util::Bootstrap qw/get_home_dir/;
 use App::PerlWatcher::Util::Storable qw/freeze thaw/;
+
 
 
 
@@ -151,7 +152,7 @@ App::PerlWatcher::Engine - Creates Watchers and lets them  notify Frontend with 
 
 =head1 VERSION
 
-version 0.18_3
+version 0.19
 
 =head1 SYNOPSIS
 
@@ -281,6 +282,12 @@ and shelf)
 
 Helper method which sorts statuses in accordance with theirs watchers
 order
+
+=head1 GTK2 FRONTEND SCREENSHOT
+
+=for HTML <p>
+<img src="https://raw.github.com/basiliscos/images/master/PerlWatcher-0.16.png" alt="PerlWatcher GTK2 screenshot" title="PerlWatcher GTK2 screenshot" style="max-width:100%;">
+</p>
 
 =head1 CREDITS
 

@@ -41,4 +41,4 @@ requires:
   perl: 5.012
 resources:
   repository: https://github.com/basiliscos/perl-watcher.git
-version: 0.18_3
+version: 0.19

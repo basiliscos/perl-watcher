@@ -1,6 +1,6 @@
 package App::PerlWatcher::Watcher::HTTP;
 {
-  $App::PerlWatcher::Watcher::HTTP::VERSION = '0.18_3'; # TRIAL
+  $App::PerlWatcher::Watcher::HTTP::VERSION = '0.19';
 }
 # ABSTRACT: The base role for watching external events via HTTP
 
@@ -122,7 +122,7 @@ App::PerlWatcher::Watcher::HTTP - The base role for watching external events via
 
 =head1 VERSION
 
-version 0.18_3
+version 0.19
 
 =head1 ATTRIBUTES
 

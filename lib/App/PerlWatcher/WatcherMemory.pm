@@ -1,6 +1,6 @@
 package App::PerlWatcher::WatcherMemory;
 {
-  $App::PerlWatcher::WatcherMemory::VERSION = '0.18_3'; # TRIAL
+  $App::PerlWatcher::WatcherMemory::VERSION = '0.19';
 }
 # ABSTRACT: Represents watcher memory, which can be persisted (detached) from Watcher
 
@@ -71,7 +71,7 @@ App::PerlWatcher::WatcherMemory - Represents watcher memory, which can be persis
 
 =head1 VERSION
 
-version 0.18_3
+version 0.19
 
 =head1 ATTRIBUTES
 
