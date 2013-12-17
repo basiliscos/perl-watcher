@@ -1,4 +1,6 @@
 {{$NEXT}}
+
+0.18_3    2013-12-14 16:54:27 Europe/Minsk
     [API] Migrate from Path::Class to Path::Tiny usage
     [Fix] Let t/101-engine-with-ping.t pass tests on Windows by using the recent
     Path::Tiny version

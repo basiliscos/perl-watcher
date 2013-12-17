@@ -93,6 +93,18 @@ use App::PerlWatcher::Util::Storable qw/freeze thaw/;
 
 =cut
 
+=head1 GTK2 FRONTEND SCREENSHOT
+
+=begin HTML
+
+<p>
+<img src="https://raw.github.com/basiliscos/images/master/PerlWatcher-0.16.png" alt="PerlWatcher GTK2 screenshot" title="PerlWatcher GTK2 screenshot" style="max-width:100%;">
+</p>
+
+=end HTML
+
+=cut
+
 =head1 DESCRIPTION
 
 The more detailed description of PerlWatcher application can be found here:
