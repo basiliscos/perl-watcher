@@ -1,4 +1,6 @@
 {{$NEXT}}
+    Now, it should pass all tests on windows. (No changes since 0.18_3
+    except added Gtk2+ Frontend Screenshot)
 
 0.18_3    2013-12-14 16:54:27 Europe/Minsk
     [API] Migrate from Path::Class to Path::Tiny usage
