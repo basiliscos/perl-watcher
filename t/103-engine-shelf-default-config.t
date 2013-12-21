@@ -12,6 +12,7 @@ use File::Temp qw/ tempdir /;
 use List::Util qw/first/;
 use Test::More;
 use Test::TCP;
+use Test::Warnings;
 
 use aliased 'App::PerlWatcher::Engine';
 use App::PerlWatcher::Levels;

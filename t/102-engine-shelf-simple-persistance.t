@@ -6,6 +6,7 @@ use warnings;
 
 use File::Temp qw/ tempdir /;
 use Test::More;
+use Test::Warnings;
 
 use aliased 'App::PerlWatcher::Engine';
 use App::PerlWatcher::EventItem;

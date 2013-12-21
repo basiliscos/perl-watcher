@@ -6,6 +6,7 @@ use warnings;
 
 use Smart::Comments;
 use Test::More;
+use Test::Warnings;
 
 use FindBin;
 BEGIN { unshift @INC, "$FindBin::Bin/lib" }

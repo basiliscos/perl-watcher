@@ -6,6 +6,7 @@ use warnings;
 
 use Smart::Comments;
 use Test::More;
+use Test::Warnings;
 
 use App::PerlWatcher::Levels;
 use App::PerlWatcher::Status;

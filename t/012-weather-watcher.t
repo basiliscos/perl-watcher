@@ -10,6 +10,7 @@ use Smart::Comments;
 use File::Basename;
 use Path::Tiny;
 use Test::More;
+use Test::Warnings;
 
 use App::PerlWatcher::Levels;
 use App::PerlWatcher::Status;

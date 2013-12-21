@@ -5,6 +5,7 @@ use strict;
 use warnings;
 
 use Test::More;
+use Test::Warnings;
 
 use App::PerlWatcher::Levels;
 use App::PerlWatcher::Status;

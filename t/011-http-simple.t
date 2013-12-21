@@ -9,6 +9,7 @@ use AnyEvent::HTTPD;
 use Smart::Comments;
 use File::Basename;
 use Test::More;
+use Test::Warnings;
 
 use App::PerlWatcher::Levels;
 use App::PerlWatcher::Status;

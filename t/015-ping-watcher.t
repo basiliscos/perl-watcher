@@ -12,6 +12,7 @@ use File::Basename;
 use Net::Ping::External qw(ping);
 use Test::More;
 use Test::TCP;
+use Test::Warnings;
 
 my $server = Test::TCP->new(
   code => sub {
