@@ -85,11 +85,10 @@ is_deeply $thawed_shelf->statuses->{$s1->watcher}->items()->(), $items;
 # check that watcher's memory is restored
 $engine = Engine->new(config => $config, backend => $backend);
 $watcher = $engine->watchers->[0];
-my $memory = $watcher->memory;
-is $memory->interpret_result(1), LEVEL_NOTICE;
-is $memory->interpret_result(1), LEVEL_INFO;
-is $memory->last_level, LEVEL_INFO;
-$memory->data->{some_key} = { a => "some data"};
+is $watcher->_interpret_result_as_level(1), LEVEL_NOTICE;
+is $watcher->_interpret_result_as_level(1), LEVEL_INFO;
+is $watcher->last_level, LEVEL_INFO;
+$watcher->memory->data->{some_key} = { a => "some data"};
 $serialized = freeze($engine);
 $engine = Engine->new(config => $config, backend => $backend);
 
@@ -98,7 +97,7 @@ ok thaw($engine, $serialized);
 $thawed_shelf = $engine->shelf;
 $watcher = $engine->watchers->[0];
 ok $watcher;
-is $watcher->memory->last_level, LEVEL_INFO;
+is $watcher->last_level, LEVEL_INFO;
 is $watcher->memory->data->{some_key}->{a}, "some data", "data in memory has been restored";
 
 # change the config -> no wather and event should be restored

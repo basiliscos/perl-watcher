@@ -10,61 +10,77 @@ use Test::Warnings;
 
 use App::PerlWatcher::Levels;
 use App::PerlWatcher::Status;
-use App::PerlWatcher::Watcher;
-use App::PerlWatcher::WatcherMemory;
+
+use FindBin;
+BEGIN { unshift @INC, "$FindBin::Bin/lib" }
+
+use Test::PerlWatcher::TestWatcher;
 
 my $engine_config = {
-    fail => { 
-        3   =>  'info',
-        5   =>  'alert',
-    },
-    ok  => { 3 => 'notice' },
+    defaults => {
+        behaviour => {
+            fail => {
+                3   =>  'info',
+                5   =>  'alert',
+            },
+            ok  => { 3 => 'notice' },
+        }
+    }
 };
 
-my $map = App::PerlWatcher::Watcher::calculate_threshods($engine_config, {});
-ok $map, "thresholds map has been defined";
-
-my $wm = App::PerlWatcher::WatcherMemory->new(thresholds_map=>$map);
-
-is $wm->interpret_result(1), LEVEL_NOTICE;
-is $wm->interpret_result(1), LEVEL_NOTICE;
-is $wm->interpret_result(1), LEVEL_NOTICE;
-
-is $wm->interpret_result(0), LEVEL_NOTICE;
-is $wm->interpret_result(0), LEVEL_NOTICE;
-is $wm->interpret_result(0), LEVEL_INFO;
-is $wm->interpret_result(0), LEVEL_INFO;
-is $wm->interpret_result(0), LEVEL_ALERT;
-is $wm->interpret_result(0), LEVEL_ALERT;
-is $wm->interpret_result(1), LEVEL_ALERT;
-is $wm->interpret_result(1), LEVEL_ALERT;
-is $wm->interpret_result(1), LEVEL_NOTICE;
-is $wm->interpret_result(0), LEVEL_NOTICE;
-is $wm->interpret_result(0), LEVEL_NOTICE;
-is $wm->interpret_result(0), LEVEL_INFO;
-
-my %specific_config = (
-    fail => { 
-        2   =>  'info/max',
-    },
-    ok  => { 1 => 'notice' },
+my $w = Test::PerlWatcher::TestWatcher->new(
+    engine_config => $engine_config,
+    callback      => sub { ... },
 );
 
-$map = App::PerlWatcher::Watcher::calculate_threshods(\%specific_config, $engine_config);
-$wm = App::PerlWatcher::WatcherMemory->new(thresholds_map=>$map);
 
-is $wm->interpret_result(1), LEVEL_NOTICE;
-is $wm->interpret_result(1), LEVEL_NOTICE;
-is $wm->interpret_result(1), LEVEL_NOTICE;
+my $map = $w->thresholds_map;
+ok $map, "thresholds map has been defined";
 
-is $wm->interpret_result(0), LEVEL_NOTICE;
-is $wm->interpret_result(0), LEVEL_INFO;
-is $wm->interpret_result(0), LEVEL_INFO;
-is $wm->interpret_result(0), LEVEL_INFO;
-is $wm->interpret_result(0), LEVEL_INFO;
-is $wm->interpret_result(0), LEVEL_INFO;
-is $wm->interpret_result(0), LEVEL_INFO;
-is $wm->interpret_result(0), LEVEL_INFO;
+is $w->_interpret_result_as_level(1), LEVEL_NOTICE;
+is $w->_interpret_result_as_level(1), LEVEL_NOTICE;
+is $w->_interpret_result_as_level(1), LEVEL_NOTICE;
+
+is $w->_interpret_result_as_level(0), LEVEL_NOTICE;
+is $w->_interpret_result_as_level(0), LEVEL_NOTICE;
+is $w->_interpret_result_as_level(0), LEVEL_INFO;
+is $w->_interpret_result_as_level(0), LEVEL_INFO;
+is $w->_interpret_result_as_level(0), LEVEL_ALERT;
+is $w->_interpret_result_as_level(0), LEVEL_ALERT;
+is $w->_interpret_result_as_level(1), LEVEL_ALERT;
+is $w->_interpret_result_as_level(1), LEVEL_ALERT;
+is $w->_interpret_result_as_level(1), LEVEL_NOTICE;
+is $w->_interpret_result_as_level(0), LEVEL_NOTICE;
+is $w->_interpret_result_as_level(0), LEVEL_NOTICE;
+is $w->_interpret_result_as_level(0), LEVEL_INFO;
+
+my %specific_config = (
+    on => {
+        fail => {
+            2   =>  'info/max',
+        },
+        ok  => { 1 => 'notice' },
+    }
+);
+
+$w = Test::PerlWatcher::TestWatcher->new(
+    engine_config => $engine_config,
+    callback      => sub { ... },
+    %specific_config,
+);
+
+is $w->_interpret_result_as_level(1), LEVEL_NOTICE;
+is $w->_interpret_result_as_level(1), LEVEL_NOTICE;
+is $w->_interpret_result_as_level(1), LEVEL_NOTICE;
+
+is $w->_interpret_result_as_level(0), LEVEL_NOTICE;
+is $w->_interpret_result_as_level(0), LEVEL_INFO;
+is $w->_interpret_result_as_level(0), LEVEL_INFO;
+is $w->_interpret_result_as_level(0), LEVEL_INFO;
+is $w->_interpret_result_as_level(0), LEVEL_INFO;
+is $w->_interpret_result_as_level(0), LEVEL_INFO;
+is $w->_interpret_result_as_level(0), LEVEL_INFO;
+is $w->_interpret_result_as_level(0), LEVEL_INFO;
 
 done_testing();
 

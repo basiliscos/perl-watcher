@@ -4,6 +4,7 @@ package App::PerlWatcher::Watcher::HTTPSimple;
 use 5.12.0;
 use strict;
 use warnings;
+use utf8;
 
 use App::PerlWatcher::EventItem;
 use Carp;

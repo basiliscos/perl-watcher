@@ -71,7 +71,7 @@ my $scenario = [
             my $status = shift;
             is $status->level, LEVEL_INFO;
             $end_var->send;
-            $watcher->active(0);
+            $watcher->activate(0);
         },
     },
 
