@@ -11,6 +11,7 @@ use File::Temp qw/ tempdir /;
 use List::MoreUtils qw/any none/;
 use Path::Tiny;
 use Test::More;
+use Test::Warnings;
 
 use App::PerlWatcher::Levels;
 use aliased qw/App::PerlWatcher::Watcher::GenericExecutor/;

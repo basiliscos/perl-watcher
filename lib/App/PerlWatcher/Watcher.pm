@@ -10,7 +10,8 @@ use warnings;
 
 use App::PerlWatcher::Levels;
 use App::PerlWatcher::Status;
-use aliased 'App::PerlWatcher::WatcherMemory';
+use App::PerlWatcher::WatcherMemory qw /memory_patch/;
+
 use Carp;
 use Data::Dump::Filtered qw/dump_filtered/;
 use Smart::Comments -ENV;
@@ -38,6 +39,15 @@ has 'unique_id'         => ( is => 'lazy');
 has 'memory'            => ( is => 'rw');
 
 
+memory_patch(__PACKAGE__, 'active');
+
+
+memory_patch(__PACKAGE__, 'thresholds_map');
+
+
+memory_patch(__PACKAGE__, 'last_level');
+
+
 has 'poll_callback' => (is => 'rw', default => sub { sub{};  } );
 
 
@@ -54,7 +64,10 @@ use overload fallback => 1, q/""/ => sub { $_[0]->unique_id; };
 sub BUILD {
     my ($self, $init_args) = @_;
     $self->init_args($init_args);
-    $self->memory($self->_build_memory);
+    $self->memory(App::PerlWatcher::WatcherMemory->new);
+    $self->_init_thresholds_map;
+    $self->active(1);
+    $self->last_level(LEVEL_NOTICE);
 }
 
 sub _build_config {
@@ -67,14 +80,14 @@ sub _build_config {
     return \%config;
 }
 
-sub _build_memory {
+sub _init_thresholds_map {
     my $self = shift;
     my ( $l, $r ) = (
         $self->config        -> {on} // {},
         $self->engine_config -> {defaults}->{behaviour},
     );
     my $map = calculate_threshods($l, $r);
-    return WatcherMemory->new(thresholds_map=>$map);
+    $self->thresholds_map($map);
 }
 
 sub _build_unique_id {
@@ -106,27 +119,27 @@ sub _build_unique_id {
 
 sub force_poll {
     my $self = shift;
-    $self->active(0);
-    $self->active(1);
+    $self->activate(0);
+    $self->activate(1);
 }
 
 
-sub active {
+sub activate {
     my ( $self, $value ) = @_;
     if ( defined($value) ) {
-        $self->memory->active($value);
+        $self->active($value);
         $self->watcher_guard(undef)
             unless $value;
         $self->start if $value;
     }
-    return $self->memory->active;
+    return $self->active;
 }
 
 
 sub start {
     my $self = shift;
     $self->watcher_guard( $self->build_watcher_guard )
-        if $self->memory->active;
+        if $self->active;
 }
 
 
@@ -204,9 +217,43 @@ sub _merge {
 sub interpret_result {
     my ($self, $result, $callback, $items) = @_;
 
-    my $level = $self->memory->interpret_result($result);
-
+    my $level = $self->_interpret_result_as_level($result);
     $self->_emit_event($level, $callback, $items);
+}
+
+sub _interpret_result_as_level {
+    my ($self, $result) = @_;
+    my $threshold_map = $self->thresholds_map;
+
+    $self->memory->data->{_last_result} //= $result;
+    my ($meta_key, $opposite_key)
+        = $result ? ('ok',   'fail')
+                  : ('fail',  'ok' );
+
+    my $counter_key          =  "_$meta_key" . "_counter";
+    my $opposite_counter_key =  "_$opposite_key" . "_counter";
+
+    my $result_changed = $self->memory->data->{_last_result} ne $result;
+    # reset values
+    if ($result_changed) {
+        $self->memory->data->{$counter_key}
+            = $self->memory->data->{$opposite_counter_key}
+            = 0;
+    }
+    my $counter = ++$self->memory->data->{$counter_key};
+
+    my @levels = sort keys (%{ $threshold_map -> {$meta_key} });
+    # @levels
+    # $counter
+    my $level_key = max grep { $_ <= $counter } @levels;
+    # $level_key
+    if ( defined $level_key ) {
+        my $new_level = $threshold_map->{$meta_key}->{$level_key};
+        $self->last_level($new_level);
+    }
+    $self->memory->data->{_last_result} = $result;
+
+    return $self->last_level;
 }
 
 sub _emit_event {
@@ -282,6 +329,27 @@ PerlWatcher invokations (that's why the perl internal hash funciton isn't used)
 Stores current wacher state (memory). When the watcher is persisted, only it's memory
 and unique_id are stored.
 
+=head2 active
+
+Memorizable attribute, defines, weather the current watcher is active
+
+=head2 thresholds_map
+
+The memorizable map, which represents how to interpret successul or
+unsuccessful result, i.e. which level of severity it is. It looks like:
+
+ my $map = {
+    fail => { 
+        3   =>  'info',
+        5   =>  'alert',
+    },
+    ok  => { 3 => 'notice' },
+ };
+
+=head2 last_level
+
+Represents last emitted watcher level. 
+
 =head2 poll_callback
 
 The subroutine reference, which is been called before every poll of watcher external source.
@@ -310,9 +378,9 @@ The method is responsible for building watcher_guard
 
 Immediatly polls the watched object.
 
-=head2 active
+=head2 activate
 
-Turns on and off the wacher.
+Turns on and off the wacher, remembering the state in memory
 
 =head2 start
 

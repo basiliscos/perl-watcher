@@ -1,3 +1,5 @@
+0.19      2013-12-22 18:02:49 Europe/Minsk
+
 0.19      2013-12-18 02:06:43 Europe/Minsk
     Now, it should pass all tests on windows. (No changes since 0.18_3
     except added Gtk2+ Frontend Screenshot)

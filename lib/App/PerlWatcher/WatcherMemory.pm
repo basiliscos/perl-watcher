@@ -9,55 +9,39 @@ use strict;
 use warnings;
 
 use Carp;
-use List::Util qw( max );
 use Moo;
 
-use App::PerlWatcher::Levels;
+use parent qw/Exporter/;
 
+our @EXPORT_OK = qw/memory_patch/;
 
-has 'thresholds_map'    => ( is => 'ro', required => 1);
-
-
-has 'last_level'        => ( is => 'rw', default => sub { LEVEL_NOTICE; } );
-
-
-has 'active' => (is => 'rw', default => sub { 1 } );
 
 
 has 'data' => (is => 'rw', default => sub { {}; });
 
-
-sub interpret_result {
-    my ($self, $result) = @_;
-    my $threshold_map = $self -> thresholds_map;
-
-    $self -> {_last_result} //= $result;
-    my ($meta_key, $opposite_key)
-        = $result ? ('ok',   'fail')
-                  : ('fail',  'ok' );
-
-    my $counter_key          =  "_$meta_key" . "_counter";
-    my $opposite_counter_key =  "_$opposite_key" . "_counter";
-
-    my $result_changed = $self -> {_last_result} ne $result;
-    # reset values
-    @$self{ ($counter_key, $opposite_counter_key) } = (0,0)
-        if ($result_changed);
-    my $counter = ++$self -> {$counter_key};
-
-    my @levels = sort keys (%{ $threshold_map -> {$meta_key} });
-    # @levels
-    # $counter
-    my $level_key = max grep { $_ <= $counter } @levels;
-    # $level_key
-    if ( defined $level_key ) {
-        my $new_level = $threshold_map -> {$meta_key} -> {$level_key};
-        $self->last_level($new_level);
-    }
-    $self -> {_last_result} = $result;
-
-    return $self->last_level;
+sub _monkey_patch {
+    my ($class, %patch) = @_;
+    no strict 'refs';
+    no warnings 'redefine';
+    *{"${class}::$_"} = $patch{$_} for keys %patch;
 }
+
+
+sub memory_patch {
+    my ($class, @attributes) = @_;
+    my %patch;
+    for my $a (@attributes) {
+        $patch{$a} = sub {
+            my ($self, $value) = @_;
+            my $memory = $self->memory;
+            $memory->data->{$a} = $value
+                if(defined $value);
+            $memory->data->{$a};
+        }
+    }
+    _monkey_patch $class, %patch;
+}
+
 
 1;
 
@@ -75,40 +59,23 @@ version 0.19
 
 =head1 ATTRIBUTES
 
-=head2 thresholds_map
-
-The map, which represents how to interpret successul or unsuccessful result, i.e.
-which level of severity it is. It looks like:
-
- my $map = {
-    fail => { 
-        3   =>  'info',
-        5   =>  'alert',
-    },
-    ok  => { 3 => 'notice' },
- };
-
-=head2 last_level
-
-Represents last emitted watcher level. 
-
-=head2 active
-
-Represents whether the watcher is active or not
-
 =head2 'data'
 
-An hashref of arbitrary to be stored within memory from front-end application, e.g.:
-collapsed/expanded state, viewed time etc.
+An hashref of arbitrary to be stored within memory.
 
 Storing of coderef's isn't supported.
 
-=head1 METHODS
+=head1 FUNCTIONS
 
-=head2 interpret_result
+=head2 memory_patch
 
-Does result interpretation in accordanse with thresholds_map. The result is boolean: true
-or false (or coerced to them). Returns the resulting level of interpretation.
+Adds setters and getters for the current package whichi are
+proxied by $memory->data of current package, e.g. 
+
+ memory_patch(__PACKAGE__, 'active'); # adds 'active' memorizable attribute
+
+The method assumes, that current the provided package has
+'memory' Moo attribute.
 
 =head1 AUTHOR
 

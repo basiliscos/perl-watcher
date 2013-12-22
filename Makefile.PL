@@ -48,7 +48,8 @@ my %WriteMakefileArgs = (
     "IO::Handle" => 0,
     "IPC::Open3" => 0,
     "Test::More" => 0,
-    "Test::TCP" => "1.26"
+    "Test::TCP" => "1.26",
+    "Test::Warnings" => "0.013"
   },
   "VERSION" => "0.19",
   "test" => {

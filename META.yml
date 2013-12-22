@@ -10,6 +10,7 @@ build_requires:
   IPC::Open3: 0
   Test::More: 0
   Test::TCP: 1.26
+  Test::Warnings: 0.013
 configure_requires:
   ExtUtils::MakeMaker: 6.72
   File::ShareDir::Install: 0.03

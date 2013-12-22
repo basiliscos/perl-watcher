@@ -9,8 +9,10 @@ use Carp;
 use Smart::Comments;
 use IO::Socket::INET;
 use File::Basename;
+use Net::Ping::External qw(ping);
 use Test::More;
 use Test::TCP;
+use Test::Warnings;
 
 my $server = Test::TCP->new(
   code => sub {
@@ -106,7 +108,9 @@ ok !$s2->updated_from($s2);
 $watcher->active(0);
 
 # testing icmp ping of localhost
-{
+SKIP: {
+    skip "localhost isn't pingable", 1 
+        unless ping(host => 'localhost', timeout => 2);
     my $succesful_icmp_ping = 0;
     my $end_var =  AnyEvent->condvar;
     my $cb = sub {

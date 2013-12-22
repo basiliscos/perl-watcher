@@ -11,6 +11,7 @@ use File::Basename;
 use File::Temp qw/ tempdir /;
 use Test::More;
 use Test::TCP;
+use Test::Warnings;
 
 use aliased 'App::PerlWatcher::Engine';
 use aliased 'App::PerlWatcher::Frontend';
