@@ -6,8 +6,8 @@ use strict;
 use warnings;
 
 use App::PerlWatcher::Levels;
+use App::PerlWatcher::Memory qw /memory_patch/;
 use App::PerlWatcher::Status;
-use App::PerlWatcher::WatcherMemory qw /memory_patch/;
 
 use Carp;
 use Data::Dump::Filtered qw/dump_filtered/;
@@ -143,7 +143,7 @@ use overload fallback => 1, q/""/ => sub { $_[0]->unique_id; };
 sub BUILD {
     my ($self, $init_args) = @_;
     $self->init_args($init_args);
-    $self->memory(App::PerlWatcher::WatcherMemory->new);
+    $self->memory(App::PerlWatcher::Memory->new);
     $self->_init_thresholds_map;
     $self->active(1);
     $self->last_level(LEVEL_NOTICE);

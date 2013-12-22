@@ -1,5 +1,5 @@
-package App::PerlWatcher::WatcherMemory;
-# ABSTRACT: Represents watcher memory, which can be persisted (detached) from Watcher
+package App::PerlWatcher::Memory;
+# ABSTRACT: Represents memory, which can be persisted (detached) for it's owner
 
 use 5.12.0;
 use strict;
@@ -32,7 +32,7 @@ sub _monkey_patch {
 
 =func memory_patch
 
-Adds setters and getters for the current package whichi are
+Adds setters and getters for the current package which are
 proxied by $memory->data of current package, e.g. 
 
  memory_patch(__PACKAGE__, 'active'); # adds 'active' memorizable attribute
