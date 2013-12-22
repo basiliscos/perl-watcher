@@ -9,10 +9,22 @@ use strict;
 use warnings;
 
 use Moo;
+use App::PerlWatcher::Memory qw /memory_patch/;
 
-has 'content'   => ( is => 'ro', required => 1 );
 
-has 'timestamp' => ( is => 'ro', default => sub{ time; } );
+with qw/App::PerlWatcher::Memorizable/;
+
+
+memory_patch(__PACKAGE__, 'content');
+
+
+memory_patch(__PACKAGE__, 'timestamp');
+
+sub BUILD {
+    my ($self, $init_args) = @_;
+    $self->content($init_args->{content});
+    $self->timestamp(time) unless($self->timestamp);
+}
 
 1;
 
@@ -32,7 +44,7 @@ version 0.19
 
 =head2 content
 
-Contains string description of particular event
+Contains string description of particular event. Required.
 
 =head2 content
 

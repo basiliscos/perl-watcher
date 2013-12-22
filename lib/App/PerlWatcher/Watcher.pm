@@ -9,8 +9,8 @@ use strict;
 use warnings;
 
 use App::PerlWatcher::Levels;
+use App::PerlWatcher::Memory qw /memory_patch/;
 use App::PerlWatcher::Status;
-use App::PerlWatcher::WatcherMemory qw /memory_patch/;
 
 use Carp;
 use Data::Dump::Filtered qw/dump_filtered/;
@@ -22,6 +22,7 @@ use Storable qw/freeze/;
 use Moo::Role;
 
 with qw/App::PerlWatcher::Describable/;
+with qw/App::PerlWatcher::Memorizable/;
 
 
 has 'engine_config'     => ( is => 'ro', required => 1);
@@ -34,9 +35,6 @@ has 'config'            => ( is => 'lazy');
 
 
 has 'unique_id'         => ( is => 'lazy');
-
-
-has 'memory'            => ( is => 'rw');
 
 
 memory_patch(__PACKAGE__, 'active');
@@ -64,7 +62,6 @@ use overload fallback => 1, q/""/ => sub { $_[0]->unique_id; };
 sub BUILD {
     my ($self, $init_args) = @_;
     $self->init_args($init_args);
-    $self->memory(App::PerlWatcher::WatcherMemory->new);
     $self->_init_thresholds_map;
     $self->active(1);
     $self->last_level(LEVEL_NOTICE);
@@ -323,11 +320,6 @@ watcher can be used to as hash key. unique_id is also used when the
 PerlWatcher state is been persisted : the watcher itself isn't stored, but
 it's unique_id is stored. That guarantees that unique_id is the same between
 PerlWatcher invokations (that's why the perl internal hash funciton isn't used)
-
-=head2 memory
-
-Stores current wacher state (memory). When the watcher is persisted, only it's memory
-and unique_id are stored.
 
 =head2 active
 

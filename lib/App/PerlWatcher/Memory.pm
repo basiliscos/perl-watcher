@@ -1,8 +1,8 @@
-package App::PerlWatcher::WatcherMemory;
+package App::PerlWatcher::Memory;
 {
-  $App::PerlWatcher::WatcherMemory::VERSION = '0.19';
+  $App::PerlWatcher::Memory::VERSION = '0.19';
 }
-# ABSTRACT: Represents watcher memory, which can be persisted (detached) from Watcher
+# ABSTRACT: Represents memory, which can be persisted (detached) for it's owner
 
 use 5.12.0;
 use strict;
@@ -51,7 +51,7 @@ __END__
 
 =head1 NAME
 
-App::PerlWatcher::WatcherMemory - Represents watcher memory, which can be persisted (detached) from Watcher
+App::PerlWatcher::Memory - Represents memory, which can be persisted (detached) for it's owner
 
 =head1 VERSION
 
@@ -69,7 +69,7 @@ Storing of coderef's isn't supported.
 
 =head2 memory_patch
 
-Adds setters and getters for the current package whichi are
+Adds setters and getters for the current package which are
 proxied by $memory->data of current package, e.g. 
 
  memory_patch(__PACKAGE__, 'active'); # adds 'active' memorizable attribute

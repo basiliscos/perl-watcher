@@ -15,6 +15,8 @@ lib/App/PerlWatcher/EventItem.pm
 lib/App/PerlWatcher/Frontend.pm
 lib/App/PerlWatcher/Level.pm
 lib/App/PerlWatcher/Levels.pm
+lib/App/PerlWatcher/Memorizable.pm
+lib/App/PerlWatcher/Memory.pm
 lib/App/PerlWatcher/Openable.pm
 lib/App/PerlWatcher/Shelf.pm
 lib/App/PerlWatcher/Status.pm
@@ -26,7 +28,6 @@ lib/App/PerlWatcher/Watcher/HTTP.pm
 lib/App/PerlWatcher/Watcher/HTTPSimple.pm
 lib/App/PerlWatcher/Watcher/Ping.pm
 lib/App/PerlWatcher/Watcher/Weather.pm
-lib/App/PerlWatcher/WatcherMemory.pm
 share/examples/engine.conf.example
 t/000-compile.t
 t/001-01-levels.t
