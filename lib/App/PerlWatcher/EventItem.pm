@@ -6,19 +6,31 @@ use strict;
 use warnings;
 
 use Moo;
+use App::PerlWatcher::Memory qw /memory_patch/;
+
+
+with qw/App::PerlWatcher::Memorizable/;
 
 =attr content
 
-Contains string description of particular event
+Contains string description of particular event. Required.
 
 =cut
-has 'content'   => ( is => 'ro', required => 1 );
+
+memory_patch(__PACKAGE__, 'content');
 
 =attr content
 
 The timestamp of event item. By default it is the current time.
 
 =cut
-has 'timestamp' => ( is => 'ro', default => sub{ time; } );
+
+memory_patch(__PACKAGE__, 'timestamp');
+
+sub BUILD {
+    my ($self, $init_args) = @_;
+    $self->content($init_args->{content});
+    $self->timestamp(time) unless($self->timestamp);
+}
 
 1;
