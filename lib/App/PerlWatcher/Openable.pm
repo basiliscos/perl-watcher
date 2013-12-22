@@ -1,5 +1,5 @@
 package App::PerlWatcher::Openable;
-# ABSTRACT: The base role to to allow item to be openable in system browser
+# ABSTRACT: The base role to allow item to be openable in system browser
 
 use 5.12.0;
 use strict;

@@ -19,6 +19,7 @@ use Storable qw/freeze/;
 use Moo::Role;
 
 with qw/App::PerlWatcher::Describable/;
+with qw/App::PerlWatcher::Memorizable/;
 
 =attr engine_config
 
@@ -57,15 +58,6 @@ PerlWatcher invokations (that's why the perl internal hash funciton isn't used)
 =cut
 
 has 'unique_id'         => ( is => 'lazy');
-
-=attr memory
-
-Stores current wacher state (memory). When the watcher is persisted, only it's memory
-and unique_id are stored.
-
-=cut
-
-has 'memory'            => ( is => 'rw');
 
 =attr active
 
@@ -143,7 +135,6 @@ use overload fallback => 1, q/""/ => sub { $_[0]->unique_id; };
 sub BUILD {
     my ($self, $init_args) = @_;
     $self->init_args($init_args);
-    $self->memory(App::PerlWatcher::Memory->new);
     $self->_init_thresholds_map;
     $self->active(1);
     $self->last_level(LEVEL_NOTICE);
