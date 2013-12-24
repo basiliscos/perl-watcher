@@ -43,7 +43,7 @@ memory_patch(__PACKAGE__, 'active');
 memory_patch(__PACKAGE__, 'thresholds_map');
 
 
-memory_patch(__PACKAGE__, 'last_level');
+memory_patch(__PACKAGE__, 'last_status');
 
 
 has 'poll_callback' => (is => 'rw', default => sub { sub{};  } );
@@ -64,7 +64,6 @@ sub BUILD {
     $self->init_args($init_args);
     $self->_init_thresholds_map;
     $self->active(1);
-    $self->last_level(LEVEL_NOTICE);
 }
 
 sub _build_config {
@@ -214,12 +213,15 @@ sub _merge {
 sub interpret_result {
     my ($self, $result, $callback, $items) = @_;
 
-    my $level = $self->_interpret_result_as_level($result);
+    my $prev_status = $self->last_status;
+    my $prev_level = $prev_status && $prev_status->level;
+    my $level = $self->_interpret_result_as_level($result, $prev_level);
     $self->_emit_event($level, $callback, $items);
 }
 
 sub _interpret_result_as_level {
-    my ($self, $result) = @_;
+    my ($self, $result, $last_level) = @_;
+    $last_level //= LEVEL_NOTICE;
     my $threshold_map = $self->thresholds_map;
 
     $self->memory->data->{_last_result} //= $result;
@@ -244,13 +246,13 @@ sub _interpret_result_as_level {
     # $counter
     my $level_key = max grep { $_ <= $counter } @levels;
     # $level_key
-    if ( defined $level_key ) {
-        my $new_level = $threshold_map->{$meta_key}->{$level_key};
-        $self->last_level($new_level);
-    }
+
+    my $result_level = ( defined $level_key )
+        ? $threshold_map->{$meta_key}->{$level_key}
+        : $last_level;
     $self->memory->data->{_last_result} = $result;
 
-    return $self->last_level;
+    return $result_level;
 }
 
 sub _emit_event {
@@ -261,6 +263,8 @@ sub _emit_event {
         description => sub { $self->describe },
         items       => $items,
     );
+    # remember it
+    $self->last_status($status);
     $callback->($status);
 }
 
@@ -331,16 +335,16 @@ The memorizable map, which represents how to interpret successul or
 unsuccessful result, i.e. which level of severity it is. It looks like:
 
  my $map = {
-    fail => { 
+    fail => {
         3   =>  'info',
         5   =>  'alert',
     },
     ok  => { 3 => 'notice' },
  };
 
-=head2 last_level
+=head2 last_status
 
-Represents last emitted watcher level. 
+Represents last emitted watcher status
 
 =head2 poll_callback
 
