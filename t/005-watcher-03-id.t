@@ -8,8 +8,7 @@ use Smart::Comments;
 use Test::More;
 use Test::Warnings;
 
-use FindBin;
-BEGIN { unshift @INC, "$FindBin::Bin/lib" }
+use lib 't/lib';
 use Test::PerlWatcher::TestWatcher;
 
 my %engine_config;

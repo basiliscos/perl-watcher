@@ -20,8 +20,8 @@ use App::PerlWatcher::Status;
 use App::PerlWatcher::Util::Bootstrap qw/config/;
 use App::PerlWatcher::Util::Storable qw/freeze thaw/;
 
-use FindBin;
-BEGIN { unshift @INC, "$FindBin::Bin/lib" }
+use lib 't/lib';
+
 use aliased qw/Test::PerlWatcher::AEBackend/;
 
 $ENV{'HOME'} = tempdir( CLEANUP => 1 );
