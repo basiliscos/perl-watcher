@@ -28,59 +28,75 @@ my $engine_config = {
     }
 };
 
-my $w = Test::PerlWatcher::TestWatcher->new(
-    engine_config => $engine_config,
-    callback      => sub { ... },
-);
+{
+    my $w = Test::PerlWatcher::TestWatcher->new(
+        engine_config => $engine_config,
+        callback      => sub { ... },
+    );
 
+    my $map = $w->thresholds_map;
+    ok $map, "thresholds map has been defined";
 
-my $map = $w->thresholds_map;
-ok $map, "thresholds map has been defined";
+    my $prev_level;
+    my $trigger_watcher = sub {
+        my $r = $w->_interpret_result_as_level(shift);
+        $prev_level = $r;
+        return $r;
+    };
 
-is $w->_interpret_result_as_level(1), LEVEL_NOTICE;
-is $w->_interpret_result_as_level(1), LEVEL_NOTICE;
-is $w->_interpret_result_as_level(1), LEVEL_NOTICE;
+    is $trigger_watcher->(1), LEVEL_NOTICE;
+    is $trigger_watcher->(1), LEVEL_NOTICE;
+    is $trigger_watcher->(1), LEVEL_NOTICE;
 
-is $w->_interpret_result_as_level(0), LEVEL_NOTICE;
-is $w->_interpret_result_as_level(0), LEVEL_NOTICE;
-is $w->_interpret_result_as_level(0), LEVEL_INFO;
-is $w->_interpret_result_as_level(0), LEVEL_INFO;
-is $w->_interpret_result_as_level(0), LEVEL_ALERT;
-is $w->_interpret_result_as_level(0), LEVEL_ALERT;
-is $w->_interpret_result_as_level(1), LEVEL_ALERT;
-is $w->_interpret_result_as_level(1), LEVEL_ALERT;
-is $w->_interpret_result_as_level(1), LEVEL_NOTICE;
-is $w->_interpret_result_as_level(0), LEVEL_NOTICE;
-is $w->_interpret_result_as_level(0), LEVEL_NOTICE;
-is $w->_interpret_result_as_level(0), LEVEL_INFO;
+    is $trigger_watcher->(0), LEVEL_NOTICE;
+    is $trigger_watcher->(0), LEVEL_NOTICE;
+    is $trigger_watcher->(0), LEVEL_INFO;
+    is $trigger_watcher->(0), LEVEL_INFO;
+    is $trigger_watcher->(0), LEVEL_ALERT;
+    is $trigger_watcher->(0), LEVEL_ALERT;
+    is $trigger_watcher->(1), LEVEL_ALERT;
+    is $trigger_watcher->(1), LEVEL_ALERT;
+    is $trigger_watcher->(1), LEVEL_NOTICE;
+    is $trigger_watcher->(0), LEVEL_NOTICE;
+    is $trigger_watcher->(0), LEVEL_NOTICE;
+    is $trigger_watcher->(0), LEVEL_INFO;
+}
 
-my %specific_config = (
-    on => {
-        fail => {
-            2   =>  'info/max',
-        },
-        ok  => { 1 => 'notice' },
-    }
-);
+{
+    my %specific_config = (
+        on => {
+            fail => {
+                2   =>  'info/max',
+            },
+            ok  => { 1 => 'notice' },
+        }
+    );
 
-$w = Test::PerlWatcher::TestWatcher->new(
-    engine_config => $engine_config,
-    callback      => sub { ... },
-    %specific_config,
-);
+    my $w = Test::PerlWatcher::TestWatcher->new(
+        engine_config => $engine_config,
+        callback      => sub { ... },
+        %specific_config,
+    );
+    my $prev_level;
+    my $trigger_watcher = sub {
+        my $r = $w->_interpret_result_as_level(shift);
+        $prev_level = $r;
+        return $r;
+    };
 
-is $w->_interpret_result_as_level(1), LEVEL_NOTICE;
-is $w->_interpret_result_as_level(1), LEVEL_NOTICE;
-is $w->_interpret_result_as_level(1), LEVEL_NOTICE;
+    is $trigger_watcher->(1), LEVEL_NOTICE;
+    is $trigger_watcher->(1), LEVEL_NOTICE;
+    is $trigger_watcher->(1), LEVEL_NOTICE;
 
-is $w->_interpret_result_as_level(0), LEVEL_NOTICE;
-is $w->_interpret_result_as_level(0), LEVEL_INFO;
-is $w->_interpret_result_as_level(0), LEVEL_INFO;
-is $w->_interpret_result_as_level(0), LEVEL_INFO;
-is $w->_interpret_result_as_level(0), LEVEL_INFO;
-is $w->_interpret_result_as_level(0), LEVEL_INFO;
-is $w->_interpret_result_as_level(0), LEVEL_INFO;
-is $w->_interpret_result_as_level(0), LEVEL_INFO;
+    is $trigger_watcher->(0), LEVEL_NOTICE;
+    is $trigger_watcher->(0), LEVEL_INFO;
+    is $trigger_watcher->(0), LEVEL_INFO;
+    is $trigger_watcher->(0), LEVEL_INFO;
+    is $trigger_watcher->(0), LEVEL_INFO;
+    is $trigger_watcher->(0), LEVEL_INFO;
+    is $trigger_watcher->(0), LEVEL_INFO;
+    is $trigger_watcher->(0), LEVEL_INFO;
+}
 
 done_testing();
 

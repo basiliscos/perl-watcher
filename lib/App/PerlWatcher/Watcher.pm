@@ -73,7 +73,7 @@ The memorizable map, which represents how to interpret successul or
 unsuccessful result, i.e. which level of severity it is. It looks like:
 
  my $map = {
-    fail => { 
+    fail => {
         3   =>  'info',
         5   =>  'alert',
     },
@@ -84,13 +84,13 @@ unsuccessful result, i.e. which level of severity it is. It looks like:
 
 memory_patch(__PACKAGE__, 'thresholds_map');
 
-=attr last_level
+=attr last_status
 
-Represents last emitted watcher level. 
+Represents last emitted watcher status
 
 =cut
 
-memory_patch(__PACKAGE__, 'last_level');
+memory_patch(__PACKAGE__, 'last_status');
 
 =attr poll_callback
 
@@ -137,7 +137,6 @@ sub BUILD {
     $self->init_args($init_args);
     $self->_init_thresholds_map;
     $self->active(1);
-    $self->last_level(LEVEL_NOTICE);
 }
 
 sub _build_config {
@@ -326,6 +325,7 @@ sub interpret_result {
 
 sub _interpret_result_as_level {
     my ($self, $result) = @_;
+    my $last_level = $self->memory->data->{_last_level} // LEVEL_NOTICE;
     my $threshold_map = $self->thresholds_map;
 
     $self->memory->data->{_last_result} //= $result;
@@ -350,13 +350,14 @@ sub _interpret_result_as_level {
     # $counter
     my $level_key = max grep { $_ <= $counter } @levels;
     # $level_key
-    if ( defined $level_key ) {
-        my $new_level = $threshold_map->{$meta_key}->{$level_key};
-        $self->last_level($new_level);
-    }
+
+    my $result_level = ( defined $level_key )
+        ? $threshold_map->{$meta_key}->{$level_key}
+        : $last_level;
+    $self->memory->data->{_last_level} = $result_level;
     $self->memory->data->{_last_result} = $result;
 
-    return $self->last_level;
+    return $result_level;
 }
 
 sub _emit_event {
@@ -367,6 +368,8 @@ sub _emit_event {
         description => sub { $self->describe },
         items       => $items,
     );
+    # remember it
+    $self->last_status($status);
     $callback->($status);
 }
 
