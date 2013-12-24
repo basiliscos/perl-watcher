@@ -39,7 +39,7 @@ my $engine_config = {
 
     my $prev_level;
     my $trigger_watcher = sub {
-        my $r = $w->_interpret_result_as_level(shift);
+        my $r = $w->_interpret_result_as_level(shift, $prev_level);
         $prev_level = $r;
         return $r;
     };
@@ -79,7 +79,7 @@ my $engine_config = {
     );
     my $prev_level;
     my $trigger_watcher = sub {
-        my $r = $w->_interpret_result_as_level(shift);
+        my $r = $w->_interpret_result_as_level(shift, $prev_level);
         $prev_level = $r;
         return $r;
     };

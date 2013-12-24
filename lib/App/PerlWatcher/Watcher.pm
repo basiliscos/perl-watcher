@@ -319,13 +319,15 @@ items). Meant to be called from subclases, e.g.
 sub interpret_result {
     my ($self, $result, $callback, $items) = @_;
 
-    my $level = $self->_interpret_result_as_level($result);
+    my $prev_status = $self->last_status;
+    my $prev_level = $prev_status && $prev_status->level;
+    my $level = $self->_interpret_result_as_level($result, $prev_level);
     $self->_emit_event($level, $callback, $items);
 }
 
 sub _interpret_result_as_level {
-    my ($self, $result) = @_;
-    my $last_level = $self->memory->data->{_last_level} // LEVEL_NOTICE;
+    my ($self, $result, $last_level) = @_;
+    $last_level //= LEVEL_NOTICE;
     my $threshold_map = $self->thresholds_map;
 
     $self->memory->data->{_last_result} //= $result;
@@ -354,7 +356,6 @@ sub _interpret_result_as_level {
     my $result_level = ( defined $level_key )
         ? $threshold_map->{$meta_key}->{$level_key}
         : $last_level;
-    $self->memory->data->{_last_level} = $result_level;
     $self->memory->data->{_last_result} = $result;
 
     return $result_level;
