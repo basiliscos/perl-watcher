@@ -273,8 +273,10 @@ sub _emit_event {
 
 # move the matching by content EventItems from old to new 
 sub _merge_items {
-    my ($old_items, $new_items) = @_;
-    return if(!$old_items || !$new_items);
+    my ($old_items_fun, $new_items_fun) = @_;
+    return if(!$old_items_fun || !$new_items_fun);
+
+    my ($old_items, $new_items) = map { $_->() } @_;
 
     my %copied;
     for my $i (0 .. @$new_items-1) {
@@ -421,6 +423,8 @@ items). Meant to be called from subclases, e.g.
 
 The items can be tacken from the previous result interpreation
 if they match by content
+
+$items is an coderef, which actually returns array of items.
 
 =head1 AUTHOR
 

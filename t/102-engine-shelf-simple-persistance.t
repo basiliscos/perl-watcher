@@ -53,6 +53,8 @@ my $items = [
     App::PerlWatcher::EventItem->new(content => "b"),
 ];
 
+$items->[0]->memory->data->{'_some_key'} = 'some_value';
+
 my $create_status = sub {
     my $level = shift;
     return App::PerlWatcher::Status->new(
