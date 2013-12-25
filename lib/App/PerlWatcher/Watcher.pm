@@ -314,6 +314,11 @@ items). Meant to be called from subclases, e.g.
 
  $watcher->interpret_result(0, $callback);
 
+The items can be tacken from the previous result interpreation
+if they match by content
+
+$items is an coderef, which actually returns array of items.
+
 =cut
 
 sub interpret_result {
@@ -363,6 +368,9 @@ sub _interpret_result_as_level {
 
 sub _emit_event {
     my ($self, $level, $callback, $items) = @_;
+    my $prev_status = $self->last_status;
+    my $prev_items = $prev_status ? $prev_status->items : undef;
+    _merge_items($prev_items, $items);
     my $status = App::PerlWatcher::Status->new(
         watcher     => $self,
         level       => $level,
@@ -372,6 +380,26 @@ sub _emit_event {
     # remember it
     $self->last_status($status);
     $callback->($status);
+}
+
+# move the matching by content EventItems from old to new 
+sub _merge_items {
+    my ($old_items_fun, $new_items_fun) = @_;
+    return if(!$old_items_fun || !$new_items_fun);
+
+    my ($old_items, $new_items) = map { $_->() } @_;
+
+    my %copied;
+    for my $i (0 .. @$new_items-1) {
+        for my $j (0 .. @$old_items-1) {
+            if ($new_items->[$i]->content eq $old_items->[$j]->content
+                && !$copied{$j}) {
+                $new_items->[$i] = $old_items->[$j];
+                $copied{$j} = 1;
+                last;
+            }
+        }
+    }
 }
 
 # storable-methods

@@ -19,7 +19,7 @@ Contains string description of particular event. Required.
 
 memory_patch(__PACKAGE__, 'content');
 
-=attr content
+=attr timestamp
 
 The timestamp of event item. By default it is the current time.
 
