@@ -8,11 +8,11 @@ use Smart::Comments;
 use Test::More;
 use Test::Warnings;
 
+use aliased qw/App::PerlWatcher::EventItem/;
 use App::PerlWatcher::Levels;
 use App::PerlWatcher::Status;
 
-use FindBin;
-BEGIN { unshift @INC, "$FindBin::Bin/lib" }
+use lib 't/lib';
 
 use Test::PerlWatcher::TestWatcher;
 
@@ -28,6 +28,7 @@ my $engine_config = {
     }
 };
 
+# test for generic engine thresholds map
 {
     my $w = Test::PerlWatcher::TestWatcher->new(
         engine_config => $engine_config,
@@ -62,6 +63,8 @@ my $engine_config = {
     is $trigger_watcher->(0), LEVEL_INFO;
 }
 
+# test for generic engine thresholds map in combination with
+# watcher-specific threshold map
 {
     my %specific_config = (
         on => {
@@ -96,6 +99,56 @@ my $engine_config = {
     is $trigger_watcher->(0), LEVEL_INFO;
     is $trigger_watcher->(0), LEVEL_INFO;
     is $trigger_watcher->(0), LEVEL_INFO;
+}
+
+# test for emitted event items
+{
+    my $w = Test::PerlWatcher::TestWatcher->new(
+        engine_config => $engine_config,
+        callback      => sub { },
+    );
+
+    my $trigger_watcher = sub {
+        my ($result, $items) = @_;
+        my $status;
+        my $cb = sub {
+            my $status = shift;
+        };
+        $w->interpret_result($result, $cb, $items);
+    };
+    my $events_1 = [
+        EventItem->new(content => "a"),
+        EventItem->new(content => "b"),
+        EventItem->new(content => "c"),
+    ];
+    # we add something to event items memories, to
+    # be sure, that the same items will remain
+    $events_1->[1]->memory->data->{"x1"} = "y1";
+    $events_1->[2]->memory->data->{"x2"} = "y2";
+    my $st_1 = $trigger_watcher->(1, $events_1);
+    ok $st_1;
+    is @{ $st_1->items }, @$events_1, "got required items";
+    is_deeply $st_1->items, $events_1;
+
+    my $events_2 = [
+        EventItem->new(content => "b"),
+        EventItem->new(content => "c"),
+        EventItem->new(content => "d"),
+        EventItem->new(content => "e"),
+    ];
+    my $st_2 = $trigger_watcher->(1, $events_2);
+    ok $st_2;
+    is_deeply $st_2->items, $events_2;
+    is_deeply $st_2->items->[0], $st_1->items->[1];
+    is_deeply $st_2->items->[1], $st_1->items->[2];
+
+    my $events_3 = [
+        EventItem->new(content => "b"),
+    ];
+    my $st_3 = $trigger_watcher->(1, $events_3);
+    ok $st_3;
+    is_deeply $st_3->items, $events_3;
+    is_deeply $st_3->items->[0], $st_2->items->[0];
 }
 
 done_testing();

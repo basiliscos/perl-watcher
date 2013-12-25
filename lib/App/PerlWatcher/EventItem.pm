@@ -46,7 +46,7 @@ version 0.19
 
 Contains string description of particular event. Required.
 
-=head2 content
+=head2 timestamp
 
 The timestamp of event item. By default it is the current time.
 

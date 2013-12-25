@@ -14,10 +14,9 @@ use App::PerlWatcher::Levels;
 use App::PerlWatcher::Status;
 use App::PerlWatcher::Util::Storable qw/freeze thaw/;
 
-use FindBin;
-BEGIN { unshift @INC, "$FindBin::Bin/lib" }
-use aliased qw/Test::PerlWatcher::AEBackend/;
+use lib 't/lib';
 
+use aliased qw/Test::PerlWatcher::AEBackend/;
 
 $ENV{'HOME'} = tempdir( CLEANUP => 1 );
 

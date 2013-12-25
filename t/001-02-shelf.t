@@ -11,8 +11,7 @@ use App::PerlWatcher::Levels;
 use App::PerlWatcher::Status;
 use App::PerlWatcher::Shelf;
 
-use FindBin;
-BEGIN { unshift @INC, "$FindBin::Bin/lib" }
+use lib 't/lib';
 
 use Test::PerlWatcher::TestWatcher;
 
