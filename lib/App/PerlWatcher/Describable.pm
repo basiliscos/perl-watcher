@@ -1,6 +1,6 @@
 package App::PerlWatcher::Describable;
 {
-  $App::PerlWatcher::Describable::VERSION = '0.19';
+  $App::PerlWatcher::Describable::VERSION = '0.20';
 }
 # ABSTRACT: The base role for providing description for UI
 
@@ -33,13 +33,15 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 App::PerlWatcher::Describable - The base role for providing description for UI
 
 =head1 VERSION
 
-version 0.19
+version 0.20
 
 =head1 ATTRIBUTES
 

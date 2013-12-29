@@ -1,6 +1,6 @@
 package App::PerlWatcher::Backend;
 {
-  $App::PerlWatcher::Backend::VERSION = '0.19';
+  $App::PerlWatcher::Backend::VERSION = '0.20';
 }
 # ABSTRACT: The base role to which provides event loop (AnyEvent, PE, Gtk, KDE etc.)
 
@@ -23,13 +23,15 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 App::PerlWatcher::Backend - The base role to which provides event loop (AnyEvent, PE, Gtk, KDE etc.)
 
 =head1 VERSION
 
-version 0.19
+version 0.20
 
 =head1 METHODS
 

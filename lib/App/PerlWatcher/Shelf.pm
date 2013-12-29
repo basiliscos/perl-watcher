@@ -1,6 +1,6 @@
 package App::PerlWatcher::Shelf;
 {
-  $App::PerlWatcher::Shelf::VERSION = '0.19';
+  $App::PerlWatcher::Shelf::VERSION = '0.20';
 }
 # ABSTRACT: Used to stash (store) statuses for further detection weather they has been changed.
 
@@ -44,13 +44,15 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 App::PerlWatcher::Shelf - Used to stash (store) statuses for further detection weather they has been changed.
 
 =head1 VERSION
 
-version 0.19
+version 0.20
 
 =head1 ATTRIBUTES
 

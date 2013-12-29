@@ -1,6 +1,6 @@
 package App::PerlWatcher::Watcher::GenericExecutor;
 {
-  $App::PerlWatcher::Watcher::GenericExecutor::VERSION = '0.19';
+  $App::PerlWatcher::Watcher::GenericExecutor::VERSION = '0.20';
 }
 # ABSTRACT: Watches for the output of execution of arbitrary command.
 
@@ -137,13 +137,15 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 App::PerlWatcher::Watcher::GenericExecutor - Watches for the output of execution of arbitrary command.
 
 =head1 VERSION
 
-version 0.19
+version 0.20
 
 =head1 SYNOPSIS
 

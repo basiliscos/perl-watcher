@@ -1,6 +1,6 @@
 package App::PerlWatcher::Memory;
 {
-  $App::PerlWatcher::Memory::VERSION = '0.19';
+  $App::PerlWatcher::Memory::VERSION = '0.20';
 }
 # ABSTRACT: Represents memory, which can be persisted (detached) for it's owner
 
@@ -49,13 +49,15 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 App::PerlWatcher::Memory - Represents memory, which can be persisted (detached) for it's owner
 
 =head1 VERSION
 
-version 0.19
+version 0.20
 
 =head1 ATTRIBUTES
 

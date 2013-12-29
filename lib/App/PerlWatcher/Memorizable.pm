@@ -1,6 +1,6 @@
 package App::PerlWatcher::Memorizable;
 {
-  $App::PerlWatcher::Memorizable::VERSION = '0.19';
+  $App::PerlWatcher::Memorizable::VERSION = '0.20';
 }
 # ABSTRACT: The base role to allow class to have 'memory' attributebrowser
 
@@ -21,13 +21,15 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 App::PerlWatcher::Memorizable - The base role to allow class to have 'memory' attributebrowser
 
 =head1 VERSION
 
-version 0.19
+version 0.20
 
 =head1 ATTRIBUTES
 

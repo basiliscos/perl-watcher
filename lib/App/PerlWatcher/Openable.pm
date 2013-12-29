@@ -1,6 +1,6 @@
 package App::PerlWatcher::Openable;
 {
-  $App::PerlWatcher::Openable::VERSION = '0.19';
+  $App::PerlWatcher::Openable::VERSION = '0.20';
 }
 # ABSTRACT: The base role to allow item to be openable in system browser
 
@@ -31,13 +31,15 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 App::PerlWatcher::Openable - The base role to allow item to be openable in system browser
 
 =head1 VERSION
 
-version 0.19
+version 0.20
 
 =head1 SYNOPSIS
 
