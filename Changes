@@ -1,5 +1,8 @@
 {{$NEXT}}
     [API] WatcherMemory has been generalized into Memory
+    [API] EventItems inside emitted by Watcher Status, now can be the previous
+          ones, if they match by *content* in previous Status emission
+    [API] EventItem is now Memorizable
 
 0.19      2013-12-18 02:06:43 Europe/Minsk
     Now, it should pass all tests on windows. (No changes since 0.18_3
