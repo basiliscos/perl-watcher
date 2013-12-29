@@ -1,7 +1,7 @@
 ROADMAP to public release
 # readme
 # documentation: add use cases for all watchers, links to github on main projects
-# persists summary level [engine?], collapse/expand states [gtk]
+# persists summary level [engine?]
 
 ECOSYSTEM
 # add packages for various linux distributions. Try openSUSE Build ServiceServer
@@ -15,7 +15,7 @@ ENGINE
 
 REFACTOR:
 # watcher: watcher_function?
-# make EvenItems stashable and distinct the "new" items in status from the old ones.
+# Function::Parameters and more strict args value cheking
 
 WATCHERS:
 # generic command executor
@@ -53,8 +53,6 @@ OTHER:
 # Add separate terminal application with spinners like Term::Spinner::Lite or Term::Twiddle
 
 FUTURE/POSTPONED:
-# rss: atom feeds?
-# ping: implement echo protocol for TCP/UDP for pinging devices.
 # other (non-gtk2) backends
 # cookbook of solutions
 
