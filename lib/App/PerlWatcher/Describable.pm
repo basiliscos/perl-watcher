@@ -7,6 +7,7 @@ use warnings;
 
 use Function::Parameters qw(:strict);
 use Moo::Role;
+use Types::Standard qw/CodeRef/;
 
 =method description
 
@@ -16,16 +17,6 @@ developer
 =cut
 
 requires 'description';
-
-=method start
-
-Starts watcher. The parameter is callback, wich is been invoked with Status
-on watched event occurence
-
-=cut
-
-requires 'start';
-
 
 =attr describer
 
