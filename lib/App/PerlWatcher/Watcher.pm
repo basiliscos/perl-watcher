@@ -11,9 +11,10 @@ use App::PerlWatcher::Status;
 
 use Carp;
 use Data::Dump::Filtered qw/dump_filtered/;
-use Smart::Comments -ENV;
 use Digest::MD5 qw(md5_base64);
+use Function::Parameters qw(:strict);
 use List::Util qw( max );
+use Smart::Comments -ENV;
 use Storable qw/freeze/;
 
 use Moo::Role;
@@ -139,8 +140,7 @@ sub BUILD {
     $self->active(1);
 }
 
-sub _build_config {
-    my $self = shift;
+method _build_config {
     my @clean_init_keys =
         grep {$_ ne 'engine_config'}
         keys %{ $self->init_args };
@@ -149,8 +149,7 @@ sub _build_config {
     return \%config;
 }
 
-sub _init_thresholds_map {
-    my $self = shift;
+method _init_thresholds_map {
     my ( $l, $r ) = (
         $self->config        -> {on} // {},
         $self->engine_config -> {defaults}->{behaviour},
@@ -159,8 +158,7 @@ sub _init_thresholds_map {
     $self->thresholds_map($map);
 }
 
-sub _build_unique_id {
-    my $self = shift;
+method _build_unique_id {
     my $class = ref($self);
     # Filter strips down the subroutine references
     # and transforms hashes to arrays sorted by keys.
@@ -191,8 +189,7 @@ Immediatly polls the watched object.
 
 =cut
 
-sub force_poll {
-    my $self = shift;
+method force_poll {
     $self->activate(0);
     $self->activate(1);
 }
@@ -203,8 +200,7 @@ Turns on and off the wacher, remembering the state in memory
 
 =cut
 
-sub activate {
-    my ( $self, $value ) = @_;
+method activate($value) {
     if ( defined($value) ) {
         $self->active($value);
         $self->watcher_guard(undef)
@@ -221,8 +217,7 @@ start only it is active.
 
 =cut
 
-sub start {
-    my $self = shift;
+method start {
     $self->watcher_guard( $self->build_watcher_guard )
         if $self->active;
 }
@@ -236,8 +231,7 @@ config, while the righ map is the generic PerlWatcher/Engine config
 
 =cut
 
-sub calculate_threshods {
-    my ($l, $r) = @_;
+fun calculate_threshods($l, $r) {
     my $thresholds_map;
     for my $k ('ok', 'fail') {
         my $merged = _merge($l->{$k}, $r->{$k});
@@ -254,8 +248,7 @@ sub calculate_threshods {
 # protected methods
 #
 
-sub _merge {
-    my ($l, $r) = @_;
+fun _merge($l, $r) {
 
     my $max_re = qr/(.*)\/max/;
     my $level = sub {
@@ -321,17 +314,14 @@ $items is an coderef, which actually returns array of items.
 
 =cut
 
-sub interpret_result {
-    my ($self, $result, $callback, $items) = @_;
-
+method interpret_result($result, $callback, $items = undef) {
     my $prev_status = $self->last_status;
     my $prev_level = $prev_status && $prev_status->level;
     my $level = $self->_interpret_result_as_level($result, $prev_level);
     $self->_emit_event($level, $callback, $items);
 }
 
-sub _interpret_result_as_level {
-    my ($self, $result, $last_level) = @_;
+method _interpret_result_as_level($result, $last_level) {
     $last_level //= LEVEL_NOTICE;
     my $threshold_map = $self->thresholds_map;
 
@@ -366,8 +356,7 @@ sub _interpret_result_as_level {
     return $result_level;
 }
 
-sub _emit_event {
-    my ($self, $level, $callback, $items) = @_;
+method _emit_event($level, $callback, $items = undef) {
     my $prev_status = $self->last_status;
     my $prev_items = $prev_status ? $prev_status->items : undef;
     _merge_items($prev_items, $items);
@@ -382,9 +371,8 @@ sub _emit_event {
     $callback->($status);
 }
 
-# move the matching by content EventItems from old to new 
-sub _merge_items {
-    my ($old_items_fun, $new_items_fun) = @_;
+# move the matching by content EventItems from old to new
+fun _merge_items($old_items_fun, $new_items_fun) {
     return if(!$old_items_fun || !$new_items_fun);
 
     my ($old_items, $new_items) = map { $_->() } @_;
@@ -403,6 +391,8 @@ sub _merge_items {
 }
 
 # storable-methods
+
+# just return id
 sub STORABLE_freeze {
     "$_[0]";
 };

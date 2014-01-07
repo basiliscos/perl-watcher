@@ -10,6 +10,7 @@ use Carp;
 use Class::Load ':all';
 use Smart::Comments -ENV;
 use File::Spec;
+use Function::Parameters qw(:strict);
 use List::MoreUtils qw/first_index/;
 use Moo;
 use Path::Tiny;
@@ -177,8 +178,7 @@ and they should not be stored.
 
 has 'shelf'             => ( is => 'rw');
 
-sub _build_watchers {
-    my $self = shift;
+method _build_watchers {
     my $config = $self->config;
     my @r;
     my $poll_callback = sub {
@@ -215,16 +215,14 @@ sub _build_watchers {
     return \@r;
 }
 
-sub _build_watchers_order {
-    my $self = shift;
+method _build_watchers_order {
     my $watchers = $self->watchers;
     my $order = {};
     $order->{ $watchers->[$_] } = $_ for 0 .. @$watchers - 1;
     return $order;
 }
 
-sub _build_shelf {
-    my $self = shift;
+method _build_shelf {
     my $statuses_file = $self->statuses_file;
     if ( -r $statuses_file ) {
         my $data = $statuses_file->slurp;
@@ -245,8 +243,7 @@ Starts all watchers and backend.
 
 =cut
 
-sub start {
-    my $self = shift;
+method start {
     $_->start for ( @{ $self->watchers } );
     # actually trigger watchers
     $self->backend->start_loop;
@@ -259,8 +256,7 @@ and shelf)
 
 =cut
 
-sub stop {
-    my $self = shift;
+method stop {
     $self->backend->stop_loop;
 
     my $data = freeze($self);
@@ -274,8 +270,7 @@ order
 
 =cut
 
-sub sort_statuses {
-    my ($self, $statuses) = @_;
+method sort_statuses($statuses):($) {
     my $order_of = $self->watchers_order;
     return [
         sort {

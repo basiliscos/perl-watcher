@@ -8,8 +8,9 @@ use utf8;
 
 use App::PerlWatcher::EventItem;
 use Carp;
-use Smart::Comments -ENV;
+use Function::Parameters qw(:strict);
 use Moo;
+use Smart::Comments -ENV;
 use URI;
 
 =head1 SYNOPSIS
@@ -61,16 +62,14 @@ has 'processed_response'    => ( is => 'rw');
 
 with qw/App::PerlWatcher::Watcher::HTTP/;
 
-sub description {
-    my $self = shift;
+method description {
     my $desc = "HTTP [" . $self->title . "]";
     my $response = $self->processed_response;
     $desc .= " : " . ( $response // q{} );
     return $desc;
 }
 
-sub process_http_response {
-    my ($self, $content, $headers) = @_;
+method process_http_response($content, $headers) {
     my ($result, $success) = (undef, 0);
 
     eval {

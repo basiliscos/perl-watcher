@@ -6,6 +6,7 @@ use strict;
 use warnings;
 
 use Carp;
+use Function::Parameters qw(:strict);
 use Moo;
 
 use parent qw/Exporter/;
@@ -23,8 +24,7 @@ Storing of coderef's isn't supported.
 
 has 'data' => (is => 'rw', default => sub { {}; });
 
-sub _monkey_patch {
-    my ($class, %patch) = @_;
+fun _monkey_patch($class, %patch) {
     no strict 'refs';
     no warnings 'redefine';
     *{"${class}::$_"} = $patch{$_} for keys %patch;
@@ -42,8 +42,7 @@ The method assumes, that current the provided package has
 
 =cut
 
-sub memory_patch {
-    my ($class, @attributes) = @_;
+fun memory_patch($class, @attributes) {
     my %patch;
     for my $a (@attributes) {
         $patch{$a} = sub {

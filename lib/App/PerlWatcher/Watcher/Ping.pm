@@ -9,9 +9,10 @@ use AnyEvent::Socket;
 use AnyEvent::Util;
 use App::PerlWatcher::Watcher;
 use Carp;
-use Smart::Comments -ENV;
+use Function::Parameters qw(:strict);
 use Moo;
 use Net::Ping::External qw(ping);
+use Smart::Comments -ENV;
 
 =head1 SYNOPSIS
 
@@ -67,25 +68,21 @@ has 'watcher_callback'  => ( is => 'lazy');
 
 with qw/App::PerlWatcher::Watcher/;
 
-sub _build_timeout {
-    $_[0]->config->{timeout} // $_[0]->engine_config->{defaults}->{timeout} // 5;
+method _build_timeout {
+    $self->config->{timeout} // $self->engine_config->{defaults}->{timeout} // 5;
 }
 
-sub _build_watcher_callback {
-    my $self = shift;
+method _build_watcher_callback {
     $self -> {_watcher} = $self->port
         ? $self->_tcp_watcher_callback
         : $self->_icmp_watcher_callback;
 }
 
-sub _icmp_watcher_callback {
-    my $self = shift;
-    my $host = $self->host;
-    my $timeout = $self->timeout;
+method _icmp_watcher_callback {
     return sub {
         $self->poll_callback->($self);
         fork_call {
-            my $alive = ping(host => $host, timeout => $timeout);
+            my $alive = ping(host => $self->host, timeout => $self->timeout);
             $alive;
         } sub {
             my $success = shift;
@@ -94,9 +91,8 @@ sub _icmp_watcher_callback {
     }
 }
 
-sub _tcp_watcher_callback {
-    my $self = shift;
-    my ($host, $port ) = ( $self->host, $self->port ); 
+method _tcp_watcher_callback {
+    my ($host, $port ) = ( $self->host, $self->port );
     return sub {
         $self->poll_callback->($self);
         tcp_connect $host, $port, sub {
@@ -115,8 +111,7 @@ sub _tcp_watcher_callback {
     };
 }
 
-sub build_watcher_guard {
-    my $self = shift;
+method build_watcher_guard {
     return AnyEvent->timer(
         after    => 0,
         interval => $self->frequency,
@@ -127,12 +122,10 @@ sub build_watcher_guard {
     );
 }
 
-sub description {
-    my $self = shift;
+method description {
     my $description = $self->port
         ? "Knocking at " . $self->host . ":" . $self->port
         : "Ping " . $self->host;
 }
-
 
 1;

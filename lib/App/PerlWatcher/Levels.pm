@@ -7,6 +7,7 @@ use warnings;
 
 use Carp;
 use Exporter;
+use Function::Parameters qw(:strict);
 
 use App::PerlWatcher::Level;
 
@@ -28,8 +29,7 @@ our %_INSTANCE_FOR;
 
 =cut
 
-sub _create {
-    my ($level_value, $level_description) = @_;
+fun _create($level_value, $level_description) {
     my $level = App::PerlWatcher::Level->new(
         value       => $level_value,
         description => $level_description,
@@ -38,8 +38,7 @@ sub _create {
     return $level;
 }
 
-sub get_by_description {
-    my $description = shift;
+fun get_by_description($description) {
     my $level = $_INSTANCE_FOR{$description};
     carp "unknown level '$description'"
         unless $level;

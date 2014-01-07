@@ -5,6 +5,7 @@ use 5.12.0;
 use strict;
 use warnings;
 
+use Function::Parameters qw(:strict);
 use Smart::Comments -ENV;
 use Storable;
 
@@ -16,8 +17,7 @@ our @EXPORT_OK = qw/freeze thaw/;
 
 local our %Watchers_Pool;
 
-sub freeze {
-    my ($engine) = @_;
+fun freeze($engine) {
     my %watchers_memories =
         map { $_ => $_->memory }
         @{ $engine->watchers };
@@ -31,8 +31,7 @@ sub freeze {
 }
 
 # return true on success
-sub thaw {
-    my ($engine, $serialized) = @_;
+fun thaw($engine, $serialized) {
     my $watchers = $engine->watchers;
     local our %Watchers_Pool;
     @Watchers_Pool{ @$watchers } = @$watchers;

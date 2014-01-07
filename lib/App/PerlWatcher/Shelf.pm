@@ -5,6 +5,7 @@ use 5.12.0;
 use strict;
 use warnings;
 
+use Function::Parameters qw(:strict);
 use Smart::Comments -ENV;
 use Moo;
 use Scalar::Util qw/refaddr/;
@@ -24,8 +25,7 @@ Stores the status. Returns true if the previous stashed value isn't the same as 
 
 =cut
 
-sub stash_status {
-    my ($self, $status) = @_;
+method stash_status($status) {
     my $same_as_previous = 0;
     if ( defined($status) ) {
         my $previous = $self->statuses->{ $status -> watcher };
@@ -42,8 +42,7 @@ Actual logic is delegated to $status->updated_from
 
 =cut
 
-sub status_changed {
-    my ($self, $status) = @_;
+method status_changed($status) {
     my $watcher = $status -> watcher;
     my $stashed_status = $self->statuses->{$watcher};
     return 1 unless $stashed_status;

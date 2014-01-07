@@ -5,6 +5,7 @@ use 5.12.0;
 use strict;
 use warnings;
 
+use Function::Parameters qw(:strict);
 use Moo::Role;
 
 =method description
@@ -49,8 +50,7 @@ Means to be used in frontends
 
 =cut
 
-sub describe {
-    my $self = shift;
+method describe {
     return $self->describer->($self->description);
 }
 

@@ -6,6 +6,7 @@ use strict;
 use warnings;
 
 use Carp;
+use Function::Parameters qw(:strict);
 use IPC::Run3;
 use Moo::Role;
 
@@ -34,8 +35,7 @@ Used to open url in system browser
 
 =cut
 
-sub open_url {
-    my $self = shift;
+method open_url {
     my $url = $self->url;
     run3 [ "xdg-open", $url ] 
         or carp("executing 'xdg-open $url' error: $?");
