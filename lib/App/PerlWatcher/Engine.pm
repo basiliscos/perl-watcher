@@ -17,6 +17,9 @@ use Function::Parameters qw(:strict);
 use List::MoreUtils qw/first_index/;
 use Moo;
 use Path::Tiny;
+use Types::Standard qw/Num HashRef ArrayRef/;
+use Type::Tiny::Role;
+use Type::Tiny::Class;
 
 use App::PerlWatcher::Shelf;
 use App::PerlWatcher::Util::Bootstrap qw/get_home_dir/;
@@ -26,29 +29,42 @@ use App::PerlWatcher::Util::Storable qw/freeze thaw/;
 
 
 
-has 'frontend'          => ( is => 'rw');
+has 'frontend' => (
+  is => 'rw',
+  isa => Type::Tiny::Role->new( role => 'App::PerlWatcher::Frontend'),
+);
 
 
-has 'config'            => ( is => 'ro', required => 0);
-
-has 'backend'           => ( is => 'ro', required => 1);
+has 'config' => ( is => 'ro', required => 0, isa => HashRef);
 
 
-has 'statuses_file'     => ( is => 'ro', default => sub {
-        return path(File::Spec->catfile(get_home_dir(), "statuses-shelf.data"));
-    });
+has 'backend' => ( is => 'ro', required => 1,
+  isa => Type::Tiny::Role->new( role => 'App::PerlWatcher::Backend'),
+);
 
 
-has 'watchers'          => ( is => 'lazy');
+has 'statuses_file' => (
+  is => 'ro',
+  default => sub {
+    return path(File::Spec->catfile(get_home_dir(), "statuses-shelf.data"));
+  },
+  isa => Type::Tiny::Class->new(class => 'Path::Tiny'),
+);
 
 
-has 'polling_watchers' => ( is => 'ro', default => sub{ [] });
+has 'watchers' => ( is => 'lazy', isa => ArrayRef);
 
 
-has 'watchers_order'    => ( is => 'lazy');
+has 'polling_watchers' => ( is => 'ro', default => sub{ [] }, isa => ArrayRef );
 
 
-has 'shelf'             => ( is => 'rw');
+has 'watchers_order' => ( is => 'lazy', isa => HashRef[Num]);
+
+
+has 'shelf' => (
+  is => 'rw',
+  isa => Type::Tiny::Class->new(class => 'App::PerlWatcher::Shelf'),
+);
 
 method _build_watchers {
     my $config = $self->config;

@@ -128,7 +128,7 @@ $engine = Engine->new(
     config      => $config,
     backend     => AEBackend->new,
     frontend    => $frontend,
-    );
+);
 ok $engine;
 
 my $end_var = AnyEvent->condvar;

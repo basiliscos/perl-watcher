@@ -10,16 +10,17 @@ use warnings;
 
 use Function::Parameters qw(:strict);
 use Moo::Role;
+use Types::Standard qw/CodeRef/;
 
 
 requires 'description';
 
 
-requires 'start';
-
-
-
-has 'describer' => ( is => 'ro', default => sub { return sub { $_[0]; }; }, );
+has 'describer' => (
+    is      => 'ro',
+    default => sub { return sub { $_[0]; }; },
+    isa     => CodeRef,
+);
 
 
 
@@ -62,11 +63,6 @@ means to be provided by user configs.
 
 The string description, it means to be provided by developer, e.g. watcher
 developer
-
-=head2 start
-
-Starts watcher. The parameter is callback, wich is been invoked with Status
-on watched event occurence
 
 =head2 describe
 

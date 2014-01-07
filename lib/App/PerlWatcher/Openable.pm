@@ -12,16 +12,17 @@ use Carp;
 use Function::Parameters qw(:strict);
 use IPC::Run3;
 use Moo::Role;
+use Types::Standard qw/Str/;
 
 
 
 
-has 'url'    => ( is => 'rw');
+has 'url' => ( is => 'rw', isa => Str);
 
 
 method open_url {
     my $url = $self->url;
-    run3 [ "xdg-open", $url ] 
+    run3 [ "xdg-open", $url ]
         or carp("executing 'xdg-open $url' error: $?");
 }
 

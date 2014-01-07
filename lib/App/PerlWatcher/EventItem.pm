@@ -9,22 +9,19 @@ use strict;
 use warnings;
 
 use Moo;
-use App::PerlWatcher::Memory qw /memory_patch/;
-
+use Types::Standard qw/Str Num/;
 
 with qw/App::PerlWatcher::Memorizable/;
 
 
-memory_patch(__PACKAGE__, 'content');
+has 'content' => (is => 'rw', isa => Str, required => 1);
 
 
-memory_patch(__PACKAGE__, 'timestamp');
-
-sub BUILD {
-    my ($self, $init_args) = @_;
-    $self->content($init_args->{content});
-    $self->timestamp(time) unless($self->timestamp);
-}
+has 'timestamp' => (
+    is => 'rw',
+    isa => Num,
+    default => sub { time }
+);
 
 1;
 

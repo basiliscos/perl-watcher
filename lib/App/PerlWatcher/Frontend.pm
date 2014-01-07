@@ -2,7 +2,7 @@ package App::PerlWatcher::Frontend;
 {
   $App::PerlWatcher::Frontend::VERSION = '0.20';
 }
-# ABSTRACT: The base role to which will be notified of updated watcher statuses. 
+# ABSTRACT: The base role to which will be notified of updated watcher statuses.
 
 use 5.12.0;
 use strict;
@@ -30,7 +30,7 @@ __END__
 
 =head1 NAME
 
-App::PerlWatcher::Frontend - The base role to which will be notified of updated watcher statuses. 
+App::PerlWatcher::Frontend - The base role to which will be notified of updated watcher statuses.
 
 =head1 VERSION
 

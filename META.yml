@@ -37,6 +37,7 @@ requires:
   Path::Tiny: 0.049
   Smart::Comments: 1.000004
   Storable: 2.45
+  Type::Tiny: 0.038
   URI: 1.60
   XML::XPath: 1.13
   aliased: 0.31

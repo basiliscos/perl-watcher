@@ -9,16 +9,17 @@ use strict;
 use warnings;
 
 use Moo;
+use Types::Standard qw/Str Num/;
 
 use overload fallback => 1,
      '0+' => sub { $_[0]->value },
      '""' => sub { $_[0]->description };
 
 
-has 'value'       => ( is => 'ro', required => 1);
+has 'value'  => ( is => 'ro', required => 1, isa => Num);
 
 
-has 'description' => ( is => 'ro', required => 1);
+has 'description' => ( is => 'ro', required => 1, isa => Str);
 
 1;
 
