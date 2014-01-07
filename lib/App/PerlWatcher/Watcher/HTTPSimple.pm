@@ -11,6 +11,7 @@ use Carp;
 use Function::Parameters qw(:strict);
 use Moo;
 use Smart::Comments -ENV;
+use Types::Standard qw/Str Num CodeRef/;
 use URI;
 
 =head1 SYNOPSIS
@@ -41,7 +42,7 @@ The url been wached
 
 =cut
 
-has 'url'                   => ( is => 'ro', required => 1);
+has 'url' => ( is => 'ro', required => 1, isa => Str);
 
 =attr response_handler
 
@@ -50,7 +51,7 @@ which should return the body to be displayed as result.
 
 =cut
 
-has 'response_handler'      => ( is => 'ro', required => 1);
+has 'response_handler' => ( is => 'ro', required => 1, isa => CodeRef);
 
 =attr processed_response
 
@@ -58,7 +59,7 @@ The last result, which is been stored after invocation of response_handler
 
 =cut
 
-has 'processed_response'    => ( is => 'rw');
+has 'processed_response' => ( is => 'rw', isa => Str);
 
 with qw/App::PerlWatcher::Watcher::HTTP/;
 

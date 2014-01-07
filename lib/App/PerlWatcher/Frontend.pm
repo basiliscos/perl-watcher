@@ -1,5 +1,5 @@
 package App::PerlWatcher::Frontend;
-# ABSTRACT: The base role to which will be notified of updated watcher statuses. 
+# ABSTRACT: The base role to which will be notified of updated watcher statuses.
 
 use 5.12.0;
 use strict;

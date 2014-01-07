@@ -12,13 +12,17 @@ use Function::Parameters qw(:strict);
 use List::MoreUtils qw/any/;
 use Moo::Role;
 use Smart::Comments -ENV;
+use Types::Standard qw/Str Num CodeRef Object/;
 use URI;
+
+use aliased qw/Type::Tiny::Role/;
 
 =attr url
 
 The subclass should provide the watched URL
 
 =cut
+
 requires 'url';
 
 =method process_http_response
@@ -38,10 +42,10 @@ The frequency of poll in seconds
 
 =cut
 
-has 'frequency'         => ( is => 'ro', default => sub { 60; } );
+has 'frequency' => ( is => 'ro', default => sub { 60; }, isa => Num );
 
 # for internal use only. No docs.
-has 'uri'               => ( is => 'lazy');
+has 'uri'  => ( is => 'lazy', isa => Object);
 
 =attr timeout
 
@@ -49,7 +53,7 @@ The http transaction timeout. Default value: 5 seconds
 
 =cut
 
-has 'timeout'           => ( is => 'lazy');
+has 'timeout' => ( is => 'lazy', isa => Num);
 
 =attr
 
@@ -57,7 +61,7 @@ The watcher title
 
 =cut
 
-has 'title'             => ( is => 'lazy');
+has 'title' => ( is => 'lazy', isa => Str);
 
 =attr watcher_callback
 
@@ -65,7 +69,7 @@ The callback, which will be called with status object
 
 =cut
 
-has 'watcher_callback'  => ( is => 'lazy');
+has 'watcher_callback'  => ( is => 'lazy', isa => CodeRef);
 
 method _build_uri {
     return URI->new($self->url);

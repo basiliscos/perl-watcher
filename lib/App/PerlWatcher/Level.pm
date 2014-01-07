@@ -6,6 +6,7 @@ use strict;
 use warnings;
 
 use Moo;
+use Types::Standard qw/Str Num/;
 
 use overload fallback => 1,
      '0+' => sub { $_[0]->value },
@@ -17,7 +18,7 @@ The numeric value (weight) of level.
 
 =cut
 
-has 'value'       => ( is => 'ro', required => 1);
+has 'value'  => ( is => 'ro', required => 1, isa => Num);
 
 =attr description
 
@@ -25,6 +26,6 @@ The string desctiption of level
 
 =cut
 
-has 'description' => ( is => 'ro', required => 1);
+has 'description' => ( is => 'ro', required => 1, isa => Str);
 
 1;

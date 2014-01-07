@@ -7,6 +7,7 @@ use warnings;
 
 use aliased qw/App::PerlWatcher::Memory/;
 use Moo::Role;
+use Type::Tiny::Role;
 
 =attr memory
 
@@ -15,7 +16,11 @@ only it's memory is been stored
 
 =cut
 
-has 'memory'    => ( is => 'rw', default => sub{ Memory->new });
+has 'memory'=> (
+    is => 'rw',
+    default => sub{ Memory->new },
+    isa => Type::Tiny::Role->new(role => Memory),
+);
 
 
 1;

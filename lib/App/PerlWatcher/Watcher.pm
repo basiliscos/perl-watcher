@@ -16,6 +16,7 @@ use Function::Parameters qw(:strict);
 use List::Util qw( max );
 use Smart::Comments -ENV;
 use Storable qw/freeze/;
+use Types::Standard qw/CodeRef HashRef Maybe Object Str/;
 
 use Moo::Role;
 
@@ -28,7 +29,7 @@ Holds an reference to engine config (used in construction watcher's thresholds_m
 
 =cut
 
-has 'engine_config'     => ( is => 'ro', required => 1);
+has 'engine_config'  => ( is => 'ro', required => 1, isa => HashRef);
 
 =attr init_args
 
@@ -37,7 +38,7 @@ thresholds_map and unique_id)
 
 =cut
 
-has 'init_args'         => ( is => 'rw');
+has 'init_args' => ( is => 'rw', isa => HashRef);
 
 =attr config
 
@@ -45,7 +46,7 @@ The wacher configuration hash ref.
 
 =cut
 
-has 'config'            => ( is => 'lazy');
+has 'config' => ( is => 'lazy', isa => HashRef);
 
 =attr unique_id
 
@@ -58,7 +59,7 @@ PerlWatcher invokations (that's why the perl internal hash funciton isn't used)
 
 =cut
 
-has 'unique_id'         => ( is => 'lazy');
+has 'unique_id' => ( is => 'lazy', isa => Str);
 
 =attr active
 
@@ -101,7 +102,11 @@ The subroutine reference, which is been called before every poll of watcher exte
 
 =cut
 
-has 'poll_callback' => (is => 'rw', default => sub { sub{};  } );
+has 'poll_callback' => (
+    is => 'rw',
+    default => sub { sub{ }  },
+    isa => CodeRef,
+);
 
 =attr callback
 
@@ -112,7 +117,7 @@ It's argument is the State, i.e.
 
 =cut
 
-has 'callback'          => ( is => 'rw', required => 1);
+has 'callback' => ( is => 'rw', required => 1, isa => CodeRef);
 
 =attr watcher_guard
 
@@ -121,7 +126,7 @@ under wich the Watcher is been build.
 
 =cut
 
-has 'watcher_guard'     => ( is => 'rw');
+has 'watcher_guard' => ( is => 'rw', isa => Maybe[Object]);
 
 =method build_watcher_guard
 

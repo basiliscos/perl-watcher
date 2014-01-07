@@ -14,6 +14,9 @@ use Function::Parameters qw(:strict);
 use List::MoreUtils qw/first_index/;
 use Moo;
 use Path::Tiny;
+use Types::Standard qw/Num HashRef ArrayRef/;
+use Type::Tiny::Role;
+use Type::Tiny::Class;
 
 use App::PerlWatcher::Shelf;
 use App::PerlWatcher::Util::Bootstrap qw/get_home_dir/;
@@ -114,7 +117,10 @@ L<https://github.com/basiliscos/perl-watcher>.
 =cut
 
 
-has 'frontend'          => ( is => 'rw');
+has 'frontend' => (
+  is => 'rw',
+  isa => Type::Tiny::Role->new( role => 'App::PerlWatcher::Frontend'),
+);
 
 =attr config
 
@@ -122,7 +128,7 @@ Required config, which defines watchers behaviour. See engine.conf.example
 
 =cut
 
-has 'config'            => ( is => 'ro', required => 0);
+has 'config' => ( is => 'ro', required => 0, isa => HashRef);
 
 =attr backend
 
@@ -130,7 +136,10 @@ AnyEvent supported backed (loop engine), generally defined by using frontend,
 i.e. for Gtk2-frontend it should call Gtk2->main
 
 =cut
-has 'backend'           => ( is => 'ro', required => 1);
+
+has 'backend' => ( is => 'ro', required => 1,
+  isa => Type::Tiny::Role->new( role => 'App::PerlWatcher::Backend'),
+);
 
 =attr statuses_file
 
@@ -139,9 +148,13 @@ $HOME/.perl-watcher/statuses-shelf.data
 
 =cut
 
-has 'statuses_file'     => ( is => 'ro', default => sub {
-        return path(File::Spec->catfile(get_home_dir(), "statuses-shelf.data"));
-    });
+has 'statuses_file' => (
+  is => 'ro',
+  default => sub {
+    return path(File::Spec->catfile(get_home_dir(), "statuses-shelf.data"));
+  },
+  isa => Type::Tiny::Class->new(class => 'Path::Tiny'),
+);
 
 =attr watchers
 
@@ -150,7 +163,7 @@ defined in config
 
 =cut
 
-has 'watchers'          => ( is => 'lazy');
+has 'watchers' => ( is => 'lazy', isa => ArrayRef);
 
 =attr polling_watchers
 
@@ -158,7 +171,7 @@ An array_ref of Watcher instances, which currently do poll of external resource
 
 =cut
 
-has 'polling_watchers' => ( is => 'ro', default => sub{ [] });
+has 'polling_watchers' => ( is => 'ro', default => sub{ [] }, isa => ArrayRef );
 
 =attr watchers_order
 
@@ -166,7 +179,7 @@ Return an map "watcher to watcher order".
 
 =cut
 
-has 'watchers_order'    => ( is => 'lazy');
+has 'watchers_order' => ( is => 'lazy', isa => HashRef[Num]);
 
 =attr shelf
 
@@ -176,7 +189,10 @@ and they should not be stored.
 
 =cut
 
-has 'shelf'             => ( is => 'rw');
+has 'shelf' => (
+  is => 'rw',
+  isa => Type::Tiny::Class->new(class => 'App::PerlWatcher::Shelf'),
+);
 
 method _build_watchers {
     my $config = $self->config;

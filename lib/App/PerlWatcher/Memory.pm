@@ -8,6 +8,7 @@ use warnings;
 use Carp;
 use Function::Parameters qw(:strict);
 use Moo;
+use Types::Standard qw/HashRef/;
 
 use parent qw/Exporter/;
 
@@ -22,7 +23,7 @@ Storing of coderef's isn't supported.
 
 =cut
 
-has 'data' => (is => 'rw', default => sub { {}; });
+has 'data' => (is => 'rw', default => sub { {}; }, isa => HashRef);
 
 fun _monkey_patch($class, %patch) {
     no strict 'refs';

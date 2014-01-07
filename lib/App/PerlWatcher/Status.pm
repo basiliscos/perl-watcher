@@ -9,6 +9,11 @@ use Carp;
 use Function::Parameters qw(:strict);
 use Smart::Comments -ENV;
 use Moo;
+use Types::Standard qw/Maybe CodeRef Num/;
+
+use aliased qw/Type::Tiny::Role/;
+use aliased qw/App::PerlWatcher::Level/;
+use aliased qw/App::PerlWatcher::Watcher/;
 
 use App::PerlWatcher::Level;
 
@@ -18,7 +23,7 @@ The watcher, to which current status relates to
 
 =cut
 
-has 'watcher'       => ( is => 'rw');
+has 'watcher' => ( is => 'rw', isa => Role->new(role => Watcher));
 
 =attr level
 
@@ -26,7 +31,7 @@ The level of severity of single watcher poll (notice..alert)
 
 =cut
 
-has 'level'         => ( is => 'rw');
+has 'level' => ( is => 'rw', isa => Role->new(role => Level));
 
 =attr description
 
@@ -35,7 +40,7 @@ status.
 
 =cut
 
-has 'description'   => ( is => 'rw');
+has 'description' => ( is => 'rw', isa => CodeRef);
 
 =attr items
 
@@ -43,7 +48,7 @@ Closure, which beign invoked, returns array ref of EventItems.
 
 =cut 
 
-has 'items'         => ( is => 'rw');
+has 'items' => ( is => 'rw', isa => Maybe[CodeRef]);
 
 =attr timestamp
 
@@ -51,7 +56,11 @@ The timestamp of status. The default value is just a current time.
 
 =cut
 
-has 'timestamp'     => ( is => 'rw', default => sub { time(); });
+has 'timestamp' => (
+    is => 'rw',
+    default => sub { time(); },
+    isa => Num,
+);
 
 =func updated_from
 

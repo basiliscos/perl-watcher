@@ -10,6 +10,8 @@ use Smart::Comments -ENV;
 use Moo;
 use Scalar::Util qw/refaddr/;
 use Storable;
+use Types::Standard qw/HashRef/;
+
 
 =attr statuses
 
@@ -17,7 +19,7 @@ The hash ref, with key watcher (actually watcher unique id) and the value is the
 status.
 
 =cut
-has 'statuses'  => ( is => 'rw', default => sub { {}; } );
+has 'statuses'  => ( is => 'rw', default => sub { {}; }, isa => HashRef);
 
 =method stash_status
 

@@ -12,6 +12,7 @@ use IPC::Cmd qw/run/;
 use Moo;
 use POSIX qw(SIGKILL);
 use Smart::Comments -ENV;
+use Types::Standard qw/Str Maybe ArrayRef Num CodeRef/;
 
 use App::PerlWatcher::Levels qw/get_by_description LEVEL_NOTICE/;
 use aliased qw/App::PerlWatcher::EventItem/;
@@ -60,7 +61,7 @@ The command (executable) regularry been executed, e.g. /bin/ls
 
 =cut
 
-has 'command' => ( is => 'ro', required => 1 );
+has 'command' => ( is => 'ro', required => 1, isa => Str );
 
 =attr arguments
 
@@ -69,7 +70,11 @@ Default value is an empty array
 
 =cut
 
-has 'arguments' => (is => 'ro', default => sub{ []; } );
+has 'arguments' => (
+    is => 'ro',
+    default => sub{ []; },
+    isa => Maybe[ArrayRef],
+);
 
 =attr frequency
 
@@ -78,7 +83,7 @@ Default value is 600 seconds (10 mins).
 
 =cut
 
-has 'frequency' => (is => 'ro', defalut => sub{ 600; } );
+has 'frequency' => (is => 'ro', defalut => sub{ 600; }, isa => Num);
 
 =attr timeout
 
@@ -87,7 +92,7 @@ The maximum execution time of the command in seconds. Default value
 
 =cut
 
-has 'timeout' => (is => 'ro', defalut => sub{ []; } );
+has 'timeout' => (is => 'ro', defalut => sub{ 10; }, isa => Num );
 
 =attr filter
 
@@ -98,7 +103,11 @@ is localized to $_ variable.
 
 =cut
 
-has 'filter' => (is => 'ro', default => sub{ sub{ 1; };  } );
+has 'filter' => (
+    is => 'ro',
+    default => sub{ sub{ 1; };  },
+    isa => CodeRef,
+);
 
 =attr beautifyer
 
@@ -108,7 +117,11 @@ the unchanged line
 
 =cut
 
-has 'beautifyer' => (is => 'ro', default => sub{ sub{ shift;}; });
+has 'beautifyer' => (
+    is => 'ro',
+    default => sub{ sub{ shift;}; },
+    isa => CodeRef,
+);
 
 =attr rules
 
@@ -125,7 +138,7 @@ If no is applied, the default status level is 'notice'.
 
 =cut
 
-has 'rules' => (is => 'ro', default => sub { []; });
+has 'rules' => (is => 'ro', default => sub { []; }, isa => ArrayRef);
 
 
 method description {
@@ -150,7 +163,7 @@ and invokes actual callback with Status and EventItems
 
 =cut
 
-has 'callback_proxy' => (is => 'lazy');
+has 'callback_proxy' => (is => 'lazy', isa => CodeRef);
 
 method _build_callback_proxy {
     return sub {

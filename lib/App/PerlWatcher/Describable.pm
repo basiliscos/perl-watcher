@@ -31,7 +31,11 @@ means to be provided by user configs.
 
 =cut
 
-has 'describer' => ( is => 'ro', default => sub { return sub { $_[0]; }; }, );
+has 'describer' => (
+    is      => 'ro',
+    default => sub { return sub { $_[0]; }; },
+    isa     => CodeRef,
+);
 
 
 =method describe

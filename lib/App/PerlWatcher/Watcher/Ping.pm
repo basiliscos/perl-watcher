@@ -13,6 +13,7 @@ use Function::Parameters qw(:strict);
 use Moo;
 use Net::Ping::External qw(ping);
 use Smart::Comments -ENV;
+use Types::Standard qw/Str Num Maybe CodeRef/;
 
 =head1 SYNOPSIS
 
@@ -38,7 +39,7 @@ The watched host
 
 =cut
 
-has 'host'              => ( is => 'ro', required => 1 );
+has 'host'  => ( is => 'ro', required => 1, isa => Str );
 
 =attr port
 
@@ -47,7 +48,7 @@ tcp knock to the port; otherwise it does icmp ping of the host
 
 =cut
 
-has 'port'              => ( is => 'ro', required => 0 );
+has 'port' => ( is => 'ro', required => 0, isa => Maybe[Num]);
 
 =attr frequency
 
@@ -55,7 +56,7 @@ The frequency of ping. By default it is 60 seconds.
 
 =cut
 
-has 'frequency'         => ( is => 'ro', default => sub{ 60; } );
+has 'frequency' => ( is => 'ro', default => sub{ 60; }, isa => Num );
 
 =attr timeout
 
@@ -63,8 +64,9 @@ The ping timeout. Default value: 5 seconds
 
 =cut
 
-has 'timeout'           => ( is => 'lazy');
-has 'watcher_callback'  => ( is => 'lazy');
+has 'timeout' => ( is => 'lazy', isa => Num);
+
+has 'watcher_callback'  => ( is => 'lazy', isa => CodeRef);
 
 with qw/App::PerlWatcher::Watcher/;
 
