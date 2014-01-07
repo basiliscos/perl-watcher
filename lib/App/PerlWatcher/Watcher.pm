@@ -16,7 +16,7 @@ use Function::Parameters qw(:strict);
 use List::Util qw( max );
 use Smart::Comments -ENV;
 use Storable qw/freeze/;
-use Types::Standard qw/CodeRef HashRef Maybe Object Str/;
+use Types::Standard qw/CodeRef HashRef Maybe Ref Str/;
 
 use Moo::Role;
 
@@ -126,7 +126,7 @@ under wich the Watcher is been build.
 
 =cut
 
-has 'watcher_guard' => ( is => 'rw', isa => Maybe[Object]);
+has 'watcher_guard' => ( is => 'rw', isa => Maybe[Ref]);
 
 =method build_watcher_guard
 
