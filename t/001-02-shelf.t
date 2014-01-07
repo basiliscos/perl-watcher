@@ -17,7 +17,7 @@ use Test::PerlWatcher::TestWatcher;
 
 my $watcher = Test::PerlWatcher::TestWatcher->new(
     engine_config => {},
-    callback      => {},
+    callback      => sub { ... },
 );
 
 my $create_status = sub {

@@ -15,6 +15,7 @@ use IPC::Cmd qw/run/;
 use Moo;
 use POSIX qw(SIGKILL);
 use Smart::Comments -ENV;
+use Types::Standard qw/Str Maybe ArrayRef Num CodeRef/;
 
 use App::PerlWatcher::Levels qw/get_by_description LEVEL_NOTICE/;
 use aliased qw/App::PerlWatcher::EventItem/;
@@ -25,25 +26,37 @@ with qw/App::PerlWatcher::Watcher/;
 
 
 
-has 'command' => ( is => 'ro', required => 1 );
+has 'command' => ( is => 'ro', required => 1, isa => Str );
 
 
-has 'arguments' => (is => 'ro', default => sub{ []; } );
+has 'arguments' => (
+    is => 'ro',
+    default => sub{ []; },
+    isa => Maybe[ArrayRef],
+);
 
 
-has 'frequency' => (is => 'ro', defalut => sub{ 600; } );
+has 'frequency' => (is => 'ro', defalut => sub{ 600; }, isa => Num);
 
 
-has 'timeout' => (is => 'ro', defalut => sub{ []; } );
+has 'timeout' => (is => 'ro', defalut => sub{ 10; }, isa => Num );
 
 
-has 'filter' => (is => 'ro', default => sub{ sub{ 1; };  } );
+has 'filter' => (
+    is => 'ro',
+    default => sub{ sub{ 1; };  },
+    isa => CodeRef,
+);
 
 
-has 'beautifyer' => (is => 'ro', default => sub{ sub{ shift;}; });
+has 'beautifyer' => (
+    is => 'ro',
+    default => sub{ sub{ shift;}; },
+    isa => CodeRef,
+);
 
 
-has 'rules' => (is => 'ro', default => sub { []; });
+has 'rules' => (is => 'ro', default => sub { []; }, isa => ArrayRef);
 
 
 method description {
@@ -62,7 +75,7 @@ method _get_level(@lines) {
 }
 
 
-has 'callback_proxy' => (is => 'lazy');
+has 'callback_proxy' => (is => 'lazy', isa => CodeRef);
 
 method _build_callback_proxy {
     return sub {

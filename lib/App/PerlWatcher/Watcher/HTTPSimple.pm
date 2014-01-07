@@ -14,17 +14,18 @@ use Carp;
 use Function::Parameters qw(:strict);
 use Moo;
 use Smart::Comments -ENV;
+use Types::Standard qw/Str Num CodeRef/;
 use URI;
 
 
 
-has 'url'                   => ( is => 'ro', required => 1);
+has 'url' => ( is => 'ro', required => 1, isa => Str);
 
 
-has 'response_handler'      => ( is => 'ro', required => 1);
+has 'response_handler' => ( is => 'ro', required => 1, isa => CodeRef);
 
 
-has 'processed_response'    => ( is => 'rw');
+has 'processed_response' => ( is => 'rw', isa => Str);
 
 with qw/App::PerlWatcher::Watcher::HTTP/;
 

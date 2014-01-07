@@ -13,8 +13,10 @@ use Smart::Comments -ENV;
 use Moo;
 use Scalar::Util qw/refaddr/;
 use Storable;
+use Types::Standard qw/HashRef/;
 
-has 'statuses'  => ( is => 'rw', default => sub { {}; } );
+
+has 'statuses'  => ( is => 'rw', default => sub { {}; }, isa => HashRef);
 
 
 method stash_status($status) {

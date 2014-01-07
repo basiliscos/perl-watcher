@@ -19,6 +19,7 @@ use Function::Parameters qw(:strict);
 use List::Util qw( max );
 use Smart::Comments -ENV;
 use Storable qw/freeze/;
+use Types::Standard qw/CodeRef HashRef Maybe Object Str/;
 
 use Moo::Role;
 
@@ -26,16 +27,16 @@ with qw/App::PerlWatcher::Describable/;
 with qw/App::PerlWatcher::Memorizable/;
 
 
-has 'engine_config'     => ( is => 'ro', required => 1);
+has 'engine_config'  => ( is => 'ro', required => 1, isa => HashRef);
 
 
-has 'init_args'         => ( is => 'rw');
+has 'init_args' => ( is => 'rw', isa => HashRef);
 
 
-has 'config'            => ( is => 'lazy');
+has 'config' => ( is => 'lazy', isa => HashRef);
 
 
-has 'unique_id'         => ( is => 'lazy');
+has 'unique_id' => ( is => 'lazy', isa => Str);
 
 
 memory_patch(__PACKAGE__, 'active');
@@ -47,13 +48,17 @@ memory_patch(__PACKAGE__, 'thresholds_map');
 memory_patch(__PACKAGE__, 'last_status');
 
 
-has 'poll_callback' => (is => 'rw', default => sub { sub{};  } );
+has 'poll_callback' => (
+    is => 'rw',
+    default => sub { sub{ }  },
+    isa => CodeRef,
+);
 
 
-has 'callback'          => ( is => 'rw', required => 1);
+has 'callback' => ( is => 'rw', required => 1, isa => CodeRef);
 
 
-has 'watcher_guard'     => ( is => 'rw');
+has 'watcher_guard' => ( is => 'rw', isa => Maybe[Object]);
 
 
 requires 'build_watcher_guard';

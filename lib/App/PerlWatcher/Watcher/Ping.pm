@@ -16,20 +16,22 @@ use Function::Parameters qw(:strict);
 use Moo;
 use Net::Ping::External qw(ping);
 use Smart::Comments -ENV;
+use Types::Standard qw/Str Num Maybe CodeRef/;
 
 
 
-has 'host'              => ( is => 'ro', required => 1 );
+has 'host'  => ( is => 'ro', required => 1, isa => Str );
 
 
-has 'port'              => ( is => 'ro', required => 0 );
+has 'port' => ( is => 'ro', required => 0, isa => Maybe[Num]);
 
 
-has 'frequency'         => ( is => 'ro', default => sub{ 60; } );
+has 'frequency' => ( is => 'ro', default => sub{ 60; }, isa => Num );
 
 
-has 'timeout'           => ( is => 'lazy');
-has 'watcher_callback'  => ( is => 'lazy');
+has 'timeout' => ( is => 'lazy', isa => Num);
+
+has 'watcher_callback'  => ( is => 'lazy', isa => CodeRef);
 
 with qw/App::PerlWatcher::Watcher/;
 

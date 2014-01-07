@@ -12,23 +12,32 @@ use Carp;
 use Function::Parameters qw(:strict);
 use Smart::Comments -ENV;
 use Moo;
+use Types::Standard qw/Maybe CodeRef Num/;
+
+use aliased qw/Type::Tiny::Role/;
+use aliased qw/App::PerlWatcher::Level/;
+use aliased qw/App::PerlWatcher::Watcher/;
 
 use App::PerlWatcher::Level;
 
 
-has 'watcher'       => ( is => 'rw');
+has 'watcher' => ( is => 'rw', isa => Role->new(role => Watcher));
 
 
-has 'level'         => ( is => 'rw');
+has 'level' => ( is => 'rw', isa => Role->new(role => Level));
 
 
-has 'description'   => ( is => 'rw');
+has 'description' => ( is => 'rw', isa => CodeRef);
 
 
-has 'items'         => ( is => 'rw');
+has 'items' => ( is => 'rw', isa => Maybe[CodeRef]);
 
 
-has 'timestamp'     => ( is => 'rw', default => sub { time(); });
+has 'timestamp' => (
+    is => 'rw',
+    default => sub { time(); },
+    isa => Num,
+);
 
 
 fun updated_from($a, $b) {
