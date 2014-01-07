@@ -19,7 +19,7 @@ use Function::Parameters qw(:strict);
 use List::Util qw( max );
 use Smart::Comments -ENV;
 use Storable qw/freeze/;
-use Types::Standard qw/CodeRef HashRef Maybe Object Str/;
+use Types::Standard qw/CodeRef HashRef Maybe Ref Str/;
 
 use Moo::Role;
 
@@ -58,7 +58,7 @@ has 'poll_callback' => (
 has 'callback' => ( is => 'rw', required => 1, isa => CodeRef);
 
 
-has 'watcher_guard' => ( is => 'rw', isa => Maybe[Object]);
+has 'watcher_guard' => ( is => 'rw', isa => Maybe[Ref]);
 
 
 requires 'build_watcher_guard';
