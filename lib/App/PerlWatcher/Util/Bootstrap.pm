@@ -13,6 +13,7 @@ use Class::Load ':all';
 use File::Copy;
 use File::ShareDir::ProjectDistDir ':all';
 use File::Spec;
+use Function::Parameters qw(:strict);
 use Path::Tiny;
 
 use parent qw/Exporter/;
@@ -20,7 +21,7 @@ use parent qw/Exporter/;
 our @EXPORT_OK = qw/engine_config get_home_file get_home_dir config/;
 
 
-sub engine_config {
+fun engine_config {
     my $config_file = $ARGV[0]
         // get_home_file('engine.conf',
                 'App-PerlWatcher-Engine', 'examples/engine.conf.example');
@@ -28,8 +29,7 @@ sub engine_config {
 }
 
 
-sub config {
-    my ($file) = @_;
+fun config($file) {
     my $content_config = path($file)->slurp_utf8;
     my $config = eval "no warnings; $content_config ";
     croak("error in config: $@") if $@ ;
@@ -37,8 +37,7 @@ sub config {
 }
 
 
-sub get_home_file {
-    my ($file, $package, $package_example) = @_;
+fun get_home_file($file, $package, $package_example) {
     my $config_file = File::Spec->catfile(get_home_dir(), $file);
     if (not -e $config_file) {
         my $example = dist_file($package, $package_example);
@@ -106,7 +105,7 @@ Ivan Baidakou <dmol@gmx.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Ivan Baidakou.
+This software is copyright (c) 2014 by Ivan Baidakou.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

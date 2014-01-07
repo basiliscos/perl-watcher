@@ -8,6 +8,7 @@ use 5.12.0;
 use strict;
 use warnings;
 
+use Function::Parameters qw(:strict);
 use Smart::Comments -ENV;
 use Moo;
 use Scalar::Util qw/refaddr/;
@@ -16,8 +17,7 @@ use Storable;
 has 'statuses'  => ( is => 'rw', default => sub { {}; } );
 
 
-sub stash_status {
-    my ($self, $status) = @_;
+method stash_status($status) {
     my $same_as_previous = 0;
     if ( defined($status) ) {
         my $previous = $self->statuses->{ $status -> watcher };
@@ -28,8 +28,7 @@ sub stash_status {
 }
 
 
-sub status_changed {
-    my ($self, $status) = @_;
+method status_changed($status) {
     my $watcher = $status -> watcher;
     my $stashed_status = $self->statuses->{$watcher};
     return 1 unless $stashed_status;
@@ -78,7 +77,7 @@ Ivan Baidakou <dmol@gmx.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Ivan Baidakou.
+This software is copyright (c) 2014 by Ivan Baidakou.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

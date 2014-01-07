@@ -11,8 +11,9 @@ use utf8;
 
 use App::PerlWatcher::EventItem;
 use Carp;
-use Smart::Comments -ENV;
+use Function::Parameters qw(:strict);
 use Moo;
+use Smart::Comments -ENV;
 use XML::XPath;
 
 our $T_UNITS = {
@@ -41,13 +42,11 @@ sub _build_url_generator {
     };
 }
 
-sub _build_url {
-    my $self = shift;
+method _build_url {
     return $self->url_generator->($self->latitude, $self->longitude);
 }
 
-sub description {
-    my $self = shift;
+method description {
     my $desc = "";
     my %data = %{ $self->data // {} };
     if ( %data ) {
@@ -59,8 +58,7 @@ sub description {
     return $desc;
 }
 
-sub process_http_response {
-    my ($self, $content, $headers) = @_;
+method process_http_response($content, $headers) {
     my $xp = XML::XPath->new(xml => $content);
     my $t_node = $xp->find('//time[1]/location/temperature');
     if ($t_node) {
@@ -71,12 +69,6 @@ sub process_http_response {
     }
     $self->interpret_result(1, $self->callback);
 }
-
-sub _invoke_callback {
-    my ($self, $callback, $status) = @_;
-    $callback->($status);
-}
-
 
 1;
 
@@ -124,7 +116,7 @@ Ivan Baidakou <dmol@gmx.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Ivan Baidakou.
+This software is copyright (c) 2014 by Ivan Baidakou.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

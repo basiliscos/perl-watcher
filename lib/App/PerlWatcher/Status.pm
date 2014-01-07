@@ -9,6 +9,7 @@ use strict;
 use warnings;
 
 use Carp;
+use Function::Parameters qw(:strict);
 use Smart::Comments -ENV;
 use Moo;
 
@@ -30,8 +31,7 @@ has 'items'         => ( is => 'rw');
 has 'timestamp'     => ( is => 'rw', default => sub { time(); });
 
 
-sub updated_from {
-    my ($a, $b) = @_;
+fun updated_from($a, $b) {
     carp unless $a->watcher->unique_id eq $b->watcher->unique_id;
     my $updated = ($a->level != $b->level)
         || (defined($a->items) && !defined($b->items))
@@ -43,8 +43,7 @@ sub updated_from {
     return $updated;
 }
 
-sub _equals_items {
-    my ($a, $b) = @_;
+fun _equals_items($a, $b) {
     # $a
     # $b
     my $result = !($a->content cmp $b->content); #|| ($a->timestamp <=> $b->timestamp) );
@@ -52,8 +51,7 @@ sub _equals_items {
     return $result; 
 }
 
-sub _items_change_detector {
-    my ($a, $b) = @_;
+fun _items_change_detector($a, $b) {
     # $a
     # $b
     return 1 if(@$a != @$b);
@@ -128,7 +126,7 @@ Closure, which beign invoked, returns array ref of EventItems.
 
 The timestamp of status. The default value is just a current time.
 
-=head1 METHODS
+=head1 FUNCTIONS
 
 =head2 updated_from
 
@@ -143,7 +141,7 @@ Ivan Baidakou <dmol@gmx.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Ivan Baidakou.
+This software is copyright (c) 2014 by Ivan Baidakou.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

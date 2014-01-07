@@ -28,6 +28,7 @@ requires:
   Data::Dump: 1.22
   File::ReadBackwards: 1.05
   File::ShareDir::ProjectDistDir: v0.4.4
+  Function::Parameters: 1.0401
   IPC::Cmd: 0.90
   IPC::Run3: 0.045
   List::MoreUtils: 0.33

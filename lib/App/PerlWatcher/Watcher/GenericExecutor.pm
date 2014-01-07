@@ -10,10 +10,11 @@ use warnings;
 
 use AnyEvent;
 use AnyEvent::Util;
-use Smart::Comments -ENV;
+use Function::Parameters qw(:strict);
 use IPC::Cmd qw/run/;
 use Moo;
 use POSIX qw(SIGKILL);
+use Smart::Comments -ENV;
 
 use App::PerlWatcher::Levels qw/get_by_description LEVEL_NOTICE/;
 use aliased qw/App::PerlWatcher::EventItem/;
@@ -45,13 +46,11 @@ has 'beautifyer' => (is => 'ro', default => sub{ sub{ shift;}; });
 has 'rules' => (is => 'ro', default => sub { []; });
 
 
-sub description {
-    my $self = shift;
+method description {
     return "GenericExectuor [" . $self->command . "]";
 }
 
-sub _get_level {
-    my ($self, @lines) = @_;
+method _get_level(@lines) {
     my $rules = $self->rules;
     for (my $i =0; $i < @$rules; $i+=2 ) {
         my $level_string = $rules->[$i];
@@ -65,8 +64,7 @@ sub _get_level {
 
 has 'callback_proxy' => (is => 'lazy');
 
-sub _build_callback_proxy {
-    my $self = shift;
+method _build_callback_proxy {
     return sub {
         my $success = shift;
         unless ($success) {
@@ -104,8 +102,7 @@ sub _build_callback_proxy {
 }
 
 
-sub build_watcher_guard {
-    my $self = shift;
+method build_watcher_guard {
     my $guard = AnyEvent->timer(
         after    => 0,
         interval => $self->frequency,
@@ -236,7 +233,7 @@ Ivan Baidakou <dmol@gmx.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Ivan Baidakou.
+This software is copyright (c) 2014 by Ivan Baidakou.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

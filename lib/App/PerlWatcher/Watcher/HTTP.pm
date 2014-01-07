@@ -11,9 +11,10 @@ use warnings;
 use App::PerlWatcher::EventItem;
 use AnyEvent::HTTP;
 use Carp;
-use Smart::Comments -ENV;
+use Function::Parameters qw(:strict);
 use List::MoreUtils qw/any/;
 use Moo::Role;
+use Smart::Comments -ENV;
 use URI;
 
 requires 'url';
@@ -38,20 +39,19 @@ has 'title'             => ( is => 'lazy');
 
 has 'watcher_callback'  => ( is => 'lazy');
 
-sub _build_uri {
-    return URI->new($_[0]->url);
+method _build_uri {
+    return URI->new($self->url);
 }
 
-sub _build_timeout {
-    $_[0]->config->{timeout} // $_[0]->engine_config->{defaults}->{timeout} // 5;
+method _build_timeout {
+    $self->config->{timeout} // $self->engine_config->{defaults}->{timeout} // 5;
 }
 
-sub _build_title {
-    $_[0]->uri->host;
+method _build_title {
+    $self->uri->host;
 }
 
-sub _build_watcher_callback {
-    my $self = shift;
+method _build_watcher_callback {
     my $uri = $self->uri;
     my $watcher = sub {
         $self->poll_callback->($self);
@@ -85,8 +85,7 @@ sub _build_watcher_callback {
     return $watcher;
 }
 
-sub build_watcher_guard {
-    my $self = shift;
+method build_watcher_guard {
     return AnyEvent->timer(
         after    => 0,
         interval => $self->frequency,
@@ -97,7 +96,7 @@ sub build_watcher_guard {
     );
 }
 
-sub description {
+method description {
     my $self = shift;
     return "HTTP [" . $self->title . "]";
 }
@@ -105,8 +104,7 @@ sub description {
 # private API
 
 # intendent to be overriden in descendants
-sub _invoke_callback {
-    my ($self, $callback, $status) = @_;
+method _invoke_callback($callback, $status) {
     $callback->($status);
 }
 
@@ -161,7 +159,7 @@ Ivan Baidakou <dmol@gmx.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Ivan Baidakou.
+This software is copyright (c) 2014 by Ivan Baidakou.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

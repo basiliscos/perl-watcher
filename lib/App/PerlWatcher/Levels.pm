@@ -10,6 +10,7 @@ use warnings;
 
 use Carp;
 use Exporter;
+use Function::Parameters qw(:strict);
 
 use App::PerlWatcher::Level;
 
@@ -18,8 +19,7 @@ use parent qw/Exporter/;
 our %_INSTANCE_FOR;
 
 
-sub _create {
-    my ($level_value, $level_description) = @_;
+fun _create($level_value, $level_description) {
     my $level = App::PerlWatcher::Level->new(
         value       => $level_value,
         description => $level_description,
@@ -28,8 +28,7 @@ sub _create {
     return $level;
 }
 
-sub get_by_description {
-    my $description = shift;
+fun get_by_description($description) {
     my $level = $_INSTANCE_FOR{$description};
     carp "unknown level '$description'"
         unless $level;
@@ -105,7 +104,7 @@ Ivan Baidakou <dmol@gmx.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Ivan Baidakou.
+This software is copyright (c) 2014 by Ivan Baidakou.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

@@ -9,6 +9,7 @@ use strict;
 use warnings;
 
 use Carp;
+use Function::Parameters qw(:strict);
 use IPC::Run3;
 use Moo::Role;
 
@@ -18,8 +19,7 @@ use Moo::Role;
 has 'url'    => ( is => 'rw');
 
 
-sub open_url {
-    my $self = shift;
+method open_url {
     my $url = $self->url;
     run3 [ "xdg-open", $url ] 
         or carp("executing 'xdg-open $url' error: $?");
@@ -67,7 +67,7 @@ Ivan Baidakou <dmol@gmx.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Ivan Baidakou.
+This software is copyright (c) 2014 by Ivan Baidakou.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

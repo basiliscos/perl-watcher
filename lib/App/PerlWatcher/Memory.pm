@@ -9,6 +9,7 @@ use strict;
 use warnings;
 
 use Carp;
+use Function::Parameters qw(:strict);
 use Moo;
 
 use parent qw/Exporter/;
@@ -19,16 +20,14 @@ our @EXPORT_OK = qw/memory_patch/;
 
 has 'data' => (is => 'rw', default => sub { {}; });
 
-sub _monkey_patch {
-    my ($class, %patch) = @_;
+fun _monkey_patch($class, %patch) {
     no strict 'refs';
     no warnings 'redefine';
     *{"${class}::$_"} = $patch{$_} for keys %patch;
 }
 
 
-sub memory_patch {
-    my ($class, @attributes) = @_;
+fun memory_patch($class, @attributes) {
     my %patch;
     for my $a (@attributes) {
         $patch{$a} = sub {
@@ -85,7 +84,7 @@ Ivan Baidakou <dmol@gmx.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Ivan Baidakou.
+This software is copyright (c) 2014 by Ivan Baidakou.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
